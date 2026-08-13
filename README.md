@@ -10,7 +10,7 @@ Living architecture docs for the Haven platform — generated with [Corbell](htt
 | `haven-aol` | `haven-aol/` | Motoko (canister) + TS/Python SDKs | ICP VetKD gating, EIP-712 `ecrecover`, epoch cache | **Core** — deployed to `dciac-uaaaa-aaaad-qlzuq-cai` |
 | `haven-dapp` | `haven-dapp/` | TypeScript / Next.js 15 | Web3 frontend (`@arkiv-network/sdk` `arkiv_query`), decrypt, cache, playback | Calls `arkiv-chain` + `haven-aol` via HTTPS/Candid |
 | `haven-cli` | `haven-cli/` | Python 3.11+ | Media pipeline (`arkiv_sync.py`), encryption, archival | Calls `arkiv-chain` + `haven-aol` + Filecoin |
-| `haven-mobile` | `haven-mobile/` | Kotlin + TS | Android offline-first viewer (Media3 + foc-cache) | Calls `haven-aol` via `ic-kotlin` + Arkiv via SDK |
+| `haven-mobile` | `haven-mobile/` | **Kotlin** (Compose/Media3/Room, `build.gradle.kts` `org.jetbrains.kotlin.android 2.3.21`) | Android offline-first viewer (Media3 + foc-cache) | Calls `haven-aol` via `ic-kotlin` + Arkiv via SDK |
 
 ```
 haven-dapp ──┐

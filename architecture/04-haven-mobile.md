@@ -31,4 +31,4 @@
 
 ## Corbell mapping
 
-`id: haven-mobile, language: typescript (workspace marker), actual Kotlin, tags: [mobile, react-native, decoupled]`. Decoupled: no shared DB, talks to `haven-aol` only via `ic-kotlin`; storage is hedged multi-provider FOC cache not dapp's synapse/IndexedDB.
+`id: haven-mobile, language: kotlin, tags: [mobile, kotlin, android, decoupled]`. Decoupled: no shared DB, talks to `haven-aol` only via `ic-kotlin`; storage is hedged multi-provider FOC cache not dapp's synapse/IndexedDB.

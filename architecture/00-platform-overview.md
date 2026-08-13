@@ -23,7 +23,7 @@ arkv-chain     rust       chain, entity, precompile, reth, core, decoupled
 haven-aol      python*    core, icp-canister, vetkd, cryptography, decoupled  (*Motoko canister, scanned as python)
 haven-dapp     typescript frontend, nextjs, web3, decoupled (via @arkiv-network/sdk)
 haven-cli      python     cli, tui, tooling, decoupled (arkiv_sync.py)
-haven-mobile   typescript mobile, react-native, decoupled (Kotlin under mobile-app/)
+haven-mobile   kotlin     mobile, kotlin, android, decoupled
 ```
 
 `*` `haven-aol`标记为 `python` 是 Corbell 支持列表限制（`python|typescript|go|...`），实际主语言 Motoko + TS/Python SDKs.

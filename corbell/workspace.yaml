@@ -23,8 +23,8 @@ services:
     tags: [cli, tui, tooling, decoupled]
   - id: haven-mobile
     repo: ../haven-mobile
-    language: typescript
-    tags: [mobile, react-native, decoupled]
+    language: kotlin
+    tags: [mobile, kotlin, android, decoupled]
 
 existing_docs:
   auto_scan: true
