@@ -61,7 +61,7 @@ integrations:
     issue_type: Task
 
 llm:
-  provider: anthropic
-  model: claude-sonnet-4-5
-  api_key: ${ANTHROPIC_API_KEY}
+  provider: meta
+  model: muse-spark-1.2-contributor
+  api_key: ${META_API_KEY}
   context_budget: 100000
