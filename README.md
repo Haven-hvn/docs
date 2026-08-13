@@ -20,17 +20,18 @@ haven-mobile─┘         ∧
 haven-dapp/haven-cli ──┴──> state trie (entity/pair/index accounts, roaring64 + ART)
 ```
 
-![Corbell graph — 5 services, 1 store](assets/corbell-graph.png)
+![Corbell graph — 5 services, **0 private stores** (Web3 public networks only)](assets/corbell-graph.png)
 
+*New paradigm: zero private backend — see [architecture/WEB3_PARADIGM.md](architecture/WEB3_PARADIGM.md) + [specs/haven-web3-zero-backend.md](specs/haven-web3-zero-backend.md) (LLM 10/10)*
 
 ## How this was built
 
 ```bash
-corbell init                    # -> corbell-data/workspace.yaml (5 services, tags: decoupled) ← fixed 2026-08-13: added arkiv-chain (was miss)
-corbell graph build             # -> .corbell/workspace.db  (Services:5 Datastores:1 Edges:6)  # arkiv-chain rust + haven-aol/dapp/cli/mobile
-corbell ui serve --port 7433 --no-browser  # → http://localhost:7433 — D3 graph (assets/corbell-graph.png) + /api/mermaid
-corbell spec new --feature "..." --provider meta  # → specs/ via muse-spark-1.2-contributor @ api.meta.ai/v1 ($0.18–$0.44)
-# -> then materialized into docs/architecture/ for review
+corbell init                    # -> corbell-data/workspace.yaml (5 services, 0 private stores) ← 2026-08-13: added arkiv-chain, haven-mobile kotlin, no shared DB
+corbell graph build             # -> .corbell/workspace.db  (Services:5 Datastores:0 Edges:5)  # arkiv-chain rust + haven-aol Motoko + haven-dapp TS + haven-cli python permissionless-local + haven-mobile kotlin (was 5/1/6 shared_postgres false)
+corbell ui serve --port 7433 --no-browser  # → http://localhost:7433 — D3 graph (assets/corbell-graph.png 64K, 5 services 0 stores, kotlin verified) — reshot 2026-08-13 21:35
+corbell spec new --feature "Haven Web3 Zero Backend" --provider meta  # → specs/haven-web3-zero-backend.md 21K via muse-spark-1.2-contributor @ api.meta.ai/v1 ($0.28, 10/10 review) — public networks only
+# -> then materialized into docs/architecture/ + entities/ for review
 ```
 
 Graph store: SQLite (`.corbell/workspace.db`, 460K, now 5 services, 0 private datastores — Haven rides on **public networks only, no private backend**). No Neo4j needed. Embeddings (`sentence-transformers/all-MiniLM-L6-v2`) not required for template specs; LLM via `META_API_KEY=LLM_...` (Meta Muse Spark) now patched in `corbell/core/llm_client.py`.
@@ -39,13 +40,18 @@ Graph store: SQLite (`.corbell/workspace.db`, 460K, now 5 services, 0 private da
 
 ## Docs layout
 
-- `architecture/00-platform-overview.md` — decoupled principles, topology, failure modes
+- `architecture/WEB3_PARADIGM.md` — **NEW** Web3 paradigm (no private backend, public chains as stores, permissionless haven-cli)
+- `architecture/00-platform-overview.md` — 5 services, 0 stores, decoupled topology (updated Kotlin)
 - `architecture/01-haven-aol.md` — canister API, v1/v3 preimages, EVM RPC, VetKD contexts
-- `architecture/02-haven-dapp.md` — Next.js routes, cache, decrypt flows
-- `architecture/03-haven-cli.md` — pipeline CLI, `haven_cli/` package map
-- `architecture/04-haven-mobile.md` — Android v1 parity table, foc-cache, Media3
+- `architecture/02-haven-dapp.md` — Next.js + `@arkiv-network/sdk` Arkiv reads
+- `architecture/03-haven-cli.md` — permissionless-local pipeline (actor-local SQLite)
+- `architecture/04-haven-mobile.md` — **Kotlin** (was TypeScript), Android v1 parity, foc-cache, Media3
+- `architecture/05-arkiv-chain.md` — entity contract `0x44…0044` precompile, state trie
+- `entities/ENTITY_SHAPE.md` — shared `Ident32`/`Mime128` container (source of truth)
+- `entities/MEDIA_CONTENT_SPEC.md` — standardized media keys (13+13 attributes/payload)
+- `specs/haven-web3-zero-backend.md` — **NEW 10/10** Web3 zero backend (regenerated 21K)
 - `decisions/ADR-001-decoupled-boundaries.md` — why no shared DB
-- `corbell/` — generated `workspace.yaml` + graph summary
+- `corbell/` — `workspace.yaml` (5 services kotlin) + `graph-summary.md` + `META_INTEGRATION.md` + 64K PNG (5 services 0 stores, kotlin)
 - `api/contracts.md` — Candid + EIP-712 contracts
 
 > All artifacts in this repo are **generated** then **reviewed** — source of truth stays in code. Re-run Corbell when services change; `corbell spec review` validates claims against the graph.
