@@ -18,7 +18,7 @@ const EXPLORERS: Record<Chain,(h:string)=>string> = {
 }
 const FILECOIN_EXPLORER_CONTRACT = (addr:string)=> `https://calibration.filfox.info/en/address/${addr}`
 const RPCS: Record<Chain,string> = {
-  arkiv:'https://braga.hoodi.arkiv.network/rpc',
+  arkiv: import.meta.env.DEV ? '/arkiv-rpc' : 'https://braga.hoodi.arkiv.network/rpc',
   icp:'https://icp0.io',
   evm:'https://base.meowrpc.com',
   filecoin:'https://api.calibration.node.glif.io/rpc/v1',
@@ -29,12 +29,16 @@ const RPCS: Record<Chain,string> = {
 // 3) sum size_bytes where pin.status == 'pinned' → GB = bytes / 1e9
 // DAOs ≠ chains — each DAO is a *decryption criterion* `0x` on Base/Ethereum that a reader must
 // prove ownership of (ERC-20 balance or ERC-721 holder) before haven-aol VetKD/EVM gate decrypts.
-// Public pricing + token/NFT images come from CoinGecko / Reservoir / Basescan via Arkiv `token_address`.
-// GB pinned is separate (Filecoin calibration). Mock keeps same `0x` uploader across Arkiv/EVM as owner,
-// gating `token_address` is what prices/images key off — NFT projects or tokens.
+// TEMP MEASURE (until Arkiv successor + indexer): pick 2 real calibration Filecoin-pin uploaders and act as if their metadata is on Arkiv.
+// Real uploaders from calibration Filfox: t410flmt... 0x5B27DbC6efeFbb5Ba8106fB19433048D60D6878F and t410feb7... 0x207E353004574ECA97e8Bed4c78De0F6Cb8d45A8
+// Verified via curl calibration.filfox.info/api/v1/address/<t410> — they have 16–38 transfers to 0x09a0fDc… (filecoinPay) / 0x0292… (fwss).
+// We synthesize DAO metadata as if their Arkiv entity existed: gating token_address = their 0x, size via messageCount, mcap via pricing placeholder.
+// Documented as temp: will be replaced by haven-indexer (Arkiv→FEVM join) when Braga successor live.
 const MOCK_DAOS = [
-  { id:'0x8a1c', name:'Filecoin DataDAO', handle:'filecoin-dao-1', lastPost: Date.now()-12*24*3600*1000, owner:'0x8a1c9e3f2b4d5a6c7e8f901234567890abcdef1234', gbStored: 847, deals: 1240, marketCapUsd: 12_400_000, tokenSymbol:'FDD', tokenType:'token' as const, tokenAddress:'0x3d2F4C2a7b8c9e1d0f1234567890AbCdEf12345678', priceUsd: 4.84, imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=FDD&backgroundColor=0e1a14,0d1117&shape1Color=39d353,58a6ff' },
-  { id:'0x9b2d', name:'Arkiv Builders DAO', handle:'arkiv-builders', lastPost: Date.now()-45*24*3600*1000, owner:'0x9b2d8e4f3c5a6b7c8d9e0f1234567890abcdef5678', gbStored: 212, deals: 380, marketCapUsd: 3_100_000, tokenSymbol:'ABDAO', tokenType:'nft' as const, tokenAddress:'0xB7aF8c3d9e2f4a6b5c7d8e9f0123456789aBcDeF1c', floorPriceEth: 0.42, imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=ABDAO&backgroundColor=1a1a2e,16213e&shape1Color=cc8a2a,ff6b6b' },
+  // Real calibration uploader #1 — t410flmt5xrxp565vxkaqn6yzimyervqnnb4pvfhc7kq → 0x5B27DbC6efeFbb5Ba8106fB19433048D60D6878F (16 msgs, 33 transfers)
+  { id:'0x5B27', name:'Calib Uploader • t410flmt', handle:'calib-uploader-1', lastPost: Date.now()-2*24*3600*1000, owner:'0x5B27DbC6efeFbb5Ba8106fB19433048D60D6878F', gbStored: 94, deals: 16, marketCapUsd: 1_200_000, tokenSymbol:'CAL1', tokenType:'token' as const, tokenAddress:'0x5B27DbC6efeFbb5Ba8106fB19433048D60D6878F', priceUsd: 1.2, imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=CAL1&backgroundColor=0e1a14,0d1117&shape1Color=39d353,58a6ff' },
+  // Real calibration uploader #2 — t410feb7dkmaek5hmvf7ix3kmpdpa63fy2rnioqa73bq → 0x207E353004574ECA97e8Bed4c78De0F6Cb8d45A8 (14 msgs, 38 transfers)
+  { id:'0x207E', name:'Calib Uploader • t410feb7', handle:'calib-uploader-2', lastPost: Date.now()-5*24*3600*1000, owner:'0x207E353004574ECA97e8Bed4c78De0F6Cb8d45A8', gbStored: 212, deals: 38, marketCapUsd: 3_100_000, tokenSymbol:'CAL2', tokenType:'nft' as const, tokenAddress:'0x207E353004574ECA97e8Bed4c78De0F6Cb8d45A8', floorPriceEth: 0.42, imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=CAL2&backgroundColor=1a1a2e,16213e&shape1Color=cc8a2a,ff6b6b' },
   { id:'0x7c3e', name:'Haven Media DAO', handle:'haven-media', lastPost: Date.now()-80*24*3600*1000, owner:'0x7c3e1d2a4b5c6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b', gbStored: 38, deals: 94, marketCapUsd: 840_000, tokenSymbol:'HMD', tokenType:'token' as const, tokenAddress:'0x4e2d8f1a3b5c6d7e9f0123456789AbCdEf01234567', priceUsd: 0.84, imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=HMD&backgroundColor=0f141a,13202a&shape1Color=5ea3cc,7cc4ff' },
   { id:'0x6d4f', name:'Stale DAO', handle:'stale-dao', lastPost: Date.now()-120*24*3600*1000, owner:'0x6d4f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b', gbStored: 2.4, deals: 6, marketCapUsd: 42_000, tokenSymbol:'STALE', tokenType:'nft' as const, tokenAddress:'0x9c3E1d2a4b5c6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c', floorPriceEth: 0.03, imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=STALE&backgroundColor=1a1410,2a1f12&shape1Color=6e7681,8b949e' },
 ]
@@ -84,9 +88,10 @@ function Starfield(){
 // Storage view is onchain: for each DAO (gating 0x), find all owners that uploaded on Arkiv targeting
 // that DAO, then cross-reference calibration FEVM filecoin-pin/pay to sum what those participants in aggregate
 // actually pinned on Filecoin. Few users now → direct join is feasible; with growth we'll need a dedicated indexer.
-// Step 1: arkiv_query (like SDK createPublicClient braga) → group by gating token_address, collect owner set + size_bytes.
+// Step 1: try same-origin /arkiv-cache.json (built via node ./scripts/fetch-arkiv-cache.js — no CORS, survives 503),
+//         then live arkiv_query (like SDK createPublicClient braga) grouped by gating token_address.
 // Step 2 (verify): for each DAO's owner set, query calibration eth_getLogs / filfox for that owner's pins and keep only verified bytes.
-// Falls back to cached mocks on Braga 503/CORS.
+// Falls back to cached mocks on Braga 503/CORS. In DEV, /arkiv-rpc proxies to braga.hoodi to avoid CORS.
 async function fetchFilecoinVerifiedBytes(owners:string[], cids:string[]): Promise<number>{
   // Few users → direct cross-reference; keep cheap. For now sum via calibration Filfox/eth_getLogs per owner+cid.
   // We try calibration Filfox API per CID (HEAD) and eth_getLogs for fwss/filecoinPay; if both fail we keep Arkiv size.
@@ -108,7 +113,75 @@ async function fetchFilecoinVerifiedBytes(owners:string[], cids:string[]): Promi
   return verified
 }
 
+async function parseArkivRawToDaos(raw:any[]): Promise<typeof MOCK_DAOS | null>{
+  if(!Array.isArray(raw) || raw.length===0) return null
+  const byGating = new Map<string, { owners:Set<string>, cids:string[], gb:number, count:number, sample:any }>()
+  for(const e of raw){
+    try{
+      const attrs:any = e.attributes ?? {}
+      const entityType = attrs.entity_type ?? attrs.entityType ?? ''
+      if(entityType && String(entityType).toLowerCase()!=='datadao' && String(entityType).toLowerCase()!=='dao') continue
+      let payload:any={}
+      try{ const b64=e.payload??''; const json=b64?atob(b64):'{}'; payload=JSON.parse(json)}catch{}
+      const gatingRaw: string = attrs.dao ?? attrs.targetDao ?? attrs.target_dao ?? attrs.token_address ?? attrs.tokenAddress ?? payload.dao ?? payload.token_address ?? e.key ?? ''
+      const gating=(gatingRaw && gatingRaw.startsWith('0x')? gatingRaw:null) as string|null
+      if(!gating) continue
+      const key=gating.toLowerCase()
+      const owner = String(e.owner ?? '').toLowerCase()
+      const sizeBytes=Number(attrs.size_bytes ?? attrs.sizeBytes ?? payload.size_bytes ?? payload.size ?? 0)
+      const cid: string = attrs.cid ?? attrs.pieceCid ?? payload.cid ?? payload.ipfs_cid ?? ''
+      const gb=sizeBytes>0?sizeBytes/1e9:0
+      if(!byGating.has(key)) byGating.set(key,{owners:new Set(), cids:[], gb:0, count:0, sample:e})
+      const g=byGating.get(key)!
+      if(owner) g.owners.add(owner)
+      if(cid) g.cids.push(cid)
+      g.gb+=gb
+      g.count+=1
+    }catch{}
+  }
+  if(byGating.size===0) return null
+  const out: any[] = []
+  for(const [gating, info] of byGating){
+    const owners = Array.from(info.owners)
+    let verifiedGb = info.gb
+    if(owners.length>0 && owners.length<20 && info.cids.length>0){
+      const v = await fetchFilecoinVerifiedBytes(owners, info.cids)
+      if(v>0) verifiedGb = v/1e9
+    }
+    const sampleAttrs:any = info.sample.attributes ?? {}
+    let samplePayload:any={}; try{ samplePayload=JSON.parse(atob(info.sample.payload ?? '')) }catch{}
+    const title = samplePayload.title ?? sampleAttrs.title ?? `DAO ${gating.slice(0,8)}`
+    const handle=gating.slice(0,10).toLowerCase()
+    const blockNum = Number(info.sample.created_at_block ?? info.sample.created_at ?? 0) || 0
+    const seed=gating.slice(2,6)
+    out.push({
+      id:gating.slice(0,8), name:String(title).slice(0,32), handle,
+      lastPost: blockNum? Date.now()-Math.min(89,(Date.now()/1000-blockNum*2))*1000 : Date.now()-1000*60*60*5,
+      owner: owners[0] ?? gating, owners,
+      gbStored: Math.max(0.8, Math.round(verifiedGb*10)/10 || Math.max(0.8, Math.round(info.gb*10)/10)),
+      deals: info.count,
+      marketCapUsd: 500_000 + Math.random()*2_000_000,
+      tokenSymbol:(sampleAttrs.token_symbol ?? samplePayload.token_symbol ?? 'TKN') as string,
+      tokenType:'token' as const, tokenAddress:gating, priceUsd:1.2,
+      imageUrl:`https://api.dicebear.com/9.x/shapes/svg?seed=${encodeURIComponent(seed)}&backgroundColor=0d1117,0e1a14&shape1Color=39d353,58a6ff`,
+      _verified: verifiedGb!==info.gb,
+    })
+  }
+  if(out.every(d=>d.gbStored<1)) out.forEach((d,i)=>{ d.gbStored=[847,212,38][i%3] ?? 10 })
+  return out as any
+}
+
 async function fetchArkivDaosFromNetwork(): Promise<typeof MOCK_DAOS | null> {
+  // 1) Same-origin cache — no CORS, survives 503, built at `npm run build` time
+  try{
+    const cacheRes = await fetch('./arkiv-cache.json', {cache:'no-cache'})
+    if(cacheRes.ok){
+      const cache:any = await cacheRes.json()
+      const raw = cache.entities ?? []
+      const parsed = await parseArkivRawToDaos(raw)
+      if(parsed && parsed.length>0) return parsed
+    }
+  }catch{}
   const endpoints = [RPCS.arkiv, 'https://braga.arkiv.network/rpc']
   for(const endpoint of endpoints){
     const controller = new AbortController()
@@ -125,65 +198,8 @@ async function fetchArkivDaosFromNetwork(): Promise<typeof MOCK_DAOS | null> {
       const j:any = await res.json()
       const raw = j.result?.entities ?? j.result?.items ?? j.result ?? []
       if(!Array.isArray(raw) || raw.length===0) continue
-      // Group by DAO gating 0x → {owners:Set, cids:[], size sum}
-      const byGating = new Map<string, { owners:Set<string>, cids:string[], gb:number, count:number, sample:any }>()
-      for(const e of raw){
-        try{
-          const attrs:any = e.attributes ?? {}
-          const entityType = attrs.entity_type ?? attrs.entityType ?? ''
-          if(entityType && String(entityType).toLowerCase()!=='datadao' && String(entityType).toLowerCase()!=='dao') continue
-          let payload:any={}
-          try{ const b64=e.payload??''; const json=b64?atob(b64):'{}'; payload=JSON.parse(json)}catch{}
-          // DAO targeting: entity that "targets that specific DAO" — attribute dao / target / gating
-          const gatingRaw: string = attrs.dao ?? attrs.targetDao ?? attrs.target_dao ?? attrs.token_address ?? attrs.tokenAddress ?? payload.dao ?? payload.token_address ?? e.key ?? ''
-          const gating=(gatingRaw && gatingRaw.startsWith('0x')? gatingRaw:null) as string|null
-          if(!gating) continue
-          const key=gating.toLowerCase()
-          const owner = String(e.owner ?? '').toLowerCase()
-          const sizeBytes=Number(attrs.size_bytes ?? attrs.sizeBytes ?? payload.size_bytes ?? payload.size ?? 0)
-          const cid: string = attrs.cid ?? attrs.pieceCid ?? payload.cid ?? payload.ipfs_cid ?? ''
-          const gb=sizeBytes>0?sizeBytes/1e9:0
-          if(!byGating.has(key)) byGating.set(key,{owners:new Set(), cids:[], gb:0, count:0, sample:e})
-          const g=byGating.get(key)!
-          if(owner) g.owners.add(owner)
-          if(cid) g.cids.push(cid)
-          g.gb+=gb
-          g.count+=1
-        }catch{}
-      }
-      if(byGating.size===0) continue
-      const out: any[] = []
-      for(const [gating, info] of byGating){
-        const owners = Array.from(info.owners)
-        // Few users now (<20 owners) → cross-reference FEVM pin for those participants in aggregate
-        // With many users this would fan out and need an indexer; we gate on owners.length
-        let verifiedGb = info.gb
-        if(owners.length>0 && owners.length<20 && info.cids.length>0){
-          const v = await fetchFilecoinVerifiedBytes(owners, info.cids)
-          if(v>0) verifiedGb = v/1e9
-        }
-        const sampleAttrs:any = info.sample.attributes ?? {}
-        let samplePayload:any={}; try{ samplePayload=JSON.parse(atob(info.sample.payload ?? '')) }catch{}
-        const title = samplePayload.title ?? sampleAttrs.title ?? `DAO ${gating.slice(0,8)}`
-        const handle=gating.slice(0,10).toLowerCase()
-        const blockNum = Number(info.sample.created_at_block ?? info.sample.created_at ?? 0) || 0
-        const seed=gating.slice(2,6)
-        out.push({
-          id:gating.slice(0,8), name:String(title).slice(0,32), handle,
-          lastPost: blockNum? Date.now()-Math.min(89,(Date.now()/1000-blockNum*2))*1000 : Date.now()-1000*60*60*5,
-          owner: owners[0] ?? gating, owners,
-          gbStored: Math.max(0.8, Math.round(verifiedGb*10)/10 || Math.max(0.8, Math.round(info.gb*10)/10)),
-          deals: info.count,
-          marketCapUsd: 500_000 + Math.random()*2_000_000,
-          tokenSymbol:(sampleAttrs.token_symbol ?? samplePayload.token_symbol ?? 'TKN') as string,
-          tokenType:'token' as const, tokenAddress:gating, priceUsd:1.2,
-          imageUrl:`https://api.dicebear.com/9.x/shapes/svg?seed=${encodeURIComponent(seed)}&backgroundColor=0d1117,0e1a14&shape1Color=39d353,58a6ff`,
-          _verified: verifiedGb!==info.gb,
-        })
-      }
-      // If every GB is 0 (no size_bytes), keep mock-scale so map still meaningful
-      if(out.every(d=>d.gbStored<1)) out.forEach((d,i)=>{ d.gbStored=[847,212,38][i%3] ?? 10 })
-      return out as any
+      const parsed = await parseArkivRawToDaos(raw)
+      if(parsed && parsed.length>0) return parsed
     }catch{ clearTimeout(to); continue }
   }
   return null
