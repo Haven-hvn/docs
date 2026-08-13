@@ -6,10 +6,10 @@ type Chain = 'arkiv' | 'icp' | 'evm' | 'filecoin'
 type TxStatus = 'pending' | 'confirmed' | 'failed'
 interface InFlightTx { id:string; hash:string; chain:Chain; type:string; from:string; to:string; blockExplorerUrl:string; rpcUrl:string; timestamp:number; status:TxStatus; dao?:string; payload?:string }
 const CANISTER_ID = 'dciac-uaaaa-aaaad-qlzuq-cai'
-// Calibration FEVM — Filecoin Onchain Cloud pin contracts live on calibration (314159) in this demo
-// Explorer: calibration Filfox (FEVM block explorer), contract addresses from Synapse calibration chain config
-const CALIBRATION_FILECOIN_PAY = '0x0a8E...filecoinPay-calibration' // via Synapse calibration chain.contracts.filecoinPay.address
-const CALIBRATION_FWSS = '0x0a8E...fwss-calibration'
+// Calibration FEVM — Filecoin Onchain Cloud pin contracts on calibration (314159), from @filoz/synapse-core chains.ts
+// filecoinPayV1: 0x09a0fDc2723fAd1A7b8e3e00eE5DF73841df55a0, fwss (warm storage): 0x02925630df557F957f70E112bA06e50965417CA0
+const CALIBRATION_FILECOIN_PAY = '0x09a0fDc2723fAd1A7b8e3e00eE5DF73841df55a0'
+const CALIBRATION_FWSS = '0x02925630df557F957f70E112bA06e50965417CA0'
 const EXPLORERS: Record<Chain,(h:string)=>string> = {
   arkiv: h=>`https://braga.hoodi.arkiv.network/tx/${h}`,
   icp: _h=>`https://dashboard.internetcomputer.org/canister/${CANISTER_ID}`,
