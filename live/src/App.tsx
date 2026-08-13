@@ -322,7 +322,7 @@ export default function App(){
 
   useEffect(()=>{
     const svg=svgRef.current; const wrap=wrapRef.current; if(!svg||!wrap) return
-    const W=wrap.clientWidth, H=520
+    const W=Math.max(420, wrap.clientWidth || 640), H=520
     svg.setAttribute('viewBox',`0 0 ${W} ${H}`)
     svg.innerHTML=''
     const g = d3.select(svg).append('g')
