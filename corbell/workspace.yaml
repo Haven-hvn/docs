@@ -1,0 +1,67 @@
+version: "1"
+
+workspace:
+  name: "haven-platform"
+  root: ".."
+
+services:
+  - id: haven-aol
+    repo: ../haven-aol
+    language: python
+    tags: [core, icp-canister, vetkd, cryptography, decoupled]
+  - id: haven-dapp
+    repo: ../haven-dapp
+    language: typescript
+    tags: [frontend, nextjs, web3, decoupled]
+  - id: haven-cli
+    repo: ../haven-cli
+    language: python
+    tags: [cli, tui, tooling, decoupled]
+  - id: haven-mobile
+    repo: ../haven-mobile
+    language: typescript
+    tags: [mobile, react-native, decoupled]
+
+existing_docs:
+  auto_scan: true
+  paths: []
+  patterns:
+    - "*.design.md"
+    - "*-spec.md"
+    - "RFC-*.md"
+    - "ADR-*.md"
+    - "DESIGN.md"
+
+storage:
+  graph:
+    backend: sqlite
+    path: .corbell/workspace.db
+  embeddings:
+    backend: sqlite
+    path: .corbell/workspace.db
+  model: all-MiniLM-L6-v2
+
+spec:
+  output_dir: specs/
+  template: default
+
+integrations:
+  notion:
+    token: ${CORBELL_NOTION_TOKEN}
+    parent_page_id: ${CORBELL_NOTION_PAGE_ID}
+  linear:
+    api_key: ${CORBELL_LINEAR_API_KEY}
+    team_id: ${CORBELL_LINEAR_TEAM_ID}
+    default_project_id: ${CORBELL_LINEAR_PROJECT_ID}
+  jira:
+    url: ${CORBELL_JIRA_URL}
+    email: ${CORBELL_JIRA_EMAIL}
+    api_token: ${CORBELL_JIRA_API_TOKEN}
+    project_key: ${CORBELL_JIRA_PROJECT_KEY}
+    issue_type: Task
+
+llm:
+  provider: anthropic
+  model: claude-sonnet-4-5
+  api_key: ${ANTHROPIC_API_KEY}
+  context_budget: 100000
