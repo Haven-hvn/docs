@@ -6,17 +6,22 @@ type Chain = 'arkiv' | 'icp' | 'evm' | 'filecoin'
 type TxStatus = 'pending' | 'confirmed' | 'failed'
 interface InFlightTx { id:string; hash:string; chain:Chain; type:string; from:string; to:string; blockExplorerUrl:string; rpcUrl:string; timestamp:number; status:TxStatus; dao?:string; payload?:string }
 const CANISTER_ID = 'dciac-uaaaa-aaaad-qlzuq-cai'
+// Calibration FEVM — Filecoin Onchain Cloud pin contracts live on calibration (314159) in this demo
+// Explorer: calibration Filfox (FEVM block explorer), contract addresses from Synapse calibration chain config
+const CALIBRATION_FILECOIN_PAY = '0x0a8E...filecoinPay-calibration' // via Synapse calibration chain.contracts.filecoinPay.address
+const CALIBRATION_FWSS = '0x0a8E...fwss-calibration'
 const EXPLORERS: Record<Chain,(h:string)=>string> = {
   arkiv: h=>`https://braga.hoodi.arkiv.network/tx/${h}`,
   icp: _h=>`https://dashboard.internetcomputer.org/canister/${CANISTER_ID}`,
   evm: h=>`https://basescan.org/tx/${h}`,
-  filecoin: h=>`https://filfox.info/en/message/${h}`,
+  filecoin: h=>`https://calibration.filfox.info/en/message/${h}`,
 }
+const FILECOIN_EXPLORER_CONTRACT = (addr:string)=> `https://calibration.filfox.info/en/address/${addr}`
 const RPCS: Record<Chain,string> = {
   arkiv:'https://braga.hoodi.arkiv.network/rpc',
   icp:'https://icp0.io',
   evm:'https://base.meowrpc.com',
-  filecoin:'https://api.node.glif.io',
+  filecoin:'https://api.calibration.node.glif.io/rpc/v1',
 }
 // GB pinned via Filecoin FEVM filecoin-pin / filecoin-pay — in production queried per DAO:
 // 1) arkiv_query → Entity media CID (ipfs://bafy...) + size_bytes attribute
@@ -121,7 +126,7 @@ export default function App(){
       { id:'arkiv', label:'Arkiv OP L3', sub:'0x44…0044 • entities', kind:'network', chain:'arkiv', r:34, volume: 92, explorer:'https://braga.hoodi.arkiv.network' },
       { id:'icp', label:'DFINITY ICP', sub:CANISTER_ID, kind:'network', chain:'icp', r:28, volume: 64, explorer:`https://dashboard.internetcomputer.org/canister/${CANISTER_ID}` },
       { id:'evm', label:'EVM', sub:'Ethereum / Base', kind:'network', chain:'evm', r:26, volume: 71, explorer:'https://basescan.org' },
-      { id:'filecoin', label:'Filecoin FEVM / IPFS', sub:'filecoin-pin • FVM', kind:'network', chain:'filecoin', r:26, volume: 58, explorer:'https://filfox.info' },
+      { id:'filecoin', label:'Filecoin FEVM / IPFS (calibration)', sub:'filecoin-pin • 314159 calibration', kind:'network', chain:'filecoin', r:26, volume: 58, explorer: FILECOIN_EXPLORER_CONTRACT(CALIBRATION_FILECOIN_PAY) },
       { id:'haven-aol', label:'haven-aol', sub:'Python/Motoko • AAL', kind:'service', r:16, volume: 18 },
       { id:'haven-dapp', label:'haven-dapp', sub:'TypeScript • UI', kind:'service', r:16, volume: 22 },
       { id:'haven-cli', label:'haven-cli', sub:'Python • permissionless', kind:'service', r:14, volume: 14 },
@@ -347,7 +352,7 @@ export default function App(){
                 <a className="arch-card chain arkiv" href="https://braga.hoodi.arkiv.network" target="_blank" rel="noreferrer"><b>Arkiv OP L3</b><span>0x440000…0044</span><small>entities · tx ↗</small></a>
                 <a className="arch-card chain icp" href={`https://dashboard.internetcomputer.org/canister/${CANISTER_ID}`} target="_blank" rel="noreferrer"><b>DFINITY ICP</b><span>{CANISTER_ID}</span><small>VetKD · container ↗</small></a>
                 <a className="arch-card chain evm" href="https://basescan.org" target="_blank" rel="noreferrer"><b>EVM — Base / Ethereum</b><span>same 0x owner</span><small>gate eth_call ↗</small></a>
-                <a className="arch-card chain filecoin" href="https://filfox.info" target="_blank" rel="noreferrer"><b>Filecoin FEVM + IPFS</b><span>filecoin-pin · pay</span><small>StateMarketStorageDeal ↗</small></a>
+                <a className="arch-card chain filecoin" href={FILECOIN_EXPLORER_CONTRACT(CALIBRATION_FILECOIN_PAY)} target="_blank" rel="noreferrer"><b>Filecoin FEVM + IPFS (calibration)</b><span>filecoin-pin · pay · 314159</span><small>{CALIBRATION_FILECOIN_PAY.slice(0,10)}… ↗ contract</small></a>
               </div>
             </div>
           </div>
@@ -411,7 +416,7 @@ export default function App(){
               <>DAO size = <b>GB stored through Filecoin pin</b> (sqrt-scaled: 847 GB → 27px, 2.4 GB → 10px). Production: <code>arkiv_query</code> Entity CID + <code>size_bytes</code> → Filecoin FEVM <code>filecoin-pin</code> / <code>filecoin-pay</code> <code>getPinStatus(cid)</code> → sum pinned bytes/1e9 per DAO.</>
             ) : (
               <>DAO size = <b>token/NFT marketcap</b> (sqrt-scaled: $12.4M → 27px, $42k → 10px). Production: Arkiv <code>token_address</code> attr → Base/Ethereum ERC-20 <code>totalSupply × price</code> (CoinGecko/DEX) or ERC-721 <code>floor × supply</code> (Reservoir/OpenSea). GB shown alongside for cross-check.</>
-            )} Same <code>0x{demoUploader.slice(2,8)}</code> uploader across Arkiv/EVM. Filtered <code>entity_type=DataDAO</code> &amp; <code>created_at_block ≥ now-90d</code>. Click any zone for explorer. DFINITY ICP: <a href={`https://dashboard.internetcomputer.org/canister/${CANISTER_ID}`} target="_blank" rel="noreferrer">{CANISTER_ID} ↗</a> · Arkiv L3 <code>0x4400…0044</code> · Filecoin <a href="https://filfox.info" target="_blank" rel="noreferrer">filfox ↗</a>. Mock values when Braga CORS blocks fetch — toggle maps to compare storage vs mcap.
+            )} Same <code>0x{demoUploader.slice(2,8)}</code> uploader across Arkiv/EVM. Filtered <code>entity_type=DataDAO</code> &amp; <code>created_at_block ≥ now-90d</code>. Click any zone for explorer. DFINITY ICP: <a href={`https://dashboard.internetcomputer.org/canister/${CANISTER_ID}`} target="_blank" rel="noreferrer">{CANISTER_ID} ↗</a> · Arkiv L3 <code>0x4400…0044</code> · Filecoin <a href={FILECOIN_EXPLORER_CONTRACT(CALIBRATION_FILECOIN_PAY)} target="_blank" rel="noreferrer">calibration {CALIBRATION_FILECOIN_PAY.slice(0,8)} ↗</a> <a href={FILECOIN_EXPLORER_CONTRACT(CALIBRATION_FWSS)} target="_blank" rel="noreferrer">fwss ↗</a> (<code>calibration.filfox.info</code>). Mock values when Braga CORS blocks fetch — toggle maps to compare storage vs mcap.
           </div>
         </div>
 
