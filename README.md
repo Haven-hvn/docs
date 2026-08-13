@@ -33,7 +33,9 @@ corbell spec new --feature "..." --provider meta  # → specs/ via muse-spark-1.
 # -> then materialized into docs/architecture/ for review
 ```
 
-Graph store: SQLite (`.corbell/workspace.db`, 460K, now 5 services). No Neo4j needed. Embeddings (`sentence-transformers/all-MiniLM-L6-v2`) not required for template specs; LLM via `META_API_KEY=LLM_...` (Meta Muse Spark) now patched in `corbell/core/llm_client.py`.
+Graph store: SQLite (`.corbell/workspace.db`, 460K, now 5 services, 0 private datastores — Haven rides on **public networks only, no private backend**). No Neo4j needed. Embeddings (`sentence-transformers/all-MiniLM-L6-v2`) not required for template specs; LLM via `META_API_KEY=LLM_...` (Meta Muse Spark) now patched in `corbell/core/llm_client.py`.
+
+> **No private backend:** All state is on public chains — **DFINITY ICP** (VetKD canister), **Arkiv OP L3** (`0x44…0044` precompile), **any EVM** (Ethereum/Base/etc. as `haven-aol` gates), **Filecoin FEVM / IPFS** (Filecoin Onchain Cloud, `filecoin-pin`/`filecoin-pay`) — verified `corbell graph build` now `Datastores:0` after fixing false `shared_postgres_db`, `haven-cli` is permissionless-local (actor-local `haven.db` SQLite per user, not shared).
 
 ## Docs layout
 

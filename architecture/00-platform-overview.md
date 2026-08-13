@@ -1,17 +1,19 @@
 # Haven Platform — Decoupled Architecture Overview
 
-> Updated: 2026-08-13 via Corbell `graph build` (Services:5, Edges:6, DB:460K) — **added arkiv-chain** (was miss). Workspace: `corbell-data/workspace.yaml` (name: `haven-platform`, root `..`), tags `decoupled` on all services.
+> Updated: 2026-08-13 via Corbell `graph build` (Services:5, Datastores:0, Edges:5, DB:460K) — **added arkiv-chain** (was miss) + **fixed false shared_postgres_db** + **haven-cli permissionless**. Workspace: `corbell-data/workspace.yaml` (name: `haven-platform`, root `..`), tags `decoupled` + `permissionless` on all services. **Haven rides on public networks only — no private backend.** All state is on-chain: DFINITY ICP (VetKD), Arkiv OP L3 (`0x44…0044`), any EVM (Ethereum/Base as haven-aol gates), Filecoin FEVM/IPFS (filecoin-pin/pay).
 
 ## 1. Design intent: highly decoupled (5 services)
 
-Each Haven component is a **deployable unit with no shared mutable state**:
+Each Haven component is a **deployable unit with no shared private backend — all shared state is on public chains**:
 
-- **No shared DB.** `haven-aol` stores approval cache (TTL 30d) inside canister only; `haven-dapp` uses IndexedDB/Room, `haven-cli` uses local pipeline DB, `haven-mobile` uses Room + `foc-cache`, **arkiv-chain** stores entities/pairs/indexes in state trie as Ethereum accounts (not external DB). No cross-service DB Reads.
+- **No private backend / no shared DB.** `haven-aol` stable memory + ICP VetKD (public ICP), **arkiv-chain** state trie (public Arkiv OP L3), **any EVM** (Ethereum/Base/etc. via `evm_rpc` `eth_call` as gate, public), **Filecoin Onchain Cloud** FEVM/IPFS (`filecoin-pin`/`filecoin-pay`, public). `haven-cli` is **permissionless-local** — each actor runs `haven-cli` locally with actor-local `haven.db` SQLite (`sqlite:///` in `haven_cli/database/connection.py`), not shared. Prior `shared_postgres_db` was Corbell `builder.py:66` `create_engine(` → `postgres` false positive, now `Datastores:0`. No cross-service private DB reads.
 - **No shared types.** Contracts are Candid (`.did`) + EntityRegistry ABI (`EntityRegistry.sol` at `0x44…0044`) + EIP-712 typed data + CID lists. SDKs (`packages/typescript`, `packages/python`, `ic-kotlin`, `@arkiv-network/sdk@0.7.0`) are thin clients, not shared libs.
 - **IPC only via network.** HTTPS + Candid `update`/`query` + Arkiv `arkiv_*` JSON-RPC (`arkiv_query`, `arkiv_getEntityCount`, `arkiv_getBlockTiming`) over `https://braga.hoodi.arkiv.network/rpc` and `0x44…0044 CALL`.
 - **Independent scaling & deploys.** Canister upgrades (`main.mo`) and chain upgrades (reth precompile) don't require frontend deploys; CLI releases via `pyproject.toml`; dapp via `next build`; mobile via Gradle.
 
-![Corbell graph — 5 services (arkv-chain top) + 1 store, D3 explorer](assets/corbell-graph.png)
+![Corbell graph — 5 services (arkv-chain top) + **0 private stores (public chains only)**, D3 explorer](assets/corbell-graph.png)
+
+> **Public networks only:** Screenshot prior to fix showed `1 stores` orange `shared_postgres_db` (false, `haven-cli` SQLite mis-labeled); now `Datastores:0` — shared state is ICP + Arkiv L3 + EVM + Filecoin FEVM (not in graph as private DB). See `docs/assets/corbell-graph.png` (captured `2026-08-13` 71K, 5 services; re-capture pending after rebuild shows 0 stores).
 
 ## 2. Topology (from `corbell graph services` + `graph build` + `api/graph`)
 
