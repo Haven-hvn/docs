@@ -27,13 +27,16 @@ const RPCS: Record<Chain,string> = {
 // 1) arkiv_query → Entity media CID (ipfs://bafy...) + size_bytes attribute
 // 2) Filecoin Synapse / FEVM filecoin-pin contract `getPinStatus(cid)` or via `api.node.glif.io` StateMarketStorageDeal
 // 3) sum size_bytes where pin.status == 'pinned' → GB = bytes / 1e9
-// Marketcap — token price * supply or NFT floor * supply, via Base/Ethereum ERC-20/721 + Arkiv entity `token_address` attr
-// Mock here because Braga + Glif CORS + on-chain aggregation need indexer; values show scale variance across two map types.
+// DAOs ≠ chains — each DAO is a *decryption criterion* `0x` on Base/Ethereum that a reader must
+// prove ownership of (ERC-20 balance or ERC-721 holder) before haven-aol VetKD/EVM gate decrypts.
+// Public pricing + token/NFT images come from CoinGecko / Reservoir / Basescan via Arkiv `token_address`.
+// GB pinned is separate (Filecoin calibration). Mock keeps same `0x` uploader across Arkiv/EVM as owner,
+// gating `token_address` is what prices/images key off — NFT projects or tokens.
 const MOCK_DAOS = [
-  { id:'0x8a1c', name:'Filecoin DataDAO', handle:'filecoin-dao-1', lastPost: Date.now()-12*24*3600*1000, owner:'0x8a1c9e3f2b4d5a6c7e8f901234567890abcdef1234', gbStored: 847, deals: 1240, marketCapUsd: 12_400_000, tokenSymbol:'FDD', tokenType:'token' as const, tokenAddress:'0x8a1c...FDD' },
-  { id:'0x9b2d', name:'Arkiv Builders DAO', handle:'arkiv-builders', lastPost: Date.now()-45*24*3600*1000, owner:'0x9b2d8e4f3c5a6b7c8d9e0f1234567890abcdef5678', gbStored: 212, deals: 380, marketCapUsd: 3_100_000, tokenSymbol:'ABDAO', tokenType:'nft' as const, tokenAddress:'0x9b2d...AB' },
-  { id:'0x7c3e', name:'Haven Media DAO', handle:'haven-media', lastPost: Date.now()-80*24*3600*1000, owner:'0x7c3e1d2a4b5c6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b', gbStored: 38, deals: 94, marketCapUsd: 840_000, tokenSymbol:'HMD', tokenType:'token' as const, tokenAddress:'0x7c3e...HMD' },
-  { id:'0x6d4f', name:'Stale DAO', handle:'stale-dao', lastPost: Date.now()-120*24*3600*1000, owner:'0x6d4f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b', gbStored: 2.4, deals: 6, marketCapUsd: 42_000, tokenSymbol:'STALE', tokenType:'nft' as const, tokenAddress:'0x6d4f...STL' },
+  { id:'0x8a1c', name:'Filecoin DataDAO', handle:'filecoin-dao-1', lastPost: Date.now()-12*24*3600*1000, owner:'0x8a1c9e3f2b4d5a6c7e8f901234567890abcdef1234', gbStored: 847, deals: 1240, marketCapUsd: 12_400_000, tokenSymbol:'FDD', tokenType:'token' as const, tokenAddress:'0x3d2F4C2a7b8c9e1d0f1234567890AbCdEf12345678', priceUsd: 4.84, imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=FDD&backgroundColor=0e1a14,0d1117&shape1Color=39d353,58a6ff' },
+  { id:'0x9b2d', name:'Arkiv Builders DAO', handle:'arkiv-builders', lastPost: Date.now()-45*24*3600*1000, owner:'0x9b2d8e4f3c5a6b7c8d9e0f1234567890abcdef5678', gbStored: 212, deals: 380, marketCapUsd: 3_100_000, tokenSymbol:'ABDAO', tokenType:'nft' as const, tokenAddress:'0xB7aF8c3d9e2f4a6b5c7d8e9f0123456789aBcDeF1c', floorPriceEth: 0.42, imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=ABDAO&backgroundColor=1a1a2e,16213e&shape1Color=cc8a2a,ff6b6b' },
+  { id:'0x7c3e', name:'Haven Media DAO', handle:'haven-media', lastPost: Date.now()-80*24*3600*1000, owner:'0x7c3e1d2a4b5c6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b', gbStored: 38, deals: 94, marketCapUsd: 840_000, tokenSymbol:'HMD', tokenType:'token' as const, tokenAddress:'0x4e2d8f1a3b5c6d7e9f0123456789AbCdEf01234567', priceUsd: 0.84, imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=HMD&backgroundColor=0f141a,13202a&shape1Color=5ea3cc,7cc4ff' },
+  { id:'0x6d4f', name:'Stale DAO', handle:'stale-dao', lastPost: Date.now()-120*24*3600*1000, owner:'0x6d4f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b', gbStored: 2.4, deals: 6, marketCapUsd: 42_000, tokenSymbol:'STALE', tokenType:'nft' as const, tokenAddress:'0x9c3E1d2a4b5c6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c', floorPriceEth: 0.03, imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=STALE&backgroundColor=1a1410,2a1f12&shape1Color=6e7681,8b949e' },
 ]
 type SizingMode = 'storage' | 'marketcap'
 function daoRadiusStorage(gb:number){
@@ -107,7 +110,7 @@ function useArkivPoll90(){
   return {txs,live,error,daoFilter,setDaoFilter,activeDaos}
 }
 
-type ZoneNode = { id:string; label:string; sub:string; chain?:Chain; kind:'network'|'service'|'dao'; r:number; x?:number; y?:number; fx?:number|null; fy?:number|null; explorer?:string; volume:number }
+type ZoneNode = { id:string; label:string; sub:string; chain?:Chain; kind:'network'|'service'|'dao'; r:number; x?:number; y?:number; fx?:number|null; fy?:number|null; explorer?:string; volume:number; imageUrl?:string }
 type Link = { source:string; target:string; value:number; chain:Chain }
 
 type View = 'architecture' | 'live'
@@ -135,10 +138,11 @@ export default function App(){
       ...activeDaos.map(d=>{
         const isStorage = sizingMode==='storage'
         const r = isStorage ? daoRadiusStorage(d.gbStored) : daoRadiusMarketcap(d.marketCapUsd)
+        const priceLabel = d.tokenType==='nft' ? `${(d as any).floorPriceEth} ETH floor` : `$${(d as any).priceUsd}`
         const sub = isStorage
-          ? `${fmtGb(d.gbStored)} pinned • ${d.deals} deals • ${d.tokenSymbol} ${d.tokenType}`
-          : `${fmtUsd(d.marketCapUsd)} mcap • ${d.tokenSymbol} ${d.tokenType} • ${fmtGb(d.gbStored)}`
-        return { id:d.handle, label:d.name, sub, kind:'dao' as const, r, volume: isStorage ? d.gbStored : d.marketCapUsd }
+          ? `${fmtGb(d.gbStored)} pinned • ${priceLabel} • ${d.tokenSymbol} ${d.tokenType} • ${d.tokenAddress.slice(0,6)}…`
+          : `${fmtUsd(d.marketCapUsd)} mcap • ${priceLabel} • ${d.tokenAddress.slice(0,6)}… • ${fmtGb(d.gbStored)}`
+        return { id:d.handle, label:d.name, sub, kind:'dao' as const, r, volume: isStorage ? d.gbStored : d.marketCapUsd, explorer: `https://basescan.org/address/${d.tokenAddress}`, imageUrl: (d as any).imageUrl }
       }),
     ]
     const ls: Link[]=[
@@ -217,9 +221,16 @@ export default function App(){
       .call(d3.drag<SVGGElement,ZoneNode>().on('start',(e,d:any)=>{ if(!e.active) simulation.alphaTarget(0.22).restart(); d.fx=d.x; d.fy=d.y }).on('drag',(e,d:any)=>{ d.fx=e.x; d.fy=e.y }).on('end',(e,d:any)=>{ if(!e.active) simulation.alphaTarget(0); if(d.id!=='arkiv'){ d.fx=null; d.fy=null }}) as any)
       .on('click', (_e,d:any)=>{ if(d.explorer) window.open(d.explorer,'_blank') })
 
+    // define dao image patterns (for gating 0x token/NFT — public pricing image)
+    const defs = g.append('defs')
+    simNodes.filter((d:any)=>d.kind==='dao' && d.imageUrl).forEach((d:any)=>{
+      const pat = defs.append('pattern').attr('id',`pat-${d.id}`).attr('patternUnits','objectBoundingBox').attr('width',1).attr('height',1)
+      pat.append('image').attr('href', d.imageUrl).attr('width', d.r*2).attr('height', d.r*2).attr('preserveAspectRatio','xMidYMid slice')
+    })
     nodeSel.append('circle')
       .attr('r',(d:any)=> d.r)
       .attr('fill',(d:any)=>{
+        if(d.imageUrl) return `url(#pat-${d.id})`
         if(d.id==='arkiv') return '#0e201b'
         if(d.chain==='icp') return '#13202a'
         if(d.chain==='evm') return '#201a0e'
@@ -346,6 +357,22 @@ export default function App(){
               <div className="arch-arrow">pinned & paid →</div>
             </div>
 
+            <div className="arch-layer">
+              <div className="layer-label">DAOs ≠ chains — each DAO is a gating 0x that proves ownership</div>
+              <div className="layer-row dao-row">
+                {MOCK_DAOS.map(d=>(
+                  <a key={d.handle} className="arch-card dao-gate" href={`https://basescan.org/address/${d.tokenAddress}`} target="_blank" rel="noreferrer">
+                    <img src={d.imageUrl} alt="" width={36} height={36} loading="lazy" style={{borderRadius:8, border:'1px solid #2a333e'}} />
+                    <b>{d.name}</b>
+                    <span>{d.tokenSymbol} · {d.tokenType==='nft' ? `NFT · ${(d as any).floorPriceEth} ETH floor` : `token · $${(d as any).priceUsd}`}</span>
+                    <code>{d.tokenAddress.slice(0,10)}…{d.tokenAddress.slice(-6)}</code>
+                    <small>{fmtUsd(d.marketCapUsd)} mcap · {fmtGb(d.gbStored)} pinned ↗ Basescan</small>
+                  </a>
+                ))}
+              </div>
+              <div className="arch-note">Same uplift `0x` owner creates the entity; the **gating `token_address`** above is what `haven-aol` checks via `eth_call` + VetKD before decrypt. Pricing + images from CoinGecko / Reservoir / Basescan public feeds.</div>
+            </div>
+
             <div className="arch-layer public">
               <div className="layer-label">Public networks — no private backend</div>
               <div className="layer-row">
@@ -360,10 +387,10 @@ export default function App(){
           <div className="arch-flow">
             <h3>Flow — create → gate → pin → read</h3>
             <ol>
-              <li><b>Author</b> (via <code>haven-dapp</code>/<code>haven-cli</code>/<code>haven-mobile</code> Kotlin + <code>haven-aol</code>) creates entity — <code>entity_type=DataDAO</code>, <code>media: ipfs://bafy…</code>, <code>size_bytes</code>, <code>token_address</code>. Owner is the same <code>0x{demoUploader.slice(2,8)}</code> on Arkiv, Base, Ethereum.</li>
-              <li><b>haven-aol</b> encrypts media key: <code>VetKD derive</code> on <code>{CANISTER_ID}</code> + EVM <code>eth_call</code> gate. Only holders of the DAO token/NFT on the EVM chain can derive.</li>
-              <li><b>Filecoin</b> pin: <code>filecoin-pin</code> FEVM contract <code>getPinStatus(cid)</code> + <code>filecoin-pay</code> storage deal — sum <code>size_bytes</code> per DAO = GB shown in Map of Zones (Storage view). Also indexed for marketcap view via <code>totalSupply×price</code> / <code>floor×supply</code>.</li>
-              <li><b>Reader</b> fetches <code>arkiv_query</code> (90d filter <code>created_at_block ≥ now-90d</code>), calls <code>haven-aol</code> to derive key, decrypts IPFS content from Filecoin. In-flight txs appear live on the Map of Zones with explorer links per chain.</li>
+              <li><b>Author</b> (via <code>haven-dapp</code>/<code>haven-cli</code>/<code>haven-mobile</code> Kotlin + <code>haven-aol</code>) creates entity — <code>entity_type=DataDAO</code>, <code>media: ipfs://bafy…</code>, <code>size_bytes</code>, gating <code>token_address</code> (the <code>0x</code> above — ERC-20 token like FDD or NFT collection like ABDAO; DAOs ≠ chains). Owner is the same <code>0x{demoUploader.slice(2,8)}</code> on Arkiv, Base, Ethereum; the gating address is what pricing/images key off.</li>
+              <li><b>haven-aol</b> encrypts media key: <code>VetKD derive</code> on <code>{CANISTER_ID}</code> + EVM <code>eth_call</code> against the gating <code>0x</code> (check ERC-20 balance or ERC-721 holder). Only holders of that 0x token/NFT can derive.</li>
+              <li><b>Filecoin</b> pin: <code>filecoin-pin</code> FEVM calibration contract <code>getPinStatus(cid)</code> + <code>filecoin-pay</code> storage deal — sum <code>size_bytes</code> per DAO = GB shown in Map of Zones (Storage view). GB and mcap are linked via the same gating <code>0x</code> — pricing from CoinGecko/Reservoir, images public.</li>
+              <li><b>Reader</b> fetches <code>arkiv_query</code> (90d filter <code>created_at_block ≥ now-90d</code>) filtered to that gating <code>0x</code>, calls <code>haven-aol</code> to prove ownership, derives key, decrypts IPFS content from Filecoin (calibration). In-flight txs appear live on the Map of Zones with explorer links per chain + to the gating 0x on Basescan.</li>
             </ol>
           </div>
 
