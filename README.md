@@ -2,32 +2,38 @@
 
 Living architecture docs for the Haven platform — generated with [Corbell](https://github.com/corbell-ai/corbell) and checked in.
 
-**Stack:** 4 highly decoupled services, no shared DB, IPC via Candid/HTTPS only.
+**Stack:** 5 highly decoupled services, no shared DB, IPC via Candid/HTTPS + Arkiv precompile.
 
 | Service | Repo | Language | Role | Coupling |
 |---------|------|----------|------|----------|
+| `arkiv-chain` | `arkiv-op-reth/` | Rust (reth + precompile `0x44…0044`) | **Entity contract** — `EntityRegistry.sol` ABI, `execute(Operation[])`, `arkiv_*` RPC (Braga `0.7.0` SDK) | **Core** — state trie, no external indexer |
 | `haven-aol` | `haven-aol/` | Motoko (canister) + TS/Python SDKs | ICP VetKD gating, EIP-712 `ecrecover`, epoch cache | **Core** — deployed to `dciac-uaaaa-aaaad-qlzuq-cai` |
-| `haven-dapp` | `haven-dapp/` | TypeScript / Next.js 15 | Web3 frontend, decrypt, cache, playback | Calls `haven-aol` via Candid only |
-| `haven-cli` | `haven-cli/` | Python 3.11+ | Media pipeline, encryption, archival | Calls `haven-aol` Python SDK + Filecoin |
-| `haven-mobile` | `haven-mobile/` | Kotlin + TS | Android offline-first viewer (Media3 + foc-cache) | Calls `haven-aol` via `ic-kotlin` |
+| `haven-dapp` | `haven-dapp/` | TypeScript / Next.js 15 | Web3 frontend (`@arkiv-network/sdk` `arkiv_query`), decrypt, cache, playback | Calls `arkiv-chain` + `haven-aol` via HTTPS/Candid |
+| `haven-cli` | `haven-cli/` | Python 3.11+ | Media pipeline (`arkiv_sync.py`), encryption, archival | Calls `arkiv-chain` + `haven-aol` + Filecoin |
+| `haven-mobile` | `haven-mobile/` | Kotlin + TS | Android offline-first viewer (Media3 + foc-cache) | Calls `haven-aol` via `ic-kotlin` + Arkiv via SDK |
 
 ```
 haven-dapp ──┐
-haven-cli  ──┼──> haven-aol (ICP canister, VetKD v1/v3) ──> EVM RPC (eth_call) ──> Filecoin PIN
-haven-mobile─┘
+haven-cli  ──┼──> haven-aol (ICP VetKD v1/v3) ──> EVM RPC ──> Filecoin PIN
+haven-mobile─┘         ∧
+                       │   arkiv-chain (0x44…0044 precompile, arkiv_query, braga.hoodi.arkiv.network)
+haven-dapp/haven-cli ──┴──> state trie (entity/pair/index accounts, roaring64 + ART)
 ```
+
+![Corbell graph — 5 services, 1 store](assets/corbell-graph.png)
+
 
 ## How this was built
 
 ```bash
-corbell init                    # -> corbell-data/workspace.yaml (4 services, tags: decoupled)
-corbell graph build             # -> .corbell/workspace.db  (Services:4 Datastores:1 Edges:6)
-corbell graph services          # verifies decoupled tags
-corbell spec new --feature "..." --no-llm  # -> specs/haven-decoupled-architecture.md
+corbell init                    # -> corbell-data/workspace.yaml (5 services, tags: decoupled) ← fixed 2026-08-13: added arkiv-chain (was miss)
+corbell graph build             # -> .corbell/workspace.db  (Services:5 Datastores:1 Edges:6)  # arkiv-chain rust + haven-aol/dapp/cli/mobile
+corbell ui serve --port 7433 --no-browser  # → http://localhost:7433 — D3 graph (assets/corbell-graph.png) + /api/mermaid
+corbell spec new --feature "..." --provider meta  # → specs/ via muse-spark-1.2-contributor @ api.meta.ai/v1 ($0.18–$0.44)
 # -> then materialized into docs/architecture/ for review
 ```
 
-Graph store: SQLite (`.corbell/workspace.db`, 460K). No Neo4j needed. Embeddings (`sentence-transformers/all-MiniLM-L6-v2`) not required for template specs; add `corbell embeddings build` + `ANTHROPIC_API_KEY` for LLM-enriched generation.
+Graph store: SQLite (`.corbell/workspace.db`, 460K, now 5 services). No Neo4j needed. Embeddings (`sentence-transformers/all-MiniLM-L6-v2`) not required for template specs; LLM via `META_API_KEY=LLM_...` (Meta Muse Spark) now patched in `corbell/core/llm_client.py`.
 
 ## Docs layout
 

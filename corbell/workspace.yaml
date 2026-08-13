@@ -5,6 +5,10 @@ workspace:
   root: ".."
 
 services:
+  - id: arkiv-chain
+    repo: ../arkiv-op-reth
+    language: rust
+    tags: [chain, entity, precompile, reth, core, decoupled]
   - id: haven-aol
     repo: ../haven-aol
     language: python
