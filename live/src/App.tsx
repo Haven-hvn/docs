@@ -105,8 +105,10 @@ function useArkivPoll90(){
 type ZoneNode = { id:string; label:string; sub:string; chain?:Chain; kind:'network'|'service'|'dao'; r:number; x?:number; y?:number; fx?:number|null; fy?:number|null; explorer?:string; volume:number }
 type Link = { source:string; target:string; value:number; chain:Chain }
 
+type View = 'architecture' | 'live'
 export default function App(){
   const {txs,live,error,daoFilter,setDaoFilter,activeDaos}=useArkivPoll90()
+  const [view,setView]=useState<View>('architecture')
   const [chainFilter,setChainFilter]=useState<Chain|'all'>('all')
   const [sizingMode,setSizingMode]=useState<SizingMode>('storage')
   const svgRef=useRef<SVGSVGElement>(null)
@@ -280,9 +282,102 @@ export default function App(){
           <span className="sub">Distributed public networks · no private backend</span>
           <span className={`dot ${live?'live':'mock'}`} title={live?'RPC live':'mock 90d fallback'} />
         </div>
-        <nav className="nav"><a href="../README.md">Docs</a><a href="https://github.com/Haven-hvn/docs">GitHub</a></nav>
+        <nav className="nav">
+          <button className={view==='architecture'?'on':''} onClick={()=>setView('architecture')}>Architecture</button>
+          <button className={view==='live'?'on':''} onClick={()=>setView('live')}>Live network</button>
+          <a href="../README.md">Docs</a><a href="https://github.com/Haven-hvn/docs">GitHub</a>
+        </nav>
       </header>
 
+      {view==='architecture' ? (
+        <div className="arch">
+          <div className="arch-hero">
+            <div>
+              <h1>Haven — how the pieces fit</h1>
+              <p>Every Haven surface is a thin client over <b>public networks</b>. No shared Postgres, no private backend. Arkiv is the shared log (entity contract), haven-aol is the decrypt gate (VetKD + EVM), Filecoin is the pin layer, DFINITY & EVM are the identity roots. Same <code>0x</code> uploader across Arkiv, Base and Ethereum.</p>
+              <div className="arch-kicker"><span>5 decoupled surfaces</span><span>•</span><span>1 shared entity shape</span><span>•</span><span>4 public chains</span></div>
+            </div>
+            <div className="arch-cta">
+              <button className="cta" onClick={()=>setView('live')}>Explore live network →</button>
+              <span className="cta-hint">{activeDaos.length} active DAOs (90d) · {live?'RPC live':'mock'} · d3-force Map of Zones</span>
+            </div>
+          </div>
+
+          <div className="arch-diagram">
+            <div className="arch-layer">
+              <div className="layer-label">Surfaces — permissionless clients</div>
+              <div className="layer-row">
+                <div className="arch-card soft"><b>haven-dapp</b><span>TypeScript · web</span><code>src/lib/arkiv.ts</code></div>
+                <div className="arch-card soft"><b>haven-cli</b><span>Python · any actor</span><code>haven-cli</code></div>
+                <div className="arch-card soft"><b>haven-mobile</b><span>Kotlin · Android</span><small>not TypeScript</small></div>
+                <div className="arch-card accent"><b>haven-aol</b><span>Python / Motoko · AAL</span><code>VetKD + EVM gate</code></div>
+                <div className="arch-card soft"><b>arkiv-chain</b><span>Rust · EntityRegistry</span><code>contracts/EntityRegistry.sol</code></div>
+              </div>
+              <div className="arch-arrow">uses shared shape + gates →</div>
+            </div>
+
+            <div className="arch-layer core">
+              <div className="layer-label">Shared log — the only source of truth</div>
+              <div className="layer-row">
+                <div className="arch-card core-card">
+                  <b>Entity shape (shared)</b>
+                  <code>entity_type, title, media, attributes</code>
+                  <pre>{`{ id, owner: 0x…, created_at_block,\n  entity_type: "DataDAO",\n  title, media: ipfs://bafy…,\n  attributes: { chain, token_address } }`}</pre>
+                  <a href="../entities/ENTITY_SHAPE.md">ENTITY_SHAPE.md ↗</a>
+                </div>
+                <div className="arch-card core-card">
+                  <b>Media content (standardized)</b>
+                  <code>cid, mime, size_bytes, duration</code>
+                  <pre>{`media: { cid, mime, size_bytes,\n  duration, thumbnail }\nattributes: { chain, token }`}</pre>
+                  <a href="../entities/MEDIA_CONTENT_SPEC.md">MEDIA_CONTENT_SPEC.md ↗</a>
+                </div>
+                <div className="arch-card core-card">
+                  <b>Arkiv EntityRegistry</b>
+                  <span>OP L3 <code>0x4400…0044</code></span>
+                  <code>arkiv_query • arkiv_getEntityCount</code>
+                  <a href="https://braga.hoodi.arkiv.network" target="_blank" rel="noreferrer">braga.hoodi.arkiv.network ↗</a>
+                </div>
+              </div>
+              <div className="arch-arrow">pinned & paid →</div>
+            </div>
+
+            <div className="arch-layer public">
+              <div className="layer-label">Public networks — no private backend</div>
+              <div className="layer-row">
+                <a className="arch-card chain arkiv" href="https://braga.hoodi.arkiv.network" target="_blank" rel="noreferrer"><b>Arkiv OP L3</b><span>0x440000…0044</span><small>entities · tx ↗</small></a>
+                <a className="arch-card chain icp" href={`https://dashboard.internetcomputer.org/canister/${CANISTER_ID}`} target="_blank" rel="noreferrer"><b>DFINITY ICP</b><span>{CANISTER_ID}</span><small>VetKD · container ↗</small></a>
+                <a className="arch-card chain evm" href="https://basescan.org" target="_blank" rel="noreferrer"><b>EVM — Base / Ethereum</b><span>same 0x owner</span><small>gate eth_call ↗</small></a>
+                <a className="arch-card chain filecoin" href="https://filfox.info" target="_blank" rel="noreferrer"><b>Filecoin FEVM + IPFS</b><span>filecoin-pin · pay</span><small>StateMarketStorageDeal ↗</small></a>
+              </div>
+            </div>
+          </div>
+
+          <div className="arch-flow">
+            <h3>Flow — create → gate → pin → read</h3>
+            <ol>
+              <li><b>Author</b> (via <code>haven-dapp</code>/<code>haven-cli</code>/<code>haven-mobile</code> Kotlin + <code>haven-aol</code>) creates entity — <code>entity_type=DataDAO</code>, <code>media: ipfs://bafy…</code>, <code>size_bytes</code>, <code>token_address</code>. Owner is the same <code>0x{demoUploader.slice(2,8)}</code> on Arkiv, Base, Ethereum.</li>
+              <li><b>haven-aol</b> encrypts media key: <code>VetKD derive</code> on <code>{CANISTER_ID}</code> + EVM <code>eth_call</code> gate. Only holders of the DAO token/NFT on the EVM chain can derive.</li>
+              <li><b>Filecoin</b> pin: <code>filecoin-pin</code> FEVM contract <code>getPinStatus(cid)</code> + <code>filecoin-pay</code> storage deal — sum <code>size_bytes</code> per DAO = GB shown in Map of Zones (Storage view). Also indexed for marketcap view via <code>totalSupply×price</code> / <code>floor×supply</code>.</li>
+              <li><b>Reader</b> fetches <code>arkiv_query</code> (90d filter <code>created_at_block ≥ now-90d</code>), calls <code>haven-aol</code> to derive key, decrypts IPFS content from Filecoin. In-flight txs appear live on the Map of Zones with explorer links per chain.</li>
+            </ol>
+          </div>
+
+          <div className="arch-compare">
+            <div className="compare-card">
+              <h4>Storage view</h4>
+              <p>Zone = GB pinned via Filecoin (sqrt-scaled). Channel = GB volume. Answers “who stores the most?” — currently Filecoin DataDAO 847 GB dominant.</p>
+              <button onClick={()=>setView('live')}>Open Storage map →</button>
+            </div>
+            <div className="compare-card">
+              <h4>Marketcap view</h4>
+              <p>Zone = token/NFT marketcap (ERC-20/721 price×supply). Channel = mcap volume. Answers “who is most valued?” — $12.4M vs $42k spread.</p>
+              <button onClick={()=>setView('live')}>Open Marketcap map →</button>
+            </div>
+          </div>
+          <div className="arch-foot">Highly decoupled: each surface ships alone, talks only via RPC to the four public networks. No private DB ever sees an entity — the blockchains + IPFS are the database. <a href="../architecture/WEB3_PARADIGM.md">WEB3_PARADIGM.md ↗</a></div>
+        </div>
+      ) : (
+      <>
       <div className="bar">
         <div className="sizing">
           <span className="label">Map sizing</span>
@@ -347,6 +442,8 @@ export default function App(){
           </div>
         </div>
       </div>
+      </>
+      )}
 
       <footer className="ftr"><span>Haven · 5 decoupled surfaces (arkiv-chain Rust · haven-aol Python/Motoko · haven-dapp TS · haven-cli Python · haven-mobile Kotlin) · shared state is blockchains only — no private backend</span><a href="../README.md">← Back to docs</a></footer>
     </div>
