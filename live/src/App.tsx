@@ -237,7 +237,10 @@ function useArkivPoll90(){
         const r=await fetch(RPCS.arkiv,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:1,method:'arkiv_getEntityCount',params:[]})})
         if(r.ok){ const j=await r.json(); if(j.result!==undefined) setLive(true) }
         else if(r.status===503) setError('Arkiv 503 — using cached mocks')
-      }catch(e:any){ setError(String(e.message||e).slice(0,56)) }
+      }catch{
+        const msg = (typeof navigator !== 'undefined' && !navigator.onLine) ? 'Offline — using cached mocks' : 'Arkiv 503 — using cached mocks';
+        setError(prev=> prev && prev.includes('Arkiv 503') ? prev : msg)
+      }
       if(activeDaos.length===0) return
       const dao=activeDaos[Math.floor(Math.random()*activeDaos.length)]
       const sameUploader=dao.owner
