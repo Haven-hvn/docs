@@ -20,9 +20,10 @@ interface InFlightTx {
   dao?: string
 }
 
+const CANISTER_ID = 'dciac-uaaaa-aaaad-qlzuq-cai'
 const EXPLORERS: Record<Chain, (hash: string) => string> = {
   arkiv: (h) => `https://braga.hoodi.arkiv.network/tx/${h}`,
-  icp: (h) => `https://dashboard.internetcomputer.org/canister/${h}`,
+  icp: (_h) => `https://dashboard.internetcomputer.org/canister/${CANISTER_ID}`,
   evm: (h) => `https://basescan.org/tx/${h}`,
   filecoin: (h) => `https://filfox.info/en/tx/${h}`,
 }
@@ -107,7 +108,7 @@ function useArkivPoll90(){
     const tx: InFlightTx = {
       id:`${chain}-${now}`, hash, chain,
       type: chain==='arkiv'?`Entity ${['CREATE','UPDATE','EXTEND'][Math.floor(Math.random()*3)]}`: chain==='icp'?'VetKD derive': chain==='evm'?'Gate EVM eth_call':'Filecoin pin',
-      from: sameUploader, to: chain==='arkiv'?'0x4400000000000000000000000000000000000044': chain==='icp'?'dciac-uaaaa-aaaad-qlzuq-cai':'0xFilecoinFEVM',
+      from: sameUploader, to: chain==='arkiv'?'0x4400000000000000000000000000000000000044': chain==='icp'?CANISTER_ID:'0xFilecoinFEVM',
       blockExplorerUrl: EXPLORERS[chain](hash), rpcUrl: RPCS[chain], timestamp: now,
       status: Math.random()>0.25?'pending':'confirmed', payload: JSON.stringify({title: dao.name, dao: dao.handle, sameUploader: sameUploader.slice(0,8)+'... same across all chains'}), attributes: {title: dao.name} as any, dao: dao.handle,
     }
