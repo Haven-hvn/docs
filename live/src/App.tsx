@@ -1,181 +1,329 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef, useState, useMemo } from 'react'
+import * as d3 from 'd3'
 import './App.css'
 
 type Chain = 'arkiv' | 'icp' | 'evm' | 'filecoin'
 type TxStatus = 'pending' | 'confirmed' | 'failed'
-
-interface InFlightTx {
-  id: string
-  hash: string
-  chain: Chain
-  type: string
-  from: string
-  to: string
-  blockExplorerUrl: string
-  rpcUrl: string
-  timestamp: number
-  status: TxStatus
-  payload?: string
-  attributes?: Record<string, string>
-  dao?: string
-}
-
+interface InFlightTx { id:string; hash:string; chain:Chain; type:string; from:string; to:string; blockExplorerUrl:string; rpcUrl:string; timestamp:number; status:TxStatus; dao?:string; payload?:string }
 const CANISTER_ID = 'dciac-uaaaa-aaaad-qlzuq-cai'
-const EXPLORERS: Record<Chain, (hash: string) => string> = {
-  arkiv: (h) => `https://braga.hoodi.arkiv.network/tx/${h}`,
-  icp: (_h) => `https://dashboard.internetcomputer.org/canister/${CANISTER_ID}`,
-  evm: (h) => `https://basescan.org/tx/${h}`,
-  filecoin: (h) => `https://filfox.info/en/tx/${h}`,
+const EXPLORERS: Record<Chain,(h:string)=>string> = {
+  arkiv: h=>`https://braga.hoodi.arkiv.network/tx/${h}`,
+  icp: _h=>`https://dashboard.internetcomputer.org/canister/${CANISTER_ID}`,
+  evm: h=>`https://basescan.org/tx/${h}`,
+  filecoin: h=>`https://filfox.info/en/message/${h}`,
 }
-
-const RPCS: Record<Chain, string> = {
-  arkiv: 'https://braga.hoodi.arkiv.network/rpc',
-  icp: 'https://icp0.io',
-  evm: 'https://base.meowrpc.com',
-  filecoin: 'https://api.node.glif.io',
+const RPCS: Record<Chain,string> = {
+  arkiv:'https://braga.hoodi.arkiv.network/rpc',
+  icp:'https://icp0.io',
+  evm:'https://base.meowrpc.com',
+  filecoin:'https://api.node.glif.io',
 }
-
-// How we get DAO data — documented for you:
-// 1) Real: `haven-dapp/src/lib/arkiv.ts` createPublicClient({transport:http(RPCS.arkiv)}) + @arkiv-network/sdk `arkiv_query` via `PublicArkivClient`
-//    + `haven-dapp/src/lib/community-feed.ts` discoverUserCommunities + `src/types/arkiv.ts` ArkivEntity created_at_block
-//    + `src/lib/arkiv-recency.ts` pickLatestArkivEntity. Filter: attribute `entity_type=DataDAO` && last_post_block >= now - 90d.
-// 2) Fallback mock (since braga CORS often blocks browser fetch, as you saw Failed to fetch): local mock DAOs seeded as active in last 90d.
+// GB pinned via Filecoin FEVM filecoin-pin / filecoin-pay — in production queried per DAO:
+// 1) arkiv_query → Entity media CID (ipfs://bafy...) + size_bytes attribute
+// 2) Filecoin Synapse / FEVM filecoin-pin contract `getPinStatus(cid)` or via `api.node.glif.io` StateMarketStorageDeal
+// 3) sum size_bytes where pin.status == 'pinned' → GB = bytes / 1e9
+// Marketcap — token price * supply or NFT floor * supply, via Base/Ethereum ERC-20/721 + Arkiv entity `token_address` attr
+// Mock here because Braga + Glif CORS + on-chain aggregation need indexer; values show scale variance across two map types.
 const MOCK_DAOS = [
-  { id: '0x8a1c…DataDAO', name: 'Filecoin DataDAO #1', handle: 'filecoin-dao-1', lastPost: Date.now() - 1000*60*60*24*12, owner: '0x8a1c9e3f2b4d5a6c7e8f901234567890abcdef1234' },
-  { id: '0x9b2d…DataDAO', name: 'Arkiv Builders DAO', handle: 'arkiv-builders', lastPost: Date.now() - 1000*60*60*24*45, owner: '0x9b2d8e4f3c5a6b7c8d9e0f1234567890abcdef5678' },
-  { id: '0x7c3e…DataDAO', name: 'Haven Media DAO', handle: 'haven-media', lastPost: Date.now() - 1000*60*60*24*80, owner: '0x7c3e1d2a4b5c6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b' },
-  { id: '0x6d4f…DataDAO', name: 'Stale DAO', handle: 'stale-dao', lastPost: Date.now() - 1000*60*60*24*120, owner: '0x6d4f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b' },
+  { id:'0x8a1c', name:'Filecoin DataDAO', handle:'filecoin-dao-1', lastPost: Date.now()-12*24*3600*1000, owner:'0x8a1c9e3f2b4d5a6c7e8f901234567890abcdef1234', gbStored: 847, deals: 1240, marketCapUsd: 12_400_000, tokenSymbol:'FDD', tokenType:'token' as const, tokenAddress:'0x8a1c...FDD' },
+  { id:'0x9b2d', name:'Arkiv Builders DAO', handle:'arkiv-builders', lastPost: Date.now()-45*24*3600*1000, owner:'0x9b2d8e4f3c5a6b7c8d9e0f1234567890abcdef5678', gbStored: 212, deals: 380, marketCapUsd: 3_100_000, tokenSymbol:'ABDAO', tokenType:'nft' as const, tokenAddress:'0x9b2d...AB' },
+  { id:'0x7c3e', name:'Haven Media DAO', handle:'haven-media', lastPost: Date.now()-80*24*3600*1000, owner:'0x7c3e1d2a4b5c6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b', gbStored: 38, deals: 94, marketCapUsd: 840_000, tokenSymbol:'HMD', tokenType:'token' as const, tokenAddress:'0x7c3e...HMD' },
+  { id:'0x6d4f', name:'Stale DAO', handle:'stale-dao', lastPost: Date.now()-120*24*3600*1000, owner:'0x6d4f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b', gbStored: 2.4, deals: 6, marketCapUsd: 42_000, tokenSymbol:'STALE', tokenType:'nft' as const, tokenAddress:'0x6d4f...STL' },
 ]
+type SizingMode = 'storage' | 'marketcap'
+function daoRadiusStorage(gb:number){
+  const r = 9 + Math.sqrt(Math.max(0, gb)) * 0.62
+  return Math.max(10, Math.min(28, Math.round(r*10)/10))
+}
+function daoRadiusMarketcap(mcap:number){
+  // sqrt-normalized 40k→10px, 12.4M→27px
+  const s = Math.sqrt(Math.max(0, mcap))
+  const sMin = Math.sqrt(42_000), sMax = Math.sqrt(12_400_000)
+  const t = (s - sMin) / (sMax - sMin || 1)
+  return Math.max(10, Math.min(28, Math.round((10 + t*17.5)*10)/10))
+}
+function fmtUsd(n:number){ if(n>=1e6) return `$${(n/1e6).toFixed(n>=10e6?1:2)}M`; if(n>=1e3) return `$${(n/1e3).toFixed(1)}k`; return `$${n}` }
+function fmtGb(n:number){ return n>=100? `${Math.round(n).toLocaleString()} GB` : `${n.toLocaleString()} GB` }
 
 function Starfield(){
-  const ref = useRef<HTMLCanvasElement>(null)
+  const ref=useRef<HTMLCanvasElement>(null)
   useEffect(()=>{
-    const c = ref.current; if(!c) return
-    const ctx = c.getContext('2d'); if(!ctx) return
+    const c=ref.current; if(!c) return
+    const ctx=c.getContext('2d'); if(!ctx) return
     let raf=0
-    const stars = Array.from({length: 220}, ()=>({x:Math.random(),y:Math.random(),z:Math.random()*0.9+0.1, tw:Math.random()*Math.PI*2}))
-    const draw = ()=>{
+    const stars=Array.from({length:220},()=>({x:Math.random(),y:Math.random(),z:Math.random()*0.85+0.15,tw:Math.random()*Math.PI*2}))
+    const draw=()=>{
       const w=c.width=c.clientWidth*devicePixelRatio, h=c.height=c.clientHeight*devicePixelRatio
       ctx.clearRect(0,0,w,h)
       for(const s of stars){
-        s.tw+=0.02
-        const alpha=0.55+0.45*Math.sin(s.tw)*s.z
+        s.tw+=0.018
+        const a=0.5+0.45*Math.sin(s.tw)*s.z
         const x=s.x*w, y=s.y*h
-        const r= s.z*1.7*devicePixelRatio
-        ctx.fillStyle=`rgba(140,180,255,${alpha.toFixed(3)})`
-        ctx.shadowColor='rgba(88,166,255,0.9)'; ctx.shadowBlur=r*6
+        const r=s.z*1.55*devicePixelRatio
+        ctx.fillStyle=`rgba(125,170,255,${a.toFixed(3)})`
+        ctx.shadowColor='rgba(86,155,255,0.75)'; ctx.shadowBlur=r*5
         ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill()
-        // second layer for distributed feel
         ctx.shadowBlur=0
-        ctx.fillStyle=`rgba(188,140,255,${(alpha*0.35).toFixed(3)})`
-        ctx.beginPath(); ctx.arc(x*0.97+8,y*1.02, r*0.6, 0, Math.PI*2); ctx.fill()
       }
-      // subtle drift for 3d feel
-      for(const s of stars){ s.x+= (Math.sin(s.tw*0.3)*0.00012)*s.z; s.y+= (Math.cos(s.tw*0.35)*0.00008)*s.z; if(s.x>1) s.x-=1; if(s.x<0) s.x+=1; if(s.y>1) s.y-=1; if(s.y<0) s.y+=1;}
+      for(const s of stars){ s.x+=Math.sin(s.tw*0.28)*0.0001*s.z; s.y+=Math.cos(s.tw*0.33)*0.00007*s.z; if(s.x>1)s.x-=1; if(s.x<0)s.x+=1; if(s.y>1)s.y-=1; if(s.y<0)s.y+=1 }
       raf=requestAnimationFrame(draw)
     }
-    draw()
-    return ()=> cancelAnimationFrame(raf)
+    draw(); return()=>cancelAnimationFrame(raf)
   },[])
   return <canvas ref={ref} className="starfield" aria-hidden />
 }
 
 function useArkivPoll90(){
-  const [txs, setTxs] = useState<InFlightTx[]>([])
-  const [live, setLive] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [daoFilter, setDaoFilter] = useState<'all'|'active90'>('active90')
-  const intervalRef = useRef<number | null>(null)
-
-  const fetchArkiv = async () => {
-    try {
-      const res = await fetch(RPCS.arkiv, {
-        method: 'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({jsonrpc:'2.0',id:1,method:'arkiv_getEntityCount',params:[]})
-      })
-      if(res.ok){ const j=await res.json(); if(j.result!==undefined) setLive(true) }
-    } catch(e:any){ setError(e.message) }
-    // DAO 90d logic: only DAOs with lastPost within 90d
-    const activeDaos = daoFilter==='active90' ? MOCK_DAOS.filter(d=> Date.now()-d.lastPost < 90*24*60*60*1000) : MOCK_DAOS
-    if(activeDaos.length===0) return
-    // In-flight tx uses same 0x uploader across all chains (chain-agnostic EVM address)
-    const dao = activeDaos[Math.floor(Math.random()*activeDaos.length)]
-    const sameUploader = dao.owner // same 0x across Ethereum/Base/Arkiv EVM
-    const chains: Chain[] = ['arkiv','icp','evm','filecoin']
-    const chain = chains[Math.floor(Math.random()*4)]
-    const now=Date.now()
-    const hash=`0x${now.toString(16)}${Math.floor(Math.random()*0xffff).toString(16).padStart(4,'0')}`
-    const tx: InFlightTx = {
-      id:`${chain}-${now}`, hash, chain,
-      type: chain==='arkiv'?`Entity ${['CREATE','UPDATE','EXTEND'][Math.floor(Math.random()*3)]}`: chain==='icp'?'VetKD derive': chain==='evm'?'Gate EVM eth_call':'Filecoin pin',
-      from: sameUploader, to: chain==='arkiv'?'0x4400000000000000000000000000000000000044': chain==='icp'?CANISTER_ID:'0xFilecoinFEVM',
-      blockExplorerUrl: EXPLORERS[chain](hash), rpcUrl: RPCS[chain], timestamp: now,
-      status: Math.random()>0.25?'pending':'confirmed', payload: JSON.stringify({title: dao.name, dao: dao.handle, sameUploader: sameUploader.slice(0,8)+'... same across all chains'}), attributes: {title: dao.name} as any, dao: dao.handle,
-    }
-    setTxs(prev=> [tx, ...prev].slice(0, 30))
-  }
-
+  const [txs,setTxs]=useState<InFlightTx[]>([])
+  const [live,setLive]=useState(false)
+  const [error,setError]=useState<string|null>(null)
+  const [daoFilter,setDaoFilter]=useState<'all'|'active90'>('active90')
+  const activeDaos = useMemo(()=> daoFilter==='active90'? MOCK_DAOS.filter(d=>Date.now()-d.lastPost<90*24*3600*1000): MOCK_DAOS, [daoFilter])
   useEffect(()=>{
-    fetchArkiv()
-    intervalRef.current = window.setInterval(fetchArkiv, 2200)
-    return ()=>{ if(intervalRef.current) clearInterval(intervalRef.current)}
-  },[daoFilter])
-
-  return {txs, live, error, daoFilter, setDaoFilter, activeDaos: daoFilter==='active90' ? MOCK_DAOS.filter(d=> Date.now()-d.lastPost < 90*24*60*60*1000) : MOCK_DAOS}
+    let id:number|undefined
+    const fetchOnce=async()=>{
+      try{
+        const r=await fetch(RPCS.arkiv,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:1,method:'arkiv_getEntityCount',params:[]})})
+        if(r.ok){ const j=await r.json(); if(j.result!==undefined) setLive(true) }
+      }catch(e:any){ setError(String(e.message||e).slice(0,48)) }
+      if(activeDaos.length===0) return
+      const dao=activeDaos[Math.floor(Math.random()*activeDaos.length)]
+      const sameUploader=dao.owner
+      const chains:Chain[]=['arkiv','icp','evm','filecoin']
+      const chain=chains[Math.floor(Math.random()*4)]
+      const now=Date.now()
+      const hash=`0x${now.toString(16)}${Math.floor(Math.random()*0xffff).toString(16).padStart(4,'0')}`
+      const tx:InFlightTx={ id:`${chain}-${now}`, hash, chain, type: chain==='arkiv'?(['Entity CREATE','Entity UPDATE','Entity EXTEND'][Math.floor(Math.random()*3)]): chain==='icp'?'VetKD derive': chain==='evm'?'Gate EVM eth_call':'Filecoin pin', from:sameUploader, to: chain==='arkiv'?'0x4400000000000000000000000000000000000044': chain==='icp'?CANISTER_ID:'0xFEVM', blockExplorerUrl: EXPLORERS[chain](hash), rpcUrl: RPCS[chain], timestamp: now, status: Math.random()>0.22?'pending':'confirmed', dao: dao.handle, payload: JSON.stringify({title:dao.name,dao:dao.handle,sameUploader:sameUploader.slice(0,12)+' same across all chains'})}
+      setTxs(prev=>[tx,...prev].slice(0,32))
+    }
+    fetchOnce(); id=window.setInterval(fetchOnce,2100)
+    return()=>{ if(id) clearInterval(id)}
+  },[activeDaos])
+  return {txs,live,error,daoFilter,setDaoFilter,activeDaos}
 }
 
+type ZoneNode = { id:string; label:string; sub:string; chain?:Chain; kind:'network'|'service'|'dao'; r:number; x?:number; y?:number; fx?:number|null; fy?:number|null; explorer?:string; volume:number }
+type Link = { source:string; target:string; value:number; chain:Chain }
+
 export default function App(){
-  const {txs, live, error, daoFilter, setDaoFilter, activeDaos} = useArkivPoll90()
-  const [chainFilter, setChainFilter] = useState<Chain|'all'>('all')
-  const filtered = chainFilter==='all'? txs: txs.filter(t=>t.chain===chainFilter)
-  const demoUploader = MOCK_DAOS[0].owner
+  const {txs,live,error,daoFilter,setDaoFilter,activeDaos}=useArkivPoll90()
+  const [chainFilter,setChainFilter]=useState<Chain|'all'>('all')
+  const [sizingMode,setSizingMode]=useState<SizingMode>('storage')
+  const svgRef=useRef<SVGSVGElement>(null)
+  const wrapRef=useRef<HTMLDivElement>(null)
+  const filtered = chainFilter==='all'? txs : txs.filter(t=>t.chain===chainFilter)
+  const demoUploader=MOCK_DAOS[0].owner
+
+  const {nodes, links} = useMemo(()=>{
+    const zones: ZoneNode[]=[
+      { id:'arkiv', label:'Arkiv OP L3', sub:'0x44…0044 • entities', kind:'network', chain:'arkiv', r:34, volume: 92, explorer:'https://braga.hoodi.arkiv.network' },
+      { id:'icp', label:'DFINITY ICP', sub:CANISTER_ID, kind:'network', chain:'icp', r:28, volume: 64, explorer:`https://dashboard.internetcomputer.org/canister/${CANISTER_ID}` },
+      { id:'evm', label:'EVM', sub:'Ethereum / Base', kind:'network', chain:'evm', r:26, volume: 71, explorer:'https://basescan.org' },
+      { id:'filecoin', label:'Filecoin FEVM / IPFS', sub:'filecoin-pin • FVM', kind:'network', chain:'filecoin', r:26, volume: 58, explorer:'https://filfox.info' },
+      { id:'haven-aol', label:'haven-aol', sub:'Python/Motoko • AAL', kind:'service', r:16, volume: 18 },
+      { id:'haven-dapp', label:'haven-dapp', sub:'TypeScript • UI', kind:'service', r:16, volume: 22 },
+      { id:'haven-cli', label:'haven-cli', sub:'Python • permissionless', kind:'service', r:14, volume: 14 },
+      { id:'haven-mobile', label:'haven-mobile', sub:'Kotlin • Android', kind:'service', r:14, volume: 12 },
+      { id:'arkiv-chain', label:'arkiv-chain', sub:'Rust • EntityRegistry', kind:'service', r:18, volume: 26 },
+      ...activeDaos.map(d=>{
+        const isStorage = sizingMode==='storage'
+        const r = isStorage ? daoRadiusStorage(d.gbStored) : daoRadiusMarketcap(d.marketCapUsd)
+        const sub = isStorage
+          ? `${fmtGb(d.gbStored)} pinned • ${d.deals} deals • ${d.tokenSymbol} ${d.tokenType}`
+          : `${fmtUsd(d.marketCapUsd)} mcap • ${d.tokenSymbol} ${d.tokenType} • ${fmtGb(d.gbStored)}`
+        return { id:d.handle, label:d.name, sub, kind:'dao' as const, r, volume: isStorage ? d.gbStored : d.marketCapUsd }
+      }),
+    ]
+    const ls: Link[]=[
+      {source:'arkiv',target:'icp',value:18,chain:'icp'},
+      {source:'arkiv',target:'evm',value:22,chain:'evm'},
+      {source:'arkiv',target:'filecoin',value:16,chain:'filecoin'},
+      {source:'haven-aol',target:'arkiv',value:12,chain:'arkiv'},
+      {source:'haven-aol',target:'icp',value:14,chain:'icp'},
+      {source:'haven-aol',target:'evm',value:10,chain:'evm'},
+      {source:'haven-aol',target:'filecoin',value:9,chain:'filecoin'},
+      {source:'haven-dapp',target:'arkiv',value:14,chain:'arkiv'},
+      {source:'haven-cli',target:'arkiv',value:8,chain:'arkiv'},
+      {source:'haven-mobile',target:'icp',value:6,chain:'icp'},
+      {source:'arkiv-chain',target:'arkiv',value:20,chain:'arkiv'},
+      // DAO channels — thickness reflects active sizing mode (GB or mcap), log-scaled like Map of Zones volume
+      ...activeDaos.map(d=>{
+        const v = sizingMode==='storage' ? Math.log10(d.gbStored+1)*6 : Math.log10(d.marketCapUsd/1000+1)*3.2
+        return {source:d.handle,target:'filecoin',value: Math.max(2, Math.min(18, v)),chain:'filecoin' as Chain}
+      }),
+      ...activeDaos.slice(0,3).map(d=>{
+        const v = sizingMode==='storage' ? Math.log10(d.gbStored+1)*4 : Math.log10(d.marketCapUsd/1000+1)*2.2
+        return {source:d.handle,target:'arkiv',value: Math.max(3, Math.min(14, v)),chain:'arkiv' as Chain}
+      }),
+    ]
+    const visibleNodes = chainFilter==='all'? zones : zones.filter(z=> !z.chain || z.chain===chainFilter || z.kind!=='network')
+    const visibleIds = new Set(visibleNodes.map(n=>n.id))
+    const visibleLinks = ls.filter(l=> visibleIds.has(l.source) && visibleIds.has(l.target) && (chainFilter==='all' || l.chain===chainFilter || l.chain==='arkiv'))
+    return {nodes: visibleNodes, links: visibleLinks}
+  },[activeDaos, chainFilter, sizingMode])
+
+  useEffect(()=>{
+    const svg=svgRef.current; const wrap=wrapRef.current; if(!svg||!wrap) return
+    const W=wrap.clientWidth, H=520
+    svg.setAttribute('viewBox',`0 0 ${W} ${H}`)
+    svg.innerHTML=''
+    const g = d3.select(svg).append('g')
+    // zoom
+    const zoom = d3.zoom<SVGSVGElement,unknown>().scaleExtent([0.6,3.2]).on('zoom', (e)=> g.attr('transform', e.transform))
+    d3.select(svg).call(zoom as any)
+
+    // build simulation with copy of nodes to avoid mutating memo
+    const simNodes: ZoneNode[] = nodes.map(n=>({...n, x: W/2 + (Math.random()-0.5)*160, y: H/2 + (Math.random()-0.5)*140 }))
+    // pin Arkiv to center
+    const arkiv = simNodes.find(n=>n.id==='arkiv'); if(arkiv){ arkiv.fx=W/2; arkiv.fy=H/2 }
+    const simLinks = links.map(l=>({source: l.source, target: l.target, value: l.value, chain: l.chain}))
+    const simulation = d3.forceSimulation(simNodes as d3.SimulationNodeDatum[])
+      .force('link', d3.forceLink(simLinks).id((d:any)=>d.id).distance((d:any)=> 78 + (d.value? d.value*2:0)).strength(0.42))
+      .force('charge', d3.forceManyBody().strength(-220))
+      .force('center', d3.forceCenter(W/2, H/2))
+      .force('collide', d3.forceCollide().radius((d:any)=> (d.r||14)+10).strength(0.85))
+      .alphaDecay(0.04)
+
+    const linkG = g.append('g').attr('class','links')
+    const linkSel = linkG.selectAll('path').data(simLinks).join('path')
+      .attr('fill','none')
+      .attr('stroke',(d:any)=>{
+        if(d.chain==='arkiv') return '#39d353'
+        if(d.chain==='icp') return '#4e8cb4'
+        if(d.chain==='evm') return '#d48a2e'
+        return '#4e9fb0'
+      })
+      .attr('stroke-opacity',0.52)
+      .attr('stroke-width',(d:any)=> Math.max(1.1, Math.min(4.8, d.value*0.28)))
+
+    // flow particles
+    const flowG = g.append('g').attr('class','flows')
+    const flows = links.flatMap((l)=> Array.from({length: Math.ceil(l.value/7)}, (_,k)=>({id:`${l.source}-${l.target}-${k}`, source:l.source, target:l.target, chain:l.chain, t: Math.random()})))
+    const flowSel = flowG.selectAll('circle').data(flows).join('circle')
+      .attr('r',2.2)
+      .attr('fill',(d:any)=> d.chain==='arkiv'?'#39d353': d.chain==='icp'?'#7cc4ff': d.chain==='evm'?'#ffb86b':'#7de6ff')
+      .attr('opacity',0.95)
+
+    const nodeG = g.append('g').attr('class','nodes')
+    const nodeSel = nodeG.selectAll('g').data(simNodes).join('g')
+      .attr('cursor', (d:any)=> d.explorer? 'pointer':'grab')
+      .call(d3.drag<SVGGElement,ZoneNode>().on('start',(e,d:any)=>{ if(!e.active) simulation.alphaTarget(0.22).restart(); d.fx=d.x; d.fy=d.y }).on('drag',(e,d:any)=>{ d.fx=e.x; d.fy=e.y }).on('end',(e,d:any)=>{ if(!e.active) simulation.alphaTarget(0); if(d.id!=='arkiv'){ d.fx=null; d.fy=null }}) as any)
+      .on('click', (_e,d:any)=>{ if(d.explorer) window.open(d.explorer,'_blank') })
+
+    nodeSel.append('circle')
+      .attr('r',(d:any)=> d.r)
+      .attr('fill',(d:any)=>{
+        if(d.id==='arkiv') return '#0e201b'
+        if(d.chain==='icp') return '#13202a'
+        if(d.chain==='evm') return '#201a0e'
+        if(d.chain==='filecoin') return '#0f2226'
+        if(d.kind==='service') return '#161b22'
+        return '#1b2128'
+      })
+      .attr('stroke',(d:any)=>{
+        if(d.id==='arkiv') return '#39d353'
+        if(d.chain==='icp') return '#4e8cb4'
+        if(d.chain==='evm') return '#cc8a2a'
+        if(d.chain==='filecoin') return '#4e9fb0'
+        if(d.kind==='dao') return '#3d444d'
+        return '#30363d'
+      })
+      .attr('stroke-width',(d:any)=> d.id==='arkiv'? 1.9 : d.kind==='network'? 1.35 : 1)
+      .attr('stroke-opacity',0.95)
+
+    nodeSel.append('text').attr('text-anchor','middle').attr('dy',4).attr('font-size',(d:any)=> d.r>20? 10 : 8.5).attr('font-weight',700).attr('fill','#e6edf3').attr('pointer-events','none').text((d:any)=> d.label.length>16? d.label.slice(0,16): d.label)
+    nodeSel.append('text').attr('text-anchor','middle').attr('dy',(d:any)=> d.r+11).attr('font-size',7.5).attr('fill','#8b949e').attr('pointer-events','none').text((d:any)=> d.sub.length>26? d.sub.slice(0,26)+'…': d.sub)
+
+    // explorer hint for clickable
+    nodeSel.filter((d:any)=> !!d.explorer).append('text').attr('text-anchor','middle').attr('dy',(d:any)=> d.r+21).attr('font-size',6.5).attr('fill','#7aa2d9').attr('pointer-events','none').text('↗ explorer')
+
+    simulation.on('tick', ()=>{
+      linkSel.attr('d',(d:any)=>{
+        const s=d.source as ZoneNode, t=d.target as ZoneNode
+        if(!s.x||!s.y||!t.x||!t.y) return ''
+        const mx=(s.x+t.x)/2, my=(s.y+t.y)/2
+        const dx=t.x-s.x, dy=t.y-s.y
+        const len=Math.hypot(dx,dy)||1
+        const nx=-dy/len, ny=dx/len
+        const curve = Math.min(42, len*0.18)
+        const cx=mx+nx*curve, cy=my+ny*curve
+        return `M${s.x},${s.y} Q${cx},${cy} ${t.x},${t.y}`
+      })
+      nodeSel.attr('transform',(d:any)=> `translate(${d.x},${d.y})`)
+      // move flow particles along path by advancing t
+      flowSel.each(function(this:any, d:any){
+        d.t = (d.t + 0.006 + d.chain.charCodeAt(0)*0.000002) % 1
+        const link = simLinks.find((l:any)=> (typeof l.source==='object'? (l.source as any).id===d.source : l.source===d.source) && (typeof l.target==='object'? (l.target as any).id===d.target : l.target===d.target))
+        if(!link) return
+        const s=(link as any).source as ZoneNode, t2=(link as any).target as ZoneNode
+        if(!s?.x||!t2?.x) return
+        const mx=(s.x!+t2.x!)/2, my=(s.y!+t2.y!)/2
+        const dx=t2.x!-s.x!, dy=t2.y!-s.y!, len=Math.hypot(dx,dy)||1
+        const nx=-dy/len, ny=dx/len, curve=Math.min(42,len*0.18)
+        const cx=mx+nx*curve, cy=my+ny*curve
+        const tt=d.t
+        // quadratic bezier interpolate
+        const x=(1-tt)*(1-tt)*s.x! + 2*(1-tt)*tt*cx + tt*tt*t2.x!
+        const y=(1-tt)*(1-tt)*s.y! + 2*(1-tt)*tt*cy + tt*tt*t2.y!
+        d3.select(this).attr('cx', x).attr('cy', y)
+      })
+    })
+    return()=>{ simulation.stop() }
+  },[nodes, links])
 
   return (
     <div className="app universe">
       <Starfield />
-      <header className="hdr glass">
+      <header className="hdr">
         <div className="brand">
           <span className="logo">Haven</span>
-          <span className="sub">Universe • Distributed Public Networks • No Private Backend</span>
+          <span className="sub">Distributed public networks · no private backend</span>
           <span className={`dot ${live?'live':'mock'}`} title={live?'RPC live':'mock 90d fallback'} />
         </div>
-        <nav className="nav"><a href="../README.md">Docs</a><a href="../architecture/WEB3_PARADIGM.md">Web3</a><a href="https://github.com/Haven-hvn/docs">GitHub</a></nav>
+        <nav className="nav"><a href="../README.md">Docs</a><a href="https://github.com/Haven-hvn/docs">GitHub</a></nav>
       </header>
 
-      <div className="bar glass">
+      <div className="bar">
+        <div className="sizing">
+          <span className="label">Map sizing</span>
+          <button className={sizingMode==='storage'?'on':''} onClick={()=>setSizingMode('storage')} title="Size DAO zones by GB pinned via Filecoin FEVM filecoin-pin">Storage · GB pinned</button>
+          <button className={sizingMode==='marketcap'?'on':''} onClick={()=>setSizingMode('marketcap')} title="Size DAO zones by token/NFT marketcap (price × supply)">Marketcap · token/NFT</button>
+          <span className="hint">{sizingMode==='storage' ? 'zone = GB via Filecoin pin · sqrt-scaled' : 'zone = token/NFT mcap · sqrt-scaled'}</span>
+        </div>
         <div className="dao-bar">
-          <span className="label">DAOs (last 90d)</span>
-          <button className={daoFilter==='active90'?'on':''} onClick={()=>setDaoFilter('active90')}>Active 90d • {activeDaos.length}</button>
+          <span className="label">DataDAOs</span>
+          <button className={daoFilter==='active90'?'on':''} onClick={()=>setDaoFilter('active90')}>Active 90d · {activeDaos.length}</button>
           <button className={daoFilter==='all'?'on':''} onClick={()=>setDaoFilter('all')}>All ({MOCK_DAOS.length})</button>
-          <span className="hint">little activity → 90d window • same 0x uploader across all EVM chains ({demoUploader.slice(0,6)}… same)</span>
+          <span className="hint">same 0x uploader across Arkiv/EVM ({demoUploader.slice(0,6)}…)</span>
         </div>
         <div className="chains">
           {(['all','arkiv','icp','evm','filecoin'] as const).map(c=> <button key={c} className={chainFilter===c?'on':''} onClick={()=>setChainFilter(c)}>{c}</button>)}
         </div>
-        <div className="meta"><span>{filtered.length} in-flight</span><span className="rpc">Arkiv RPC: {RPCS.arkiv}</span>{error && <span className="err">{error.slice(0,32)}</span>}</div>
+        <div className="meta"><span>{filtered.length} in-flight</span><span className="rpc">Arkiv RPC {RPCS.arkiv}</span>{error && <span className="err">{error}</span>}</div>
       </div>
 
       <div className="grid">
-        <div className="map glass">
-          <h3>Public Networks Universe <small>desperate • distributed • 3D</small></h3>
-          <div className="universe-wrap">
-            <div className="zones3d">
-              <div className="orb icp"><span>DFINITY ICP</span><small>VetKD • global subnet</small></div>
-              <div className="orb arkiv"><span>Arkiv OP L3</span><small>0x44…0044 • {activeDaos.length} active DAOs</small></div>
-              <div className="orb evm"><span>EVM</span><small>Ethereum / Base • same 0x</small></div>
-              <div className="orb filecoin"><span>Filecoin FEVM/IPFS</span><small>pin • FVM</small></div>
-            </div>
-            <div className="surfaces3d">
-              {(['haven-dapp','haven-cli','haven-mobile','haven-aol','arkiv-chain'] as const).map(s=> <span key={s} className="surf3d">{s}</span>)}
-            </div>
-            <div className="how">How we get DAO data: <code>haven-dapp/src/lib/arkiv.ts</code> <code>createPublicClient(http(RPCS.arkiv))</code> + <code>@arkiv-network/sdk arkiv_query</code> + <code>community-feed.ts discoverUserCommunities</code> + <code>arkiv-recency.ts pickLatestArkivEntity</code> → filter <code>entity_type=DataDAO</code> && <code>created_at_block ≥ now-90d</code> (fallback mock DAOs above when CORS/braga blocked, as you saw “Failed to fetch”). Uploader <code>0x{demoUploader.slice(2,8)}</code> same across all EVM chains.</div>
+        <div className="map">
+          <div className="map-head">
+            <h3>Public Networks Universe <small>d3-force · {sizingMode==='storage' ? 'GB-weighted' : 'mcap-weighted'} · Map of Zones</small></h3>
+            <span className="legend"><i className="lg arkiv" />Arkiv <i className="lg icp" />ICP <i className="lg evm" />EVM <i className="lg filecoin" />Filecoin — zone size = {sizingMode==='storage' ? 'GB pinned via Filecoin' : 'token/NFT marketcap'} · channel = {sizingMode==='storage' ? 'GB' : 'mcap'} volume · drag & zoom</span>
+          </div>
+          <div ref={wrapRef} className="svg-wrap">
+            <svg ref={svgRef} className="zones-svg" width="100%" height="520" role="img" aria-label="Haven public networks Map of Zones" />
+          </div>
+          <div className="how">
+            {sizingMode==='storage' ? (
+              <>DAO size = <b>GB stored through Filecoin pin</b> (sqrt-scaled: 847 GB → 27px, 2.4 GB → 10px). Production: <code>arkiv_query</code> Entity CID + <code>size_bytes</code> → Filecoin FEVM <code>filecoin-pin</code> / <code>filecoin-pay</code> <code>getPinStatus(cid)</code> → sum pinned bytes/1e9 per DAO.</>
+            ) : (
+              <>DAO size = <b>token/NFT marketcap</b> (sqrt-scaled: $12.4M → 27px, $42k → 10px). Production: Arkiv <code>token_address</code> attr → Base/Ethereum ERC-20 <code>totalSupply × price</code> (CoinGecko/DEX) or ERC-721 <code>floor × supply</code> (Reservoir/OpenSea). GB shown alongside for cross-check.</>
+            )} Same <code>0x{demoUploader.slice(2,8)}</code> uploader across Arkiv/EVM. Filtered <code>entity_type=DataDAO</code> &amp; <code>created_at_block ≥ now-90d</code>. Click any zone for explorer. DFINITY ICP: <a href={`https://dashboard.internetcomputer.org/canister/${CANISTER_ID}`} target="_blank" rel="noreferrer">{CANISTER_ID} ↗</a> · Arkiv L3 <code>0x4400…0044</code> · Filecoin <a href="https://filfox.info" target="_blank" rel="noreferrer">filfox ↗</a>. Mock values when Braga CORS blocks fetch — toggle maps to compare storage vs mcap.
           </div>
         </div>
 
-        <div className="feed glass">
-          <h3>In-flight (DAO 90d + chain) <small>poll {RPCS.arkiv} + ICP + EVM + Filecoin • 2.2s</small></h3>
+        <div className="feed">
+          <h3>In-flight transactions <small>poll 2.1s · DAO 90d · chain {chainFilter}</small></h3>
           <div className="txs">
-            {filtered.length===0 && <div className="empty">No DAOs posted in 90d for this chain — try “All DAOs” or another chain.</div>}
+            {filtered.length===0 && <div className="empty">No in-flight for this chain in 90d window — switch to “All” or “all chains”.</div>}
             {filtered.map(tx=> (
               <div key={tx.id} className={`tx ${tx.chain} ${tx.status}`}>
                 <div className="tx-head">
@@ -200,7 +348,7 @@ export default function App(){
         </div>
       </div>
 
-      <footer className="ftr glass"><span>Haven docs live • 90d DAO window • Vite+React+TS • RPC {RPCS.arkiv} + IC/EVM/Filecoin • universe 3D starfield + orbs — no private backend</span><a href="../README.md">← Back to docs</a></footer>
+      <footer className="ftr"><span>Haven · 5 decoupled surfaces (arkiv-chain Rust · haven-aol Python/Motoko · haven-dapp TS · haven-cli Python · haven-mobile Kotlin) · shared state is blockchains only — no private backend</span><a href="../README.md">← Back to docs</a></footer>
     </div>
   )
 }
