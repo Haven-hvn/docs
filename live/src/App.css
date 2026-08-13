@@ -71,9 +71,10 @@ code,pre{font-family:"Fragment Mono","IBM Plex Mono","JetBrains Mono", ui-monosp
 .rpcUrl{margin-left:auto;color:var(--dim);font-family:"Fragment Mono",monospace;font-size:10px}
 .arch{margin-top:12px;display:grid;gap:12px}
 .arch-hero{display:flex;justify-content:space-between;gap:16px;padding:14px;background:rgba(15,20,26,0.9);border:1px solid var(--line);border-radius:12px}
-.arch-hero h1{margin:0 0 6px 0;font-size:18px;letter-spacing:-0.02em}
-.arch-hero p{margin:0;color:var(--muted);font-size:13px;line-height:1.5;max-width:720px}
+.arch-hero h1{margin:0 0 6px 0;font-size:18px;letter-spacing:-0.02em;color:var(--text)}
+.arch-hero p{margin:0;color:#b9c4d0;font-size:13px;line-height:1.5;max-width:720px}
 .arch-hero p b{color:var(--text)}
+.arch-hero p code{background:#161b22;color:#c9d1d9;padding:1px 5px;border-radius:4px;font-size:11px;border:1px solid #2a333e}
 .arch-kicker{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;font-size:11px;color:var(--dim)}
 .arch-kicker span:first-child{color:var(--arkiv);font-weight:600}
 .arch-cta{display:flex;flex-direction:column;gap:8px;align-items:flex-end;min-width:200px}
@@ -91,7 +92,7 @@ code,pre{font-family:"Fragment Mono","IBM Plex Mono","JetBrains Mono", ui-monosp
 .arch-card span{font-size:11px;color:var(--muted)}
 .arch-card small{font-size:10px;color:var(--dim)}
 .arch-card code{font-size:10px;background:#161b22;padding:2px 4px;border-radius:4px}
-.arch-card pre{margin:4px 0 0 0;padding:6px;background:#060a0e;border:1px solid #1e2630;border-radius:6px;font-size:10px;line-height:1.4;overflow:auto}
+.arch-card pre{margin:4px 0 0 0;padding:6px;background:#060a0e;border:1px solid #1e2630;border-radius:6px;font-size:10px;line-height:1.4;overflow:auto;color:#c9d1d9}
 .arch-card.soft{border-color:#2a333e}
 .arch-card.accent{border-color:rgba(57,211,83,0.45);background:#0e1a14}
 .arch-card.core-card{flex:1 1 200px}
@@ -100,9 +101,11 @@ code,pre{font-family:"Fragment Mono","IBM Plex Mono","JetBrains Mono", ui-monosp
 .arch-card.chain.arkiv{border-color:rgba(57,211,83,0.5)} .arch-card.chain.icp{border-color:rgba(94,163,204,0.55)} .arch-card.chain.evm{border-color:rgba(204,138,42,0.55)} .arch-card.chain.filecoin{border-color:rgba(78,159,176,0.55)}
 .arch-arrow{margin-top:8px;font-size:11px;color:var(--dim);text-align:center}
 .arch-flow{background:rgba(15,20,26,0.88);border:1px solid var(--line);border-radius:12px;padding:12px}
-.arch-flow h3{margin:0 0 8px 0;font-size:13px}
-.arch-flow ol{margin:0;padding-left:18px;display:grid;gap:6px;font-size:12px;color:var(--muted);line-height:1.5}
+.arch-flow h3{margin:0 0 8px 0;font-size:13px;color:var(--text)}
+.arch-flow ol{margin:0;padding-left:18px;display:grid;gap:10px;font-size:12px;color:#b9c4d0;line-height:1.65}
 .arch-flow li b{color:var(--text)}
+.arch-flow code{background:#161b22;color:#c9d1d9;padding:1px 5px;border-radius:4px;font-size:11px;border:1px solid #2a333e;white-space:nowrap}
+.arch-flow li{padding:2px 0}
 .arch-compare{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:720px){.arch-compare{grid-template-columns:1fr} .arch-hero{flex-direction:column} .arch-cta{align-items:flex-start}}
 .compare-card{background:rgba(15,20,26,0.88);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
