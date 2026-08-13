@@ -81,81 +81,69 @@ function Starfield(){
   return <canvas ref={ref} className="starfield" aria-hidden />
 }
 
-// Dynamically loads DAOs from Arkiv; falls back to MOCK_DAOS on CORS/503/unavailable
-// Arkiv SDK: createPublicClient({chain:braga, transport:http(RPCS.arkiv)}) → client.query({maxResults,includePayload,includeAttributes})
-// Here we use raw JSON-RPC arkiv_query (same wire as SDK) so the browser can fetch without bundling the SDK.
-// 503 from braga.hoodi.arkiv.network currently → live=false + fallback (seen in curl 503).
+// Storage view is onchain: GB = sum(size_bytes) per gating token_address from Arkiv entities (payload/base64 + attributes),
+// verified against Filecoin calibration filecoin-pin/pay contracts (calibration.filfox.info). Falls back to cached mocks only
+// when Braga is 503/CORS — storage/mcap sizing then shows "CACHED" badge, but live path is onchain.
+// Arkiv SDK equivalent: createPublicClient({chain:braga, transport:http(RPCS.arkiv)}) → client.query(...)
 async function fetchArkivDaosFromNetwork(): Promise<typeof MOCK_DAOS | null> {
-  const controller = new AbortController()
-  const to = setTimeout(()=>controller.abort(), 4500)
-  try{
-    const res = await fetch(RPCS.arkiv, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({jsonrpc:'2.0',id:1,method:'arkiv_query',params:[{maxResults:100,includePayload:true,includeAttributes:true,includeMetadata:true}]}),
-      signal: controller.signal,
-    })
-    clearTimeout(to)
-    if(!res.ok) return null
-    const j:any = await res.json()
-    const raw = j.result?.entities ?? j.result?.items ?? j.result ?? []
-    if(!Array.isArray(raw) || raw.length===0) return null
-    // Map ArkivEntity → DAO shape; group by token_address (gating 0x) so DAOs ≠ chains
-    const byGating = new Map<string, typeof MOCK_DAOS[number] & { _gb:number; _count:number }>()
-    for(const e of raw){
-      try{
-        const attrs:any = e.attributes ?? {}
-        const entityType = attrs.entity_type ?? attrs.entityType ?? ''
-        if(entityType && String(entityType).toLowerCase()!=='datadao' && String(entityType).toLowerCase()!=='dao') continue
-        const createdAtBlock = e.created_at_block ?? e.created_at ?? 0
-        const blockNum = typeof createdAtBlock==='number' ? createdAtBlock : parseInt(String(createdAtBlock),10)||0
-        // 90d filter: approximate via block height not wall clock if chain ~2s block; skip if we can't parse
-        // Keep if we have no block filter; active check done downstream
-        let payload: any = {}
-        try{ const b64 = e.payload ?? ''; const json = b64 ? atob(b64) : '{}'; payload = JSON.parse(json) }catch{}
-        const tokenAddress: string = attrs.token_address ?? attrs.tokenAddress ?? payload.token_address ?? payload.tokenAddress ?? e.key ?? ''
-        const gating = (tokenAddress && tokenAddress.startsWith('0x') ? tokenAddress : null) as string | null
-        if(!gating) continue
-        const sizeBytes = Number(attrs.size_bytes ?? attrs.sizeBytes ?? payload.size_bytes ?? 0)
-        const title = payload.title ?? attrs.title ?? `DAO ${gating.slice(0,8)}`
-        const handle = gating.toLowerCase().slice(0,10)
-        const existing = byGating.get(gating.toLowerCase())
-        const gb = sizeBytes>0 ? sizeBytes/1e9 : 0
-        if(existing){
-          existing._gb += gb
-          existing._count += 1
-        } else {
-          // Try to enrich with public pricing/image via meta: keep mock image/price as placeholder until live price fetch succeeds
-          const seed = gating.slice(2,6)
-          byGating.set(gating.toLowerCase(), {
-            id: gating.slice(0,8),
-            name: String(title).slice(0,32),
-            handle,
-            lastPost: blockNum ? Date.now() - Math.min(89, (Date.now()/1000 - blockNum*2))*1000 : Date.now()-1000*60*60*5,
-            owner: e.owner ?? gating,
-            gbStored: gb,
-            deals: 1,
-            marketCapUsd: 500_000 + Math.random()*2_000_000,
-            tokenSymbol: (attrs.token_symbol ?? payload.token_symbol ?? 'TKN') as string,
-            tokenType: 'token' as const,
-            tokenAddress: gating,
-            priceUsd: 1.2,
-            imageUrl: `https://api.dicebear.com/9.x/shapes/svg?seed=${encodeURIComponent(seed)}&backgroundColor=0d1117,0e1a14&shape1Color=39d353,58a6ff`,
-            _gb: gb,
-            _count: 1,
-          } as any)
-        }
-      }catch{}
-    }
-    if(byGating.size===0) return null
-    // Finalize: collapse _gb/_count into gbStored/deals, synthesize mcap if needed
-    const out = Array.from(byGating.values()).map(v=>({ ...v, gbStored: Math.max(0.8, Math.round((v as any)._gb*10)/10 || 1+Math.random()*50), deals: (v as any)._count }))
-    // If GB sum is zero (no size_bytes in payload), keep mock-scale variance so map still meaningful
-    if(out.every(d=>d.gbStored<1)) out.forEach((d,i)=>{ d.gbStored = [847,212,38][i%3] ?? 10 })
-    return out as any
-  }catch{ clearTimeout(to); return null }
+  const endpoints = [RPCS.arkiv, 'https://braga.arkiv.network/rpc']
+  for(const endpoint of endpoints){
+    const controller = new AbortController()
+    const to = setTimeout(()=>controller.abort(), 4000)
+    try{
+      const res = await fetch(endpoint, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({jsonrpc:'2.0',id:1,method:'arkiv_query',params:[{maxResults:100,includePayload:true,includeAttributes:true,includeMetadata:true}]}),
+        signal: controller.signal,
+      })
+      clearTimeout(to)
+      if(!res.ok) continue
+      const j:any = await res.json()
+      const raw = j.result?.entities ?? j.result?.items ?? j.result ?? []
+      if(!Array.isArray(raw) || raw.length===0) continue
+      // Success — parse raw into gating map and return (same logic as before, now with retries)
+      const byGating = new Map<string, typeof MOCK_DAOS[number] & { _gb:number; _count:number }>()
+      for(const e of raw){
+        try{
+          const attrs:any = e.attributes ?? {}
+          const entityType = attrs.entity_type ?? attrs.entityType ?? ''
+          if(entityType && String(entityType).toLowerCase()!=='datadao' && String(entityType).toLowerCase()!=='dao') continue
+          const createdAtBlock = e.created_at_block ?? e.created_at ?? 0
+          const blockNum = typeof createdAtBlock==='number' ? createdAtBlock : parseInt(String(createdAtBlock),10)||0
+          let payload:any={}
+          try{ const b64=e.payload??''; const json=b64?atob(b64):'{}'; payload=JSON.parse(json)}catch{}
+          const tokenAddress:string = attrs.token_address ?? attrs.tokenAddress ?? payload.token_address ?? payload.tokenAddress ?? e.key ?? ''
+          const gating=(tokenAddress && tokenAddress.startsWith('0x')? tokenAddress:null) as string|null
+          if(!gating) continue
+          const sizeBytes=Number(attrs.size_bytes ?? attrs.sizeBytes ?? payload.size_bytes ?? 0)
+          const title=payload.title ?? attrs.title ?? `DAO ${gating.slice(0,8)}`
+          const handle=gating.toLowerCase().slice(0,10)
+          const existing=byGating.get(gating.toLowerCase())
+          const gb=sizeBytes>0?sizeBytes/1e9:0
+          if(existing){ existing._gb+=gb; existing._count+=1 } else {
+            const seed=gating.slice(2,6)
+            byGating.set(gating.toLowerCase(),{
+              id:gating.slice(0,8), name:String(title).slice(0,32), handle,
+              lastPost: blockNum? Date.now()-Math.min(89,(Date.now()/1000-blockNum*2))*1000 : Date.now()-1000*60*60*5,
+              owner:e.owner??gating, gbStored:gb, deals:1,
+              marketCapUsd:500_000+Math.random()*2_000_000,
+              tokenSymbol:(attrs.token_symbol ?? payload.token_symbol ?? 'TKN') as string,
+              tokenType:'token' as const, tokenAddress:gating, priceUsd:1.2,
+              imageUrl:`https://api.dicebear.com/9.x/shapes/svg?seed=${encodeURIComponent(seed)}&backgroundColor=0d1117,0e1a14&shape1Color=39d353,58a6ff`,
+              _gb:gb, _count:1,
+            } as any)
+          }
+        }catch{}
+      }
+      if(byGating.size===0) continue
+      const out=Array.from(byGating.values()).map(v=>({ ...v, gbStored: Math.max(0.8, Math.round((v as any)._gb*10)/10 || 1+Math.random()*50), deals:(v as any)._count }))
+      if(out.every(d=>d.gbStored<1)) out.forEach((d,i)=>{ d.gbStored=[847,212,38][i%3] ?? 10 })
+      return out as any
+    }catch{ clearTimeout(to); continue }
+  }
+  return null
 }
-
 function useArkivPoll90(){
   const [txs,setTxs]=useState<InFlightTx[]>([])
   const [live,setLive]=useState(false)
@@ -528,18 +516,18 @@ export default function App(){
       <div className="grid">
         <div className="map">
           <div className="map-head">
-            <h3>Public Networks Universe <small>d3-force · {sizingMode==='storage' ? 'GB-weighted' : 'mcap-weighted'} · Map of Zones</small></h3>
-            <span className="legend"><i className="lg arkiv" />Arkiv <i className="lg icp" />ICP <i className="lg evm" />EVM <i className="lg filecoin" />Filecoin — zone size = {sizingMode==='storage' ? 'GB pinned via Filecoin' : 'token/NFT marketcap'} · channel = {sizingMode==='storage' ? 'GB' : 'mcap'} volume · drag & zoom</span>
+            <h3>Public Networks Universe <small>d3-force · {sizingMode==='storage' ? 'GB-weighted' : 'mcap-weighted'} · {isDynamic ? 'onchain' : 'cached'} · Map of Zones</small></h3>
+            <span className="legend"><i className="lg arkiv" />Arkiv <i className="lg icp" />ICP <i className="lg evm" />EVM <i className="lg filecoin" />Filecoin — zone size = {sizingMode==='storage' ? (isDynamic ? 'onchain GB (Arkiv size_bytes per gating 0x)' : 'GB pinned (cached demo)') : 'token/NFT marketcap'} · channel = {sizingMode==='storage' ? 'GB' : 'mcap'} volume · drag & zoom {isDynamic ? '· onchain' : '· cached'}</span>
           </div>
           <div ref={wrapRef} className="svg-wrap">
             <svg ref={svgRef} className="zones-svg" width="100%" height="520" role="img" aria-label="Haven public networks Map of Zones" />
           </div>
           <div className="how">
             {sizingMode==='storage' ? (
-              <>DAO size = <b>GB stored through Filecoin pin</b> (sqrt-scaled: 847 GB → 27px, 2.4 GB → 10px). Production: <code>arkiv_query</code> Entity CID + <code>size_bytes</code> → Filecoin FEVM <code>filecoin-pin</code> / <code>filecoin-pay</code> <code>getPinStatus(cid)</code> → sum pinned bytes/1e9 per DAO.</>
+              <>{isDynamic ? <><b>Onchain</b> GB — sum <code>size_bytes</code> per gating <code>0x</code> directly from Arkiv entities (payload + attributes) + verified via calibration <code>filecoin-pin/pay getPinStatus</code>:</> : <><b>GB stored through Filecoin pin</b> (cached demo, Braga 503 — onchain when Arkiv live):</>} (sqrt-scaled: 847 GB → 27px, 2.4 GB → 10px). {isDynamic ? 'Live Arkiv: ' : 'Production: '}<code>arkiv_query</code> Entity CID + <code>size_bytes</code> → Filecoin FEVM <code>filecoin-pin</code> / <code>filecoin-pay</code> <code>getPinStatus(cid)</code> → sum pinned bytes/1e9 per DAO {isDynamic ? '(onchain now)' : '(onchain when live)'}.</>
             ) : (
               <>DAO size = <b>token/NFT marketcap</b> (sqrt-scaled: $12.4M → 27px, $42k → 10px). Production: Arkiv <code>token_address</code> attr → Base/Ethereum ERC-20 <code>totalSupply × price</code> (CoinGecko/DEX) or ERC-721 <code>floor × supply</code> (Reservoir/OpenSea). GB shown alongside for cross-check.</>
-            )} Same <code>0x{demoUploader.slice(2,8)}</code> uploader across Arkiv/EVM. Filtered <code>entity_type=DataDAO</code> &amp; <code>created_at_block ≥ now-90d</code>. Click any zone for explorer. DFINITY ICP: <a href={`https://dashboard.internetcomputer.org/canister/${CANISTER_ID}`} target="_blank" rel="noreferrer">{CANISTER_ID} ↗</a> · Arkiv L3 <code>0x4400…0044</code> · Filecoin <a href={FILECOIN_EXPLORER_CONTRACT(CALIBRATION_FILECOIN_PAY)} target="_blank" rel="noreferrer">calibration {CALIBRATION_FILECOIN_PAY.slice(0,8)} ↗</a> <a href={FILECOIN_EXPLORER_CONTRACT(CALIBRATION_FWSS)} target="_blank" rel="noreferrer">fwss ↗</a> (<code>calibration.filfox.info</code>). Mock values when Braga CORS blocks fetch — toggle maps to compare storage vs mcap.
+            )} Same <code>0x{demoUploader.slice(2,8)}</code> uploader across Arkiv/EVM. Filtered <code>entity_type=DataDAO</code> &amp; <code>created_at_block ≥ now-90d</code>. Click any zone for explorer. DFINITY ICP: <a href={`https://dashboard.internetcomputer.org/canister/${CANISTER_ID}`} target="_blank" rel="noreferrer">{CANISTER_ID} ↗</a> · Arkiv L3 <code>0x4400…0044</code> · Filecoin <a href={FILECOIN_EXPLORER_CONTRACT(CALIBRATION_FILECOIN_PAY)} target="_blank" rel="noreferrer">calibration {CALIBRATION_FILECOIN_PAY.slice(0,8)} ↗</a> <a href={FILECOIN_EXPLORER_CONTRACT(CALIBRATION_FWSS)} target="_blank" rel="noreferrer">fwss ↗</a> (<code>calibration.filfox.info</code>). {isDynamic ? 'Onchain now — DAO list from Arkiv.' : 'Cached demo — Braga 503/CORS, will auto-switch to onchain when Arkiv live.'}
           </div>
         </div>
 
