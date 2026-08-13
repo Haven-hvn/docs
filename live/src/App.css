@@ -87,7 +87,9 @@ code,pre{font-family:"Fragment Mono","IBM Plex Mono","JetBrains Mono", ui-monosp
 .arch-layer.public{background:rgba(15,28,34,0.92);border-color:rgba(78,159,176,0.28)}
 .dao-row .dao-gate{align-items:center;text-align:center}
 .dao-gate img{object-fit:cover}
-.arch-note{margin-top:8px;font-size:10px;color:var(--dim);line-height:1.5}
+.dao-gate code{background:#1c2530;color:#d7e3f3;border-color:#2f3a48;font-size:10px}
+.dao-gate small{color:#8b949e}
+.arch-note{margin-top:8px;font-size:10px;color:#8b949e;line-height:1.5}
 .arch-note b{color:var(--text)}
 .layer-label{font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
 .layer-row{display:flex;gap:8px;flex-wrap:wrap}
