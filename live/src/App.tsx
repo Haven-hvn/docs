@@ -731,11 +731,11 @@ export default function App(){
       <div className="grid">
         <div className="map">
           <div className="map-head">
-            <h3>Public Networks Universe <small>d3-force · {sizingMode==='storage' ? 'GB-weighted' : 'mcap-weighted'} · {isDynamic ? 'onchain' : 'cached'} · Map of Zones</small></h3>
-            <span className="legend"><i className="lg arkiv" />Arkiv <i className="lg icp" />ICP <i className="lg evm" />EVM <i className="lg filecoin" />Filecoin — zone size = {sizingMode==='storage' ? (isDynamic ? 'onchain GB (Arkiv size_bytes per gating 0x)' : 'GB pinned (cached demo)') : 'token/NFT marketcap'} · channel = {sizingMode==='storage' ? 'GB' : 'mcap'} volume · drag & zoom {isDynamic ? '· onchain' : '· cached'}</span>
+            <h3>Haven Network Map <small>d3-force · {sizingMode==='storage' ? 'GB-weighted' : 'mcap-weighted'} · {isDynamic ? 'live' : 'cached'}</small></h3>
+            <span className="legend"><i className="lg arkiv" />Arkiv <i className="lg icp" />ICP <i className="lg evm" />EVM <i className="lg filecoin" />Filecoin — DAO zone size = {sizingMode==='storage' ? (isDynamic ? 'onchain GB (Arkiv size_bytes per gating 0x)' : 'GB pinned (cached demo)') : 'token/NFT marketcap'} · channel = {sizingMode==='storage' ? 'GB' : 'mcap'} volume · drag & zoom {isDynamic ? '· live' : '· cached'}</span>
           </div>
           <div ref={wrapRef} className="svg-wrap">
-            <svg ref={svgRef} className="zones-svg" width="100%" height="520" role="img" aria-label="Haven public networks Map of Zones" />
+            <svg ref={svgRef} className="zones-svg" width="100%" height="520" role="img" aria-label="Haven network map — DAO zones and public networks" />
           </div>
           <div className="how">
             {sizingMode==='storage' ? (
