@@ -35,12 +35,13 @@ const RPCS: Record<Chain,string> = {
 // We synthesize DAO metadata as if their Arkiv entity existed: gating token_address = their 0x, size via messageCount, mcap via pricing placeholder.
 // Documented as temp: will be replaced by haven-indexer (Arkiv→FEVM join) when Braga successor live.
 const MOCK_DAOS = [
-  // Real calibration uploader #1 — t410flmt5xrxp565vxkaqn6yzimyervqnnb4pvfhc7kq → 0x5B27DbC6efeFbb5Ba8106fB19433048D60D6878F (16 msgs, 33 transfers) — now live-fetched on page load for real pinned GB
+  // Real calibration uploader #1 — t410flmt → 0x5B27… still token example (keeps live pinned GB demo)
   { id:'0x5B27', name:'Calib Uploader • t410flmt', handle:'calib-uploader-1', lastPost: Date.now()-2*24*3600*1000, owner:'0x5B27DbC6efeFbb5Ba8106fB19433048D60D6878F', gbStored: 94, deals: 16, marketCapUsd: 1_200_000, tokenSymbol:'CAL1', tokenType:'token' as const, tokenAddress:'0x5B27DbC6efeFbb5Ba8106fB19433048D60D6878F', priceUsd: 1.2, imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=CAL1&backgroundColor=0e1a14,0d1117&shape1Color=39d353,58a6ff' },
-  // Real calibration uploader #2 — t410feb7dkmaek5hmvf7ix3kmpdpa63fy2rnioqa73bq → 0x207E353004574ECA97e8Bed4c78De0F6Cb8d45A8 (14 msgs, 38 transfers) — 212 GB is ESTIMATED placeholder, replaced on load with onchain sum
-  { id:'0x207E', name:'Calib Uploader • t410feb7', handle:'calib-uploader-2', lastPost: Date.now()-5*24*3600*1000, owner:'0x207E353004574ECA97e8Bed4c78De0F6Cb8d45A8', gbStored: 212, deals: 38, marketCapUsd: 3_100_000, tokenSymbol:'CAL2', tokenType:'nft' as const, tokenAddress:'0x207E353004574ECA97e8Bed4c78De0F6Cb8d45A8', floorPriceEth: 0.42, imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=CAL2&backgroundColor=1a1a2e,16213e&shape1Color=cc8a2a,ff6b6b' },
-  { id:'0x7c3e', name:'Haven Media DAO', handle:'haven-media', lastPost: Date.now()-80*24*3600*1000, owner:'0x7c3e1d2a4b5c6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b', gbStored: 38, deals: 94, marketCapUsd: 840_000, tokenSymbol:'HMD', tokenType:'token' as const, tokenAddress:'0x4e2d8f1a3b5c6d7e9f0123456789AbCdEf01234567', priceUsd: 0.84, imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=HMD&backgroundColor=0f141a,13202a&shape1Color=5ea3cc,7cc4ff' },
-  { id:'0x6d4f', name:'Stale DAO', handle:'stale-dao', lastPost: Date.now()-120*24*3600*1000, owner:'0x6d4f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b', gbStored: 2.4, deals: 6, marketCapUsd: 42_000, tokenSymbol:'STALE', tokenType:'nft' as const, tokenAddress:'0x9c3E1d2a4b5c6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c', floorPriceEth: 0.03, imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=STALE&backgroundColor=1a1410,2a1f12&shape1Color=6e7681,8b949e' },
+  // NFT example now uses real mainnet collection BAYC — contractURI 0xe8a3d485 → ipfs:// → public gateway, so icon resolves without Alchemy
+  { id:'0xBC4C', name:'BAYC • NFT DAO', handle:'bored-ape', lastPost: Date.now()-5*24*3600*1000, owner:'0x207E353004574ECA97e8Bed4c78De0F6Cb8d45A8', gbStored: 212, deals: 38, marketCapUsd: 3_100_000, tokenSymbol:'BAYC', tokenType:'nft' as const, tokenAddress:'0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D', floorPriceEth: 0.42, imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=BAYC&backgroundColor=1a1a2e,16213e&shape1Color=cc8a2a,ff6b6b' },
+  { id:'0x7c3e', name:'Haven Media DAO', handle:'haven-media', lastPost: Date.now()-80*24*3600*1000, owner:'0x7c3e1d2a4b5c6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b', gbStored: 38, deals: 94, marketCapUsd: 840_000, tokenSymbol:'HMD', tokenType:'token' as const, tokenAddress:'0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', priceUsd: 0.84, imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=HMD&backgroundColor=0f141a,13202a&shape1Color=5ea3cc,7cc4ff' },
+  // NFT stale example now real Azuki — also contractURI IPFS
+  { id:'0xED5A', name:'Azuki • NFT DAO', handle:'azuki', lastPost: Date.now()-120*24*3600*1000, owner:'0x6d4f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b', gbStored: 2.4, deals: 6, marketCapUsd: 42_000, tokenSymbol:'AZUKI', tokenType:'nft' as const, tokenAddress:'0xED5AF388653567Af2F388E6224dC7C4b3241C544', floorPriceEth: 0.03, imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=AZUKI&backgroundColor=1a1410,2a1f12&shape1Color=6e7681,8b949e' },
 ]
 type SizingMode = 'storage' | 'marketcap'
 function daoRadiusStorage(gb:number){
@@ -583,7 +584,7 @@ export default function App(){
           <div className="arch-hero">
             <div>
               <h1>Haven — how the pieces fit</h1>
-              <p>Every Haven surface is a thin client over <b>public networks</b>. No shared Postgres, no private backend. Arkiv is the shared log (entity contract), haven-aol is the decrypt gate (VetKD + EVM), Filecoin is the pin layer, DFINITY & EVM are the identity roots. Same <code>0x</code> uploader across Arkiv, Base and Ethereum.</p>
+              <p>Every Haven surface is a thin client over <b>public networks</b>. No shared Postgres, no private backend. Arkiv is the shared log (entity contract), haven-aol is the decrypt gate (VetKD + EVM), Filecoin is the pin layer. Bytes stay <code>AES-encrypted</code> on <code>ipfs://</code>, gated by any <code>0x</code> you hold, and shown as the collection's <code>contractURI → https://ipfs.io/ipfs/</code> image for every member — no private DB.</p>
               <div className="arch-kicker"><span>5 decoupled surfaces</span><span>•</span><span>1 shared entity shape</span><span>•</span><span>4 public chains</span></div>
             </div>
             <div className="arch-cta">
