@@ -57,6 +57,44 @@ function daoRadiusMarketcap(mcap:number){
 function fmtUsd(n:number){ if(n>=1e6) return `$${(n/1e6).toFixed(n>=10e6?1:2)}M`; if(n>=1e3) return `$${(n/1e3).toFixed(1)}k`; return `$${n}` }
 function fmtGb(n:number){ return n>=100? `${Math.round(n).toLocaleString()} GB` : `${n.toLocaleString()} GB` }
 
+// DAO icon: ERC20 token logo vs NFT collection icon — makes identity hit home for newcomers
+function gatewayNormalize(url: string | null): string | null {
+  if (!url) return null
+  if (url.startsWith('ipfs://')) return url.replace('ipfs://', 'https://ipfs.io/ipfs/')
+  return url
+}
+async function fetchDaoIcon(tokenAddress: string, tokenType: 'token' | 'nft'): Promise<string | null> {
+  // Try token logo via trustwallet / alchemy; fallback null => dicebear
+  const addr = tokenAddress.toLowerCase()
+  // 1) TrustWallet assets is deterministic, no API key
+  const trustLogo = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${tokenAddress}/logo.png`
+  // Probe trust logo quickly
+  try {
+    const head = await fetch(trustLogo, { method: 'HEAD' })
+    if (head.ok) return trustLogo
+  } catch {}
+  // 2) Try Alchemy metadata if key present (vite env)
+  const alchemyKey = (import.meta as unknown as { env?: Record<string, string> }).env?.VITE_ALCHEMY_API_KEY as string | undefined
+  if (alchemyKey) {
+    try {
+      if (tokenType === 'token') {
+        const r = await fetch(`https://eth-mainnet.g.alchemy.com/nft/v3/${alchemyKey}/getTokenMetadata?contractAddress=${addr}`)
+        if (r.ok) { const j: { logo?: string | null } = await r.json(); const u = gatewayNormalize(j.logo ?? null); if (u) return u }
+      } else {
+        const r = await fetch(`https://eth-mainnet.g.alchemy.com/nft/v3/${alchemyKey}/getContractMetadata?contractAddress=${addr}`)
+        if (r.ok) {
+          const j: { openSeaMetadata?: { imageUrl?: string | null }; contractMetadata?: { openSea?: { imageUrl?: string | null } } } = await r.json()
+          const u = gatewayNormalize(j.openSeaMetadata?.imageUrl ?? j.contractMetadata?.openSea?.imageUrl ?? null)
+          if (u) return u
+        }
+      }
+    } catch {}
+  }
+  // Fallback: will use dicebear seed
+  void addr
+  return null
+}
+
 function Starfield(){
   const ref=useRef<HTMLCanvasElement>(null)
   useEffect(()=>{
@@ -290,21 +328,42 @@ function useArkivPoll90(){
   return {txs,live,error,daoFilter,setDaoFilter,activeDaos, isDynamic: dynamicDaos!==null}
 }
 
-type ZoneNode = { id:string; label:string; sub:string; chain?:Chain; kind:'network'|'service'|'dao'; r:number; x?:number; y?:number; fx?:number|null; fy?:number|null; explorer?:string; volume:number; imageUrl?:string }
+type ZoneNode = { id:string; label:string; sub:string; chain?:Chain; kind:'network'|'service'|'dao'|'uploader'; r:number; x?:number; y?:number; fx?:number|null; fy?:number|null; explorer?:string; volume:number; imageUrl?:string; parentDao?:string }
 type Link = { source:string; target:string; value:number; chain:Chain }
 
 type View = 'architecture' | 'live'
 export default function App(){
-  const {txs,live,error,daoFilter,setDaoFilter,activeDaos, isDynamic}=useArkivPoll90() as any
+  const {txs,live,error,daoFilter,setDaoFilter,activeDaos: rawDaos, isDynamic}=useArkivPoll90() as any
   const [view,setView]=useState<View>('architecture')
   const [chainFilter,setChainFilter]=useState<Chain|'all'>('all')
   const [sizingMode,setSizingMode]=useState<SizingMode>('storage')
+  const [iconMap, setIconMap]=useState<Record<string,string>>({})
   const svgRef=useRef<SVGSVGElement>(null)
   const wrapRef=useRef<HTMLDivElement>(null)
-  const filtered = chainFilter==='all'? txs : txs.filter(t=>t.chain===chainFilter)
-  const demoUploader=MOCK_DAOS[0].owner
+  // Resolve real ERC20 logo vs NFT collection icon after mount — makes DAO identity hit home vs dicebear placeholder
+  useEffect(()=>{
+    let cancelled=false
+    ;(async()=>{
+      const next: Record<string,string> = {}
+      for(const d of rawDaos as typeof MOCK_DAOS){
+        const key = d.tokenAddress.toLowerCase()
+        if(iconMap[key]) continue
+        const resolved = await fetchDaoIcon(d.tokenAddress, d.tokenType as 'token' | 'nft')
+        if(resolved && !cancelled) next[key]=resolved
+      }
+      if(!cancelled && Object.keys(next).length) setIconMap(m=>({...m, ...next}))
+    })()
+    return()=>{ cancelled=true }
+  },[rawDaos])
+  const activeDaos = useMemo(()=> rawDaos.map((d: typeof MOCK_DAOS[number])=>{
+    const k = d.tokenAddress.toLowerCase()
+    return iconMap[k] ? { ...d, imageUrl: iconMap[k] } : d
+  }),[rawDaos, iconMap])
+  const filtered = chainFilter==='all'? txs : txs.filter((t: InFlightTx)=>t.chain===chainFilter)
+  const demoUploader=(rawDaos[0] as typeof MOCK_DAOS[number] | undefined)?.owner ?? MOCK_DAOS[0].owner
 
   const {nodes, links} = useMemo(()=>{
+    // Build DAO icons map is async; nodes use current imageUrl (dicebear or resolved) — resolved icons populate via effect below
     const zones: ZoneNode[]=[
       { id:'arkiv', label:'Arkiv OP L3', sub:'0x44…0044 • entities', kind:'network', chain:'arkiv', r:34, volume: 92, explorer:'https://braga.hoodi.arkiv.network' },
       { id:'icp', label:'DFINITY ICP', sub:CANISTER_ID, kind:'network', chain:'icp', r:28, volume: 64, explorer:`https://dashboard.internetcomputer.org/canister/${CANISTER_ID}` },
@@ -323,6 +382,27 @@ export default function App(){
           ? `${fmtGb(d.gbStored)} pinned • ${priceLabel} • ${d.tokenSymbol} ${d.tokenType} • ${d.tokenAddress.slice(0,6)}…`
           : `${fmtUsd(d.marketCapUsd)} mcap • ${priceLabel} • ${d.tokenAddress.slice(0,6)}… • ${fmtGb(d.gbStored)}`
         return { id:d.handle, label:d.name, sub, kind:'dao' as const, r, volume: isStorage ? d.gbStored : d.marketCapUsd, explorer: `https://basescan.org/address/${d.tokenAddress}`, imageUrl: (d as any).imageUrl }
+      }),
+      // Uploaders as subset of DAO — private-tracker mental model: DAO = holders (gating token), uploaders ⊂ DAO are those who have pinned content
+      ...activeDaos.flatMap(d=>{
+        const owners: string[] = (d as unknown as { owners?: string[] }).owners ?? [d.owner]
+        const take = Math.min(6, owners.length)
+        // Small per-uploader nodes clustered near their DAO; haven-aol attestation proves each uploader is also a holder
+        return owners.slice(0, take).map((owner, i)=>{
+          const short = `${owner.slice(0,6)}…${owner.slice(-4)}`
+          return {
+            id: `${d.handle}::uploader::${owner.slice(0,10)}`,
+            label: short,
+            sub: `${d.tokenSymbol} holder • uploader ${i+1}/${owners.length}`,
+            kind:'uploader' as const,
+            r: 5.5,
+            volume: 1,
+            explorer: `https://basescan.org/address/${owner}`,
+            parentDao: d.handle,
+            // Uploader avatar = holder NFT (first token in collection) when NFT DAO, else token holder — resolved async not needed for now, uses blockie fallback in detail pane
+            imageUrl: undefined,
+          } as ZoneNode
+        })
       }),
     ]
     const ls: Link[]=[
@@ -345,6 +425,16 @@ export default function App(){
       ...activeDaos.slice(0,3).map(d=>{
         const v = sizingMode==='storage' ? Math.log10(d.gbStored+1)*4 : Math.log10(d.marketCapUsd/1000+1)*2.2
         return {source:d.handle,target:'arkiv',value: Math.max(3, Math.min(14, v)),chain:'arkiv' as Chain}
+      }),
+      // Uploader ⊂ DAO edges — thin, dashed conceptually (solid here for simplicity)
+      ...activeDaos.flatMap(d=>{
+        const owners: string[] = (d as unknown as { owners?: string[] }).owners ?? [d.owner]
+        return owners.slice(0, Math.min(6, owners.length)).map(owner=>({
+          source: d.handle,
+          target: `${d.handle}::uploader::${owner.slice(0,10)}`,
+          value: 1.2,
+          chain:'arkiv' as Chain,
+        }))
       }),
     ]
     const visibleNodes = chainFilter==='all'? zones : zones.filter(z=> !z.chain || z.chain===chainFilter || z.kind!=='network')
