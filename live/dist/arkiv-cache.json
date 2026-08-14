@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-08-14T02:10:00Z",
+  "fetchedAt": "2026-08-14T02:15:00Z",
   "endpoint": "mock",
   "count": 4,
   "entities": [
@@ -8,13 +8,14 @@
       "owner": "0x1111111111111111111111111111111111111111",
       "attributes": [
         {"key": "entity_type", "value": "DataDAO"},
-        {"key": "title", "value": "Token DAO - TKN"},
+        {"key": "title", "value": "USDC Token DAO"},
         {"key": "token_type", "value": "token"},
-        {"key": "token_symbol", "value": "TKN"},
-        {"key": "price_usd", "value": 1.5},
+        {"key": "token_symbol", "value": "USDC"},
+        {"key": "token_address", "value": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"},
+        {"key": "price_usd", "value": 1.0},
         {"key": "size_bytes", "value": 5000000000}
       ],
-      "payload": "eyJ0aXRsZSI6IlRva2VuIERBTyIsInRva2VuX3R5cGUiOiJ0b2tlbiJ9",
+      "payload": "eyJ0aXRsZSI6IlVTRENUb2tlbiBEQU8ifQ==",
       "created_at": "1000000",
       "created_at_block": 1000000
     },
@@ -23,13 +24,14 @@
       "owner": "0x2222222222222222222222222222222222222222",
       "attributes": [
         {"key": "entity_type", "value": "DataDAO"},
-        {"key": "title", "value": "NFT DAO - NFT"},
+        {"key": "title", "value": "BAYC NFT DAO"},
         {"key": "token_type", "value": "nft"},
-        {"key": "token_symbol", "value": "NFT"},
-        {"key": "floor_price_eth", "value": 0.88},
+        {"key": "token_symbol", "value": "BAYC"},
+        {"key": "token_address", "value": "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D"},
+        {"key": "floor_price_eth", "value": 13.5},
         {"key": "size_bytes", "value": 8000000000}
       ],
-      "payload": "eyJ0aXRsZSI6Ik5GVCBEQU8iLCJ0b2tlbl90eXBlIjoibmZ0In0=",
+      "payload": "eyJ0aXRsZSI6IkJBWUMgTkZUIn0=",
       "created_at": "1000001",
       "created_at_block": 1000001
     },
@@ -38,13 +40,14 @@
       "owner": "0x3333333333333333333333333333333333333333",
       "attributes": [
         {"key": "entity_type", "value": "DataDAO"},
-        {"key": "title", "value": "ERC721 DAO"},
+        {"key": "title", "value": "Azuki NFT DAO"},
         {"key": "token_type", "value": "erc721"},
-        {"key": "token_symbol", "value": "ERC721"},
-        {"key": "floor_price_eth", "value": 1.2},
+        {"key": "token_symbol", "value": "AZUKI"},
+        {"key": "token_address", "value": "0xED5AF388653567Af2F388E6224dC7C4b3241C544"},
+        {"key": "floor_price_eth", "value": 3.2},
         {"key": "size_bytes", "value": 6000000000}
       ],
-      "payload": "eyJ0aXRsZSI6IkVSQzcyMSBEQU8ifQ==",
+      "payload": "eyJ0aXRsZSI6IkF6dWtpIE5GVCJ9",
       "created_at": "1000002",
       "created_at_block": 1000002
     },
@@ -53,13 +56,14 @@
       "owner": "0x4444444444444444444444444444444444444444",
       "attributes": [
         {"key": "entity_type", "value": "DataDAO"},
-        {"key": "title", "value": "Is NFT True DAO"},
-        {"key": "is_nft", "value": "true"},
-        {"key": "token_symbol", "value": "ISNFT"},
-        {"key": "floor_price_eth", "value": 0.55},
+        {"key": "title", "value": "WETH Token DAO"},
+        {"key": "token_type", "value": "token"},
+        {"key": "token_symbol", "value": "WETH"},
+        {"key": "token_address", "value": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"},
+        {"key": "price_usd", "value": 3200},
         {"key": "size_bytes", "value": 3000000000}
       ],
-      "payload": "eyJ0aXRsZSI6IklzIE5GVCBUcnVlIERBTyIsImlzX25mdCI6InRydWUifQ==",
+      "payload": "eyJ0aXRsZSI6IldFVEggVG9rZW4ifQ==",
       "created_at": "1000003",
       "created_at_block": 1000003
     }
