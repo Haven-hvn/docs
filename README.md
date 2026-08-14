@@ -24,6 +24,18 @@ haven-dapp/haven-cli ──┴──> state trie (entity/pair/index accounts, ro
 
 *New paradigm: zero private backend — see [architecture/WEB3_PARADIGM.md](architecture/WEB3_PARADIGM.md) + [specs/haven-web3-zero-backend.md](specs/haven-web3-zero-backend.md) (LLM 10/10)*
 
+## Layered protocol — Haven as application-layer (L7) over public networks
+
+Haven is not a chain — it is an **application-layer protocol** (like a private tracker is an application protocol over Bittorrent/TCP) that composes four public networks as its lower layers.
+
+| Layer | What provides it | What Haven defines on top |
+|---|---|---|
+| **L1-L3 Network / Consensus / Storage** | `arkiv-chain` OP L3 precompile `0x44…0044` (entity trie, `execute`, `arkiv_query`), `DFINITY ICP` canister `dciac-…qlzuq` (VetKD), **any EVM** (Ethereum/Base as gate), `Filecoin FEVM/IPFS` (`filecoin-pin`/`filecoin-pay`, `ipfs://` CIDs) | Just bytes + `eth_call` + `ecrecover` — no Haven semantics |
+| **L5/L6 Session / Presentation** | `haven-aol` `GateRequest V1 (GateRequest)` / `V3 (GateRequestV3, epoch 2592000)` EIP-712 + `Attestation HAVEN_ATTEST_V1:{chain}:{tokenAddress}:{threshold}:{evmAddress}:{cidHash}:{timestamp}:{balance}` / `HAVEN_BATCH_ATTEST_V1:{…}:{merkleRoot}:{cidCount}` Ed25519 (t-Schnorr `haven_attest_v1`), plus `contractURI 0xe8a3d485` / `tokenURI 0xc87b56dd` → `gatewayNormalize ipfs://→https://ipfs.io/ipfs/` and `trustwallet/assets/.../logo.png` | *How* you prove holder and derive the VetKD key + *how* you resolve the DAO icon — the session key is per `(chain, tokenAddress, threshold, cid|epoch)` |
+| **L7 Application — Haven** | Entity shape `project:haven, type:video, gate_token/gate_chain/gate_threshold, cid_hash, encryption_metadata` + rule `DAO = {chain, tokenAddress, threshold, tokenType: token|nft (nft|721|1155|is_nft)}` + `uploader ⊂ DAO` proven by `attestHolding/batchAttestHolding` over `cidHash` (reader `verifyAttestation` 30d TTL) + UI `HolderIdentity` = collection `ipfs://` image for all members of that DAO (fully public via `eth_call` contractURI, no Alchemy/OpenSea key) | This *is* the protocol: "content is a CID on Filecoin, gated by a public token/NFT, discovered via Arkiv, pinned size aggregated per gating `0x`, and identity *is* the collection icon." The 5 surfaces (`haven-dapp` TS, `haven-cli` python, `haven-mobile` Kotlin, `haven-aol` Motoko, `arkiv-chain` Rust) are just thin clients obeying the same rule set — no shared private DB. |
+
+Outside view: 4 public networks. Inside view: one deterministic rule set. Calling it `L7` makes the Map of Zones (`docs/live`, d3-force) read as *"public universe + DAO zones sized by GB/mcap, each zone's icon is its gating token/collection, uploaders are dots inside the zone"* — the private-tracker mental model.
+
 ## How this was built
 
 ```bash
