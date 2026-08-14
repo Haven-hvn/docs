@@ -36,6 +36,8 @@ Haven is not a chain — it is an **application-layer protocol** (like a private
 
 Outside view: 4 public networks. Inside view: one deterministic rule set. Calling it `L7` makes the Map of Zones (`docs/live`, d3-force) read as *"public universe + DAO zones sized by GB/mcap, each zone's icon is its gating token/collection, uploaders are dots inside the zone"* — the private-tracker mental model.
 
+**What's unique:** bytes stay `AES-encrypted` on `Filecoin/IPFS` (`ipfs://` CID), indexed in `arkiv-chain 0x44…0044`, gated by any `EVM 0x` you hold (`haven-aol` VetKD `GateRequestV3` + `Attestation HAVEN_ATTEST_V1` over `cidHash`), and shown as `HolderIdentity` — the collection's `contractURI 0xe8a3d485 → https://ipfs.io/ipfs/` image for every member. No private DB (`Services:5 Datastores:0`); five thin clients, one rule set. Pin size per `gate_token` is the DAO metric in `docs/live`.
+
 ## How this was built
 
 ```bash

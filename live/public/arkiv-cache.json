@@ -1,7 +1,67 @@
 {
-  "fetchedAt": "2026-08-13T23:16:13.830Z",
-  "endpoint": null,
-  "count": 0,
-  "entities": [],
-  "note": "Braga 503 at build — frontend uses mocks, retries live"
+  "fetchedAt": "2026-08-14T02:10:00Z",
+  "endpoint": "mock",
+  "count": 4,
+  "entities": [
+    {
+      "key": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "owner": "0x1111111111111111111111111111111111111111",
+      "attributes": [
+        {"key": "entity_type", "value": "DataDAO"},
+        {"key": "title", "value": "Token DAO - TKN"},
+        {"key": "token_type", "value": "token"},
+        {"key": "token_symbol", "value": "TKN"},
+        {"key": "price_usd", "value": 1.5},
+        {"key": "size_bytes", "value": 5000000000}
+      ],
+      "payload": "eyJ0aXRsZSI6IlRva2VuIERBTyIsInRva2VuX3R5cGUiOiJ0b2tlbiJ9",
+      "created_at": "1000000",
+      "created_at_block": 1000000
+    },
+    {
+      "key": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "owner": "0x2222222222222222222222222222222222222222",
+      "attributes": [
+        {"key": "entity_type", "value": "DataDAO"},
+        {"key": "title", "value": "NFT DAO - NFT"},
+        {"key": "token_type", "value": "nft"},
+        {"key": "token_symbol", "value": "NFT"},
+        {"key": "floor_price_eth", "value": 0.88},
+        {"key": "size_bytes", "value": 8000000000}
+      ],
+      "payload": "eyJ0aXRsZSI6Ik5GVCBEQU8iLCJ0b2tlbl90eXBlIjoibmZ0In0=",
+      "created_at": "1000001",
+      "created_at_block": 1000001
+    },
+    {
+      "key": "0xcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "owner": "0x3333333333333333333333333333333333333333",
+      "attributes": [
+        {"key": "entity_type", "value": "DataDAO"},
+        {"key": "title", "value": "ERC721 DAO"},
+        {"key": "token_type", "value": "erc721"},
+        {"key": "token_symbol", "value": "ERC721"},
+        {"key": "floor_price_eth", "value": 1.2},
+        {"key": "size_bytes", "value": 6000000000}
+      ],
+      "payload": "eyJ0aXRsZSI6IkVSQzcyMSBEQU8ifQ==",
+      "created_at": "1000002",
+      "created_at_block": 1000002
+    },
+    {
+      "key": "0xdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "owner": "0x4444444444444444444444444444444444444444",
+      "attributes": [
+        {"key": "entity_type", "value": "DataDAO"},
+        {"key": "title", "value": "Is NFT True DAO"},
+        {"key": "is_nft", "value": "true"},
+        {"key": "token_symbol", "value": "ISNFT"},
+        {"key": "floor_price_eth", "value": 0.55},
+        {"key": "size_bytes", "value": 3000000000}
+      ],
+      "payload": "eyJ0aXRsZSI6IklzIE5GVCBUcnVlIERBTyIsImlzX25mdCI6InRydWUifQ==",
+      "created_at": "1000003",
+      "created_at_block": 1000003
+    }
+  ]
 }
