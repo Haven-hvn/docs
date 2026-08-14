@@ -199,8 +199,11 @@ async function parseArkivRawToDaos(raw:any[]): Promise<typeof MOCK_DAOS | null>{
       gbStored: Math.max(0.8, Math.round(verifiedGb*10)/10 || Math.max(0.8, Math.round(info.gb*10)/10)),
       deals: info.count,
       marketCapUsd: 500_000 + Math.random()*2_000_000,
-      tokenSymbol:(sampleAttrs.token_symbol ?? samplePayload.token_symbol ?? 'TKN') as string,
-      tokenType:'token' as const, tokenAddress:gating, priceUsd:1.2,
+      tokenSymbol:(sampleAttrs.token_symbol ?? samplePayload.token_symbol ?? sampleAttrs.tokenSymbol ?? 'TKN') as string,
+      tokenType: (()=>{ const raw = String(sampleAttrs.token_type ?? sampleAttrs.gate_token_type ?? sampleAttrs.token_standard ?? sampleAttrs.standard ?? samplePayload.token_type ?? samplePayload.tokenType ?? '').toLowerCase(); if(raw.includes('nft')||raw.includes('721')||raw.includes('1155')||raw==='erc721'||raw==='erc1155') return 'nft' as const; if(String(sampleAttrs.is_nft ?? samplePayload.is_nft ?? '').toLowerCase()==='true') return 'nft' as const; return 'token' as const; })(),
+      tokenAddress:gating,
+      priceUsd: Number(sampleAttrs.price_usd ?? samplePayload.price_usd ?? sampleAttrs.priceUsd ?? 1.2) || 1.2,
+      floorPriceEth: Number(sampleAttrs.floor_price_eth ?? samplePayload.floor_price_eth ?? sampleAttrs.floorPriceEth ?? 0.42) || 0.42,
       imageUrl:`https://api.dicebear.com/9.x/shapes/svg?seed=${encodeURIComponent(seed)}&backgroundColor=0d1117,0e1a14&shape1Color=39d353,58a6ff`,
       _verified: verifiedGb!==info.gb,
     })
