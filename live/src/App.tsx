@@ -57,41 +57,68 @@ function daoRadiusMarketcap(mcap:number){
 function fmtUsd(n:number){ if(n>=1e6) return `$${(n/1e6).toFixed(n>=10e6?1:2)}M`; if(n>=1e3) return `$${(n/1e3).toFixed(1)}k`; return `$${n}` }
 function fmtGb(n:number){ return n>=100? `${Math.round(n).toLocaleString()} GB` : `${n.toLocaleString()} GB` }
 
-// DAO icon: ERC20 token logo vs NFT collection icon — makes identity hit home for newcomers
+// DAO icon: fully public — contractURI/tokenURI → IPFS gateway (CID onchain), no API key. ERC20 via trustwallet.
 function gatewayNormalize(url: string | null): string | null {
   if (!url) return null
   if (url.startsWith('ipfs://')) return url.replace('ipfs://', 'https://ipfs.io/ipfs/')
+  if (url.startsWith('ipfs/')) return `https://ipfs.io/${url}`
   return url
 }
-async function fetchDaoIcon(tokenAddress: string, tokenType: 'token' | 'nft'): Promise<string | null> {
-  // Try token logo via trustwallet / alchemy; fallback null => dicebear
-  const addr = tokenAddress.toLowerCase()
-  // 1) TrustWallet assets is deterministic, no API key
-  const trustLogo = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${tokenAddress}/logo.png`
-  // Probe trust logo quickly
+function chainRpcForDao(): string { return 'https://eth.llamarpc.com' }
+// Fully public eth_call without viem dep — contractURI() = 0xe8a3d485, tokenURI(uint256)=0xc87b56dd
+async function ethCallString(rpc: string, to: string, data: string): Promise<string | null> {
   try {
-    const head = await fetch(trustLogo, { method: 'HEAD' })
-    if (head.ok) return trustLogo
-  } catch {}
-  // 2) Try Alchemy metadata if key present (vite env)
-  const alchemyKey = (import.meta as unknown as { env?: Record<string, string> }).env?.VITE_ALCHEMY_API_KEY as string | undefined
-  if (alchemyKey) {
-    try {
-      if (tokenType === 'token') {
-        const r = await fetch(`https://eth-mainnet.g.alchemy.com/nft/v3/${alchemyKey}/getTokenMetadata?contractAddress=${addr}`)
-        if (r.ok) { const j: { logo?: string | null } = await r.json(); const u = gatewayNormalize(j.logo ?? null); if (u) return u }
-      } else {
-        const r = await fetch(`https://eth-mainnet.g.alchemy.com/nft/v3/${alchemyKey}/getContractMetadata?contractAddress=${addr}`)
-        if (r.ok) {
-          const j: { openSeaMetadata?: { imageUrl?: string | null }; contractMetadata?: { openSea?: { imageUrl?: string | null } } } = await r.json()
-          const u = gatewayNormalize(j.openSeaMetadata?.imageUrl ?? j.contractMetadata?.openSea?.imageUrl ?? null)
-          if (u) return u
-        }
-      }
+    const r = await fetch(rpc, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ jsonrpc:'2.0', id:1, method:'eth_call', params:[{ to, data }, 'latest'] }) })
+    if(!r.ok) return null
+    const j = await r.json() as { result?: string }
+    const hex = j.result
+    if(!hex || hex==='0x' || hex.length < 2) return null
+    // ABI decode string: offset (32b) + length (32b) + utf8
+    const b = hex.slice(2)
+    if(b.length < 128) return null
+    const lenHex = b.slice(64,128)
+    const len = parseInt(lenHex,16)
+    if(isNaN(len) || len<=0 || len> 4000) return null
+    const strHex = b.slice(128, 128+len*2)
+    let s=''
+    for(let i=0;i<strHex.length;i+=2) s+= String.fromCharCode(parseInt(strHex.slice(i,i+2),16))
+    return s
+  } catch { return null }
+}
+async function viemReadPublic(contractAddress: string, fn: string, args: unknown[] = []): Promise<string | null> {
+  const rpc = chainRpcForDao()
+  if(fn==='contractURI') return ethCallString(rpc, contractAddress, '0xe8a3d485')
+  if(fn==='tokenURI') {
+    const id = BigInt((args[0] as bigint | number | string) ?? 1)
+    const hexId = id.toString(16).padStart(64,'0')
+    return ethCallString(rpc, contractAddress, '0xc87b56dd'+hexId)
+  }
+  return null
+}
+async function fetchDaoIcon(tokenAddress: string, tokenType: 'token' | 'nft'): Promise<string | null> {
+  // 1) contractURI → ipfs JSON → image (fully public, CID onchain)
+  const contractUri = await viemReadPublic(tokenAddress, 'contractURI')
+  if (contractUri) {
+    const u = gatewayNormalize(contractUri)
+    if (u) try {
+      const r = await fetch(u, { cache: 'no-store' as RequestCache })
+      if (r.ok) { const j = await r.json() as { image?: string | null; image_url?: string | null }; const img = gatewayNormalize(j.image ?? j.image_url ?? null); if (img) return img }
     } catch {}
   }
-  // Fallback: will use dicebear seed
-  void addr
+  for (const id of [1n, 0n]) {
+    const uri = await viemReadPublic(tokenAddress, 'tokenURI', [id])
+    if (!uri) continue
+    const u = gatewayNormalize(uri)
+    if (!u) continue
+    try {
+      const r = await fetch(u, { cache: 'no-store' as RequestCache })
+      if (r.ok) { const j = await r.json() as { image?: string | null; image_url?: string | null }; const img = gatewayNormalize(j.image ?? j.image_url ?? null); if (img) return img }
+    } catch {}
+  }
+  // 2) ERC20 trustwallet logo (public) — works for token DAOs even when contractURI empty
+  const trustLogo = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${tokenAddress}/logo.png`
+  try { const h = await fetch(trustLogo, { method: 'HEAD' }); if (h.ok) return trustLogo } catch {}
+  void tokenType
   return null
 }
 
