@@ -341,6 +341,7 @@ export default function App(){
   const [view,setView]=useState<View>('architecture')
   const [chainFilter,setChainFilter]=useState<Chain|'all'>('all')
   const [sizingMode,setSizingMode]=useState<SizingMode>('storage')
+  const [gatingChain,setGatingChain]=useState<string>('all')
   const [iconMap, setIconMap]=useState<Record<string,string>>({})
   const svgRef=useRef<SVGSVGElement>(null)
   const wrapRef=useRef<HTMLDivElement>(null)
@@ -359,10 +360,20 @@ export default function App(){
     })()
     return()=>{ cancelled=true }
   },[rawDaos])
-  const activeDaos = useMemo(()=> rawDaos.map((d: typeof MOCK_DAOS[number])=>{
+  const activeDaosRaw = useMemo(()=> rawDaos.map((d: typeof MOCK_DAOS[number])=>{
     const k = d.tokenAddress.toLowerCase()
     return iconMap[k] ? { ...d, imageUrl: iconMap[k] } : d
   }),[rawDaos, iconMap])
+  // Gating chain filter — haven-aol VALID_CHAINS (DFINITY EVM RPC outcalls): EthMainnet, EthSepolia, ArbitrumOne, BaseMainnet, OptimismMainnet
+  const activeDaos = useMemo(()=>{
+    if(gatingChain==='all') return activeDaosRaw
+    const want = gatingChain.toLowerCase()
+    return activeDaosRaw.filter(d=>{
+      const gc = (d as unknown as { gateChain?: string; chain?: string }).gateChain ?? (d as unknown as { chain?: string }).chain ?? ''
+      if(!gc) return want==='ethmainnet' // mocks without gateChain are EthMainnet (BAYC/Azuki/USDC)
+      return gc.toLowerCase()===want || gc.toLowerCase().replace('mainnet','')===want.replace('mainnet','')
+    })
+  },[activeDaosRaw, gatingChain])
   const filtered = chainFilter==='all'? txs : txs.filter((t: InFlightTx)=>t.chain===chainFilter)
   const demoUploader=(rawDaos[0] as typeof MOCK_DAOS[number] | undefined)?.owner ?? MOCK_DAOS[0].owner
 
@@ -696,6 +707,18 @@ export default function App(){
           <button className={daoFilter==='active90'?'on':''} onClick={()=>setDaoFilter('active90')}>Active 90d · {activeDaos.length}</button>
           <button className={daoFilter==='all'?'on':''} onClick={()=>setDaoFilter('all')}>All ({MOCK_DAOS.length})</button>
           <span className="hint">same 0x uploader across Arkiv/EVM ({demoUploader.slice(0,6)}…)</span>
+        </div>
+        <div className="gating-chain">
+          <span className="label">Gating chain</span>
+          <select value={gatingChain} onChange={e=>setGatingChain(e.target.value)} title="haven-aol VALID_CHAINS — DFINITY EVM RPC outcalls">
+            <option value="all">All chains</option>
+            <option value="EthMainnet">EthMainnet</option>
+            <option value="BaseMainnet">BaseMainnet</option>
+            <option value="ArbitrumOne">ArbitrumOne</option>
+            <option value="OptimismMainnet">OptimismMainnet</option>
+            <option value="EthSepolia">EthSepolia</option>
+          </select>
+          <span className="hint">haven-aol: {gatingChain==='all' ? 'all' : gatingChain} · RPC via DFINITY</span>
         </div>
         <div className="chains">
           {(['all','arkiv','icp','evm','filecoin'] as const).map(c=> <button key={c} className={chainFilter===c?'on':''} onClick={()=>setChainFilter(c)}>{c}</button>)}
