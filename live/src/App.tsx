@@ -157,12 +157,13 @@ async function parseArkivRawToDaos(raw:any[]): Promise<typeof MOCK_DAOS | null>{
   const byGating = new Map<string, { owners:Set<string>, cids:string[], gb:number, count:number, sample:any }>()
   for(const e of raw){
     try{
-      const attrs:any = e.attributes ?? {}
+      const rawAttrs:any = e.attributes ?? {}
+      const attrs:any = Array.isArray(rawAttrs) ? Object.fromEntries(rawAttrs.map((a:any)=>[a.key, a.value])) : rawAttrs
       const entityType = attrs.entity_type ?? attrs.entityType ?? ''
       if(entityType && String(entityType).toLowerCase()!=='datadao' && String(entityType).toLowerCase()!=='dao') continue
       let payload:any={}
       try{ const b64=e.payload??''; const json=b64?atob(b64):'{}'; payload=JSON.parse(json)}catch{}
-      const gatingRaw: string = attrs.dao ?? attrs.targetDao ?? attrs.target_dao ?? attrs.token_address ?? attrs.tokenAddress ?? payload.dao ?? payload.token_address ?? e.key ?? ''
+      const gatingRaw: string = attrs.dao ?? attrs.targetDao ?? attrs.target_dao ?? attrs.token_address ?? attrs.tokenAddress ?? attrs.gate_token ?? payload.dao ?? payload.token_address ?? payload.gate_token ?? e.key ?? ''
       const gating=(gatingRaw && gatingRaw.startsWith('0x')? gatingRaw:null) as string|null
       if(!gating) continue
       const key=gating.toLowerCase()
@@ -187,7 +188,8 @@ async function parseArkivRawToDaos(raw:any[]): Promise<typeof MOCK_DAOS | null>{
       const v = await fetchFilecoinVerifiedBytes(owners, info.cids)
       if(v>0) verifiedGb = v/1e9
     }
-    const sampleAttrs:any = info.sample.attributes ?? {}
+    const rawSampleAttrs:any = info.sample.attributes ?? {}
+    const sampleAttrs:any = Array.isArray(rawSampleAttrs) ? Object.fromEntries(rawSampleAttrs.map((a:any)=>[a.key, a.value])) : rawSampleAttrs
     let samplePayload:any={}; try{ samplePayload=JSON.parse(atob(info.sample.payload ?? '')) }catch{}
     const title = samplePayload.title ?? sampleAttrs.title ?? `DAO ${gating.slice(0,8)}`
     const handle=gating.slice(0,10).toLowerCase()
