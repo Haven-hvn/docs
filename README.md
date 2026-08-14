@@ -26,7 +26,7 @@ haven-dapp/haven-cli ──┴──> state trie (entity/pair/index accounts, ro
 
 ## Layered protocol — Haven as application-layer (L7) over public networks
 
-Haven is not a chain — it is an **application-layer protocol** (like a private tracker is an application protocol over Bittorrent/TCP) that composes four public networks as its lower layers.
+Haven is not a chain — it is an **application-layer protocol** (like a member-gated community is an application protocol over its transport) that composes four public networks as its lower layers.
 
 | Layer | What provides it | What Haven defines on top |
 |---|---|---|
@@ -34,7 +34,7 @@ Haven is not a chain — it is an **application-layer protocol** (like a private
 | **L5/L6 Session / Presentation** | `haven-aol` `GateRequest V1 (GateRequest)` / `V3 (GateRequestV3, epoch 2592000)` EIP-712 + `Attestation HAVEN_ATTEST_V1:{chain}:{tokenAddress}:{threshold}:{evmAddress}:{cidHash}:{timestamp}:{balance}` / `HAVEN_BATCH_ATTEST_V1:{…}:{merkleRoot}:{cidCount}` Ed25519 (t-Schnorr `haven_attest_v1`), plus `contractURI 0xe8a3d485` / `tokenURI 0xc87b56dd` → `gatewayNormalize ipfs://→https://ipfs.io/ipfs/` and `trustwallet/assets/.../logo.png` | *How* you prove holder and derive the VetKD key + *how* you resolve the DAO icon — the session key is per `(chain, tokenAddress, threshold, cid|epoch)` |
 | **L7 Application — Haven** | Entity shape `project:haven, type:video, gate_token/gate_chain/gate_threshold, cid_hash, encryption_metadata` + rule `DAO = {chain, tokenAddress, threshold, tokenType: token|nft (nft|721|1155|is_nft)}` + `uploader ⊂ DAO` proven by `attestHolding/batchAttestHolding` over `cidHash` (reader `verifyAttestation` 30d TTL) + UI `HolderIdentity` = collection `ipfs://` image for all members of that DAO (fully public via `eth_call` contractURI, no Alchemy/OpenSea key) | This *is* the protocol: "content is a CID on Filecoin, gated by a public token/NFT, discovered via Arkiv, pinned size aggregated per gating `0x`, and identity *is* the collection icon." The 5 surfaces (`haven-dapp` TS, `haven-cli` python, `haven-mobile` Kotlin, `haven-aol` Motoko, `arkiv-chain` Rust) are just thin clients obeying the same rule set — no shared private DB. |
 
-Outside view: 4 public networks. Inside view: one deterministic rule set. Calling it `L7` makes the Map of Zones (`docs/live`, d3-force) read as *"public universe + DAO zones sized by GB/mcap, each zone's icon is its gating token/collection, uploaders are dots inside the zone"* — the private-tracker mental model.
+Outside view: 4 public networks. Inside view: one deterministic rule set. Calling it `L7` makes the Map of Zones (`docs/live`, d3-force) read as *"public universe + DAO zones sized by GB/mcap, each zone's icon is its gating token/collection, uploaders are dots inside the zone"* — the member-gated model.
 
 **What's unique:** bytes stay `AES-encrypted` on `Filecoin/IPFS` (`ipfs://` CID), indexed in `arkiv-chain 0x44…0044`, gated by any `EVM 0x` you hold (`haven-aol` VetKD `GateRequestV3` + `Attestation HAVEN_ATTEST_V1` over `cidHash`), and shown as `HolderIdentity` — the collection's `contractURI 0xe8a3d485 → https://ipfs.io/ipfs/` image for every member. No private DB (`Services:5 Datastores:0`); five thin clients, one rule set. Pin size per `gate_token` is the DAO metric in `docs/live`.
 

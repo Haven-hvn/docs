@@ -400,7 +400,7 @@ export default function App(){
           : `${fmtUsd(d.marketCapUsd)} mcap • ${priceLabel} • ${d.tokenAddress.slice(0,6)}… • ${fmtGb(d.gbStored)}`
         return { id:d.handle, label:d.name, sub, kind:'dao' as const, r, volume: isStorage ? d.gbStored : d.marketCapUsd, explorer: `https://basescan.org/address/${d.tokenAddress}`, imageUrl: (d as any).imageUrl }
       }),
-      // Uploaders as subset of DAO — private-tracker mental model: DAO = holders (gating token), uploaders ⊂ DAO are those who have pinned content
+      // Uploaders as subset of DAO — member-gated model: DAO = holders (gating token), uploaders ⊂ DAO are those who have pinned content
       ...activeDaos.flatMap(d=>{
         const owners: string[] = (d as unknown as { owners?: string[] }).owners ?? [d.owner]
         const take = Math.min(6, owners.length)
