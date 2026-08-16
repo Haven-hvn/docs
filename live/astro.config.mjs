@@ -18,18 +18,21 @@ export default defineConfig({
       cssVariable: '--font-editorial',
       weights: ['400', '500', '600'],
       styles: ['normal', 'italic'],
+      optimizedFallbacks: false,
     },
     {
       provider: fontProviders.google(),
       name: 'Inter',
       cssVariable: '--font-institution',
       weights: ['400', '500', '600'],
+      optimizedFallbacks: false,
     },
     {
       provider: fontProviders.google(),
       name: 'JetBrains Mono',
       cssVariable: '--font-ledger',
       weights: ['400', '500'],
+      optimizedFallbacks: false,
     },
   ],
 });
