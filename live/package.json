@@ -1,0 +1,48 @@
+{
+  "name": "haven-web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Haven \u2014 the sovereign media protocol. Marketing surface, protocol documentation, and the Atlas observatory.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "build:fresh": "node scripts/capture.mjs && astro build",
+    "preview": "astro preview --port 4321",
+    "check": "astro check",
+    "sync": "astro sync",
+    "capture": "node scripts/capture.mjs",
+    "capture:storage": "node scripts/capture.mjs --storage",
+    "capture:market": "node scripts/capture.mjs --market",
+    "audit:contrast": "node scripts/audit-contrast.mjs"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "7.0.5",
+    "@astrojs/react": "6.0.2",
+    "@react-three/fiber": "9.7.0",
+    "@react-three/postprocessing": "3.0.5",
+    "@tailwindcss/vite": "4.3.3",
+    "astro": "7.2.2",
+    "d3-force": "3.0.0",
+    "motion": "13.1.0",
+    "postprocessing": "6.39.4",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "tailwindcss": "4.3.3",
+    "three": "0.185.1",
+    "viem": "^2.55.15"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "@types/d3-force": "3.0.10",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
+    "@types/three": "0.185.4",
+    "playwright": "^1.58.2",
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}
