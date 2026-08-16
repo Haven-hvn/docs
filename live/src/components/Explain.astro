@@ -1,0 +1,134 @@
+---
+/**
+ * EXPLAIN
+ *
+ * Progressive disclosure for a reader who has never touched any of this.
+ *
+ * The alternative approaches both fail: writing for novices everywhere patronises
+ * the people who already know, and writing for insiders everywhere excludes the
+ * people the protocol most needs. A closed disclosure costs an expert one glance
+ * and gives a newcomer a full explanation on demand.
+ *
+ * `<details>` rather than a scripted accordion — it is keyboard operable, works
+ * with scripting off, is announced correctly by screen readers, and is findable
+ * by in-page search in browsers that expand matches inside closed details.
+ */
+interface Props {
+  /** The term being explained, phrased as the reader would ask it. */
+  term: string
+  /** Opens on load. For a term the surrounding copy cannot proceed without. */
+  open?: boolean
+  class?: string
+}
+
+const { term, open = false, class: className = '' } = Astro.props
+---
+
+<details class:list={['explain', className]} open={open}>
+  <summary class="explain-summary">
+    <span class="explain-glyph" aria-hidden="true"></span>
+    <span class="explain-term">{term}</span>
+  </summary>
+  <div class="explain-body">
+    <slot />
+  </div>
+</details>
+
+<style>
+  .explain {
+    border-left: 2px solid var(--line-strong);
+    margin: 1.1rem 0;
+  }
+
+  .explain[open] {
+    border-left-color: var(--seal);
+  }
+
+  .explain-summary {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.35rem 0 0.35rem 0.85rem;
+    cursor: pointer;
+    font-family: var(--font-ui);
+    font-size: var(--step--1);
+    color: var(--fg-2);
+    list-style: none;
+    transition: color 180ms var(--ease-out-quart);
+  }
+
+  /* Safari still paints its own triangle without this. */
+  .explain-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .explain-summary:hover {
+    color: var(--fg-0);
+  }
+
+  .explain-summary:focus-visible {
+    outline: 2px solid var(--seal);
+    outline-offset: 2px;
+  }
+
+  /* A plus that becomes a minus. Drawn rather than typed so it stays aligned
+     with the baseline of the term at any size. */
+  .explain-glyph {
+    position: relative;
+    flex: none;
+    width: 0.7rem;
+    height: 0.7rem;
+    translate: 0 0.05rem;
+  }
+
+  .explain-glyph::before,
+  .explain-glyph::after {
+    content: '';
+    position: absolute;
+    background-color: var(--seal);
+    transition: opacity 200ms var(--ease-out-quart);
+  }
+
+  .explain-glyph::before {
+    inset: 45% 0 45% 0;
+  }
+
+  .explain-glyph::after {
+    inset: 0 45% 0 45%;
+  }
+
+  .explain[open] .explain-glyph::after {
+    opacity: 0;
+  }
+
+  .explain-term {
+    text-decoration: underline;
+    text-decoration-color: var(--line-strong);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  .explain-body {
+    padding: 0.2rem 0 0.75rem 0.85rem;
+    font-size: var(--step--1);
+    line-height: 1.65;
+    color: var(--fg-2);
+    max-width: 68ch;
+  }
+
+  .explain-body :global(p + p) {
+    margin-top: 0.7rem;
+  }
+
+  .explain-body :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.92em;
+    color: var(--fg-1);
+  }
+
+  .explain-body :global(a) {
+    color: var(--seal-text);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in oklab, var(--seal) 40%, transparent);
+  }
+</style>

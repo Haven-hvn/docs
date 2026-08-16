@@ -1,0 +1,307 @@
+---
+import Mark from './Mark.astro'
+import { HAVEN } from '../lib/protocol.ts'
+
+interface Props {
+  /** Which surface is current, for the nav state. */
+  current?: 'record' | 'atlas' | 'codex' | 'threshold'
+  /** The Atlas draws its own dark chrome. */
+  tone?: 'auto' | 'void'
+}
+
+const { current = 'record', tone = 'auto' } = Astro.props
+
+const NAV = [
+  { folio: '01', label: 'The Record', href: '/', key: 'record' },
+  { folio: '02', label: 'The Atlas', href: '/atlas', key: 'atlas' },
+  { folio: '03', label: 'Codex', href: '/codex', key: 'codex' },
+  { folio: '04', label: 'The Threshold', href: '/threshold', key: 'threshold' },
+] as const
+---
+
+<header class="masthead vt-chrome" data-tone={tone === 'void' ? 'void' : undefined}>
+  <div class="progress-rule" aria-hidden="true"></div>
+
+  <div class="masthead-inner">
+    <a href="/" class="lockup vt-wordmark" aria-label={`${HAVEN.name} — ${HAVEN.descriptor}`}>
+      <Mark size={20} />
+      <span class="wordmark">{HAVEN.name}</span>
+      <span class="lockup-rule" aria-hidden="true"></span>
+      <span class="lockup-descriptor">
+        <span class="label">{HAVEN.descriptor}</span>
+        <span class="label lockup-tier">{HAVEN.tier}</span>
+      </span>
+    </a>
+
+    <nav class="nav" aria-label="Surfaces">
+      {
+        NAV.map((item) => (
+          <a
+            href={item.href}
+            class="nav-item"
+            aria-current={current === item.key ? 'page' : undefined}
+            data-magnetic="3"
+          >
+            <span class="nav-folio">{item.folio}</span>
+            <span class="nav-label">{item.label}</span>
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="masthead-tail">
+      <button class="chip" data-palette-open type="button" aria-keyshortcuts="Meta+K Control+K">
+        <span class="label">Index</span>
+        <kbd class="kbd">⌘K</kbd>
+      </button>
+
+      {/* Network before edition: it changes what the figures MEAN, which matters
+          more than what they look like. */}
+      <button
+        class="chip chip-network"
+        data-network-toggle
+        type="button"
+        aria-pressed="false"
+        title="Switch between live and test deployments"
+      >
+        <span class="net-pip" aria-hidden="true"></span>
+        <span class="label"><span data-network-label>Mainnet</span></span>
+      </button>
+
+      <button class="chip chip-icon" data-edition-toggle type="button" aria-pressed="false">
+        <span class="label"><span data-edition-label>Ink</span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<style>
+  /* The network chip carries a pip because the state is a fact about the data,
+     not a preference: a reader glancing at the masthead should be able to tell
+     whether the figures below are real money without reading the word. */
+  .chip-network {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .net-pip {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--color-arkiv, oklch(0.83 0.2 152));
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-arkiv, green) 18%, transparent);
+    flex: none;
+  }
+
+  /* Devnet is deliberately the ember state — it is the one that needs noticing. */
+  :global(html[data-network='devnet']) .net-pip {
+    background-color: var(--seal);
+    box-shadow: 0 0 0 3px var(--seal-wash);
+  }
+
+  :global(html[data-network='devnet']) .chip-network {
+    border-color: var(--seal-edge);
+  }
+
+  .masthead {
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    background-color: color-mix(in oklab, var(--surface) 78%, transparent);
+    backdrop-filter: blur(24px) saturate(1.6);
+    -webkit-backdrop-filter: blur(24px) saturate(1.6);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .progress-rule {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 2px;
+    background-color: var(--seal);
+    transform-origin: left center;
+    scale: 0 1;
+    z-index: 1;
+  }
+
+  .masthead-inner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--spacing-gutter);
+    height: var(--chrome-h);
+    max-width: var(--container-wide);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+  }
+
+  /* ── Lockup ─────────────────────────────────────────────────────────────
+     Mark, wordmark, hairline, then two stacked micro labels. The vertical rule
+     between name and descriptor is what makes it read as an institution rather
+     than an app logo. */
+  .lockup {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--seal);
+  }
+
+  .wordmark {
+    font-family: var(--font-institution);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.028em;
+    color: var(--fg);
+    line-height: 1;
+  }
+
+  .lockup-rule {
+    width: 1px;
+    height: 1.75rem;
+    background-color: var(--line);
+    margin-inline: 0.25rem;
+  }
+
+  .lockup-descriptor {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .lockup-tier {
+    color: var(--fg-4);
+    font-size: var(--text-nano);
+  }
+
+  /* ── Nav ────────────────────────────────────────────────────────────────
+     Each surface is numbered. The folio sits above the label in mono, which is
+     the same apparatus the page bodies use — the chrome and the document speak
+     the same language. */
+  .nav {
+    display: flex;
+    justify-content: center;
+    gap: 0.25rem;
+  }
+
+  .nav-item {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 0.28rem;
+    padding: 0.5rem 1.1rem;
+    color: var(--fg-2);
+    transition: color 300ms var(--ease-out-expo);
+  }
+
+  .nav-folio {
+    font-family: var(--font-ledger);
+    font-size: var(--text-nano);
+    letter-spacing: 0.18em;
+    color: var(--fg-4);
+    line-height: 1;
+    transition: color 300ms var(--ease-out-expo);
+  }
+
+  .nav-label {
+    font-size: var(--text-small);
+    font-weight: 500;
+    letter-spacing: -0.014em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .nav-item::after {
+    content: '';
+    position: absolute;
+    inset-inline: 1.1rem;
+    bottom: -1px;
+    height: 2px;
+    background-color: var(--seal);
+    scale: 0 1;
+    transform-origin: center;
+    transition: scale 460ms var(--ease-out-expo);
+  }
+
+  .nav-item:hover {
+    color: var(--fg);
+  }
+
+  .nav-item:hover .nav-folio {
+    color: var(--seal-text);
+  }
+
+  .nav-item:hover::after {
+    scale: 1 1;
+  }
+
+  .nav-item[aria-current='page'] {
+    color: var(--fg);
+  }
+
+  .nav-item[aria-current='page'] .nav-folio {
+    color: var(--seal-text);
+  }
+
+  .nav-item[aria-current='page']::after {
+    scale: 1 1;
+  }
+
+  /* ── Tail ───────────────────────────────────────────────────────────── */
+  .masthead-tail {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid var(--line);
+    color: var(--fg-2);
+    transition:
+      border-color 300ms var(--ease-out-expo),
+      color 300ms var(--ease-out-expo),
+      background-color 300ms var(--ease-out-expo);
+  }
+
+  .chip:hover {
+    border-color: var(--seal);
+    color: var(--seal);
+    background-color: var(--seal-wash);
+  }
+
+  .kbd {
+    font-family: var(--font-ledger);
+    font-size: var(--text-nano);
+    letter-spacing: 0.04em;
+    color: var(--fg-4);
+    border: 1px solid var(--line);
+    padding: 0.14rem 0.3rem;
+    line-height: 1;
+  }
+
+  .chip-icon {
+    min-width: 3.6rem;
+    justify-content: center;
+  }
+
+  @media (max-width: 1180px) {
+    .lockup-descriptor {
+      display: none;
+    }
+    .lockup-rule {
+      display: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .chip-icon {
+      display: none;
+    }
+    .nav {
+      justify-content: flex-end;
+    }
+  }
+</style>

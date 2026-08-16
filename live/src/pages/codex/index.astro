@@ -1,0 +1,203 @@
+---
+import { getCollection } from 'astro:content'
+import Base from '../../layouts/Base.astro'
+import Masthead from '../../components/Masthead.astro'
+import Footer from '../../components/Footer.astro'
+import SectionHead from '../../components/SectionHead.astro'
+import { HAVEN } from '../../lib/protocol.ts'
+import '../../styles/codex.css'
+
+const entries = await getCollection('codex')
+
+const PART_ORDER = ['Foundations', 'The Rule Set', 'Surfaces', 'Contracts', 'Operations'] as const
+
+const parts = PART_ORDER.map((part) => ({
+  part,
+  numeral: ['I', 'II', 'III', 'IV', 'V'][PART_ORDER.indexOf(part)] ?? '',
+  entries: entries
+    .filter((entry) => entry.data.part === part)
+    .sort((a, b) => a.data.order - b.data.order),
+})).filter((group) => group.entries.length > 0)
+---
+
+<Base
+  title="The Codex"
+  description="Protocol documentation for Haven: the gate, key derivation, the entity shape, the five surfaces, and how to verify every claim yourself."
+>
+  <Masthead slot="masthead" current="codex" />
+  <Footer slot="footer" />
+
+  <article class="codex-front">
+    <div class="frame">
+      <SectionHead folio="03" running="The Codex" annotation={`${entries.length} entries · ${parts.length} parts`} />
+
+      <header class="codex-front-head">
+        <h1 class="editorial-colossus" data-reveal>The Codex</h1>
+        <p class="lede" data-reveal style="--delay: 120ms">
+          The protocol, written down. Each entry states what the rule is, why it is that way, and which
+          file in the source repository it was transcribed from — so the documentation can always be
+          checked against the thing it documents.
+        </p>
+        <p class="codex-front-note" data-reveal style="--delay: 200ms">
+          {HAVEN.name} {HAVEN.version} · {HAVEN.tier}
+        </p>
+      </header>
+
+      <nav class="codex-contents" aria-label="Contents">
+        {
+          parts.map((group) => (
+            <section class="codex-part" data-reveal>
+              <header class="codex-part-head">
+                <span class="folio codex-part-numeral">Part {group.numeral}</span>
+                <h2 class="statement-title codex-part-title">{group.part}</h2>
+                <span class="label codex-part-count">{group.entries.length}</span>
+              </header>
+
+              <ol class="codex-part-list">
+                {group.entries.map((entry) => (
+                  <li>
+                    <a class="codex-entry" href={`/codex/${entry.id}`}>
+                      <span class="folio codex-entry-folio">{entry.data.folio}</span>
+                      <span class="codex-entry-body">
+                        <span class="codex-entry-title">{entry.data.title}</span>
+                        <span class="codex-entry-summary">{entry.data.summary}</span>
+                      </span>
+                      {entry.data.status !== 'settled' && (
+                        <span class="seal-mark codex-entry-status">{entry.data.status}</span>
+                      )}
+                      <svg class="codex-entry-arrow" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true">
+                        <path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" />
+                      </svg>
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          ))
+        }
+      </nav>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .codex-front {
+    padding-block: clamp(3rem, 2rem + 4vw, 6rem) clamp(4rem, 3rem + 5vw, 8rem);
+  }
+
+  .codex-front-head {
+    display: grid;
+    gap: 1.25rem;
+    max-width: 62rem;
+    padding-block: clamp(2.5rem, 2rem + 3vw, 5rem);
+  }
+
+  .codex-front-note {
+    font-family: var(--font-ledger);
+    font-size: var(--text-fine);
+    letter-spacing: 0.08em;
+    color: var(--fg-4);
+    text-transform: uppercase;
+  }
+
+  .codex-contents {
+    display: grid;
+    gap: clamp(2.5rem, 2rem + 2vw, 4rem);
+  }
+
+  .codex-part-head {
+    display: flex;
+    align-items: baseline;
+    gap: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .codex-part-numeral {
+    flex-shrink: 0;
+  }
+
+  .codex-part-title {
+    flex: 1;
+  }
+
+  .codex-part-count {
+    color: var(--fg-4);
+  }
+
+  .codex-part-list {
+    list-style: none;
+    display: grid;
+  }
+
+  .codex-entry {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr) auto auto;
+    align-items: baseline;
+    gap: 1.25rem;
+    padding-block: 1.1rem;
+    border-bottom: 1px solid var(--line);
+    transition:
+      background-color 320ms var(--ease-out-expo),
+      padding-left 420ms var(--ease-out-expo);
+  }
+
+  .codex-entry:hover {
+    background-color: color-mix(in oklab, var(--seal) 3.5%, transparent);
+    padding-left: 0.75rem;
+  }
+
+  .codex-entry-folio {
+    color: var(--fg-4);
+  }
+
+  .codex-entry:hover .codex-entry-folio {
+    color: var(--seal-text);
+  }
+
+  .codex-entry-body {
+    display: grid;
+    gap: 0.3rem;
+    min-width: 0;
+  }
+
+  .codex-entry-title {
+    font-size: var(--text-subtitle);
+    font-weight: 500;
+    letter-spacing: -0.022em;
+    color: var(--fg);
+  }
+
+  .codex-entry-summary {
+    font-size: var(--text-fine);
+    line-height: 1.5;
+    color: var(--fg-3);
+    max-width: 72ch;
+    text-wrap: pretty;
+  }
+
+  .codex-entry-status {
+    text-transform: capitalize;
+  }
+
+  .codex-entry-arrow {
+    color: var(--fg-3);
+    transition:
+      translate 420ms var(--ease-out-expo),
+      color 320ms ease;
+  }
+
+  .codex-entry:hover .codex-entry-arrow {
+    translate: 4px 0;
+    color: var(--seal);
+  }
+
+  @media (max-width: 760px) {
+    .codex-entry {
+      grid-template-columns: 3.5rem minmax(0, 1fr);
+    }
+    .codex-entry-arrow {
+      display: none;
+    }
+  }
+</style>

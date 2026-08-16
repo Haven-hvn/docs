@@ -1,0 +1,354 @@
+@import 'tailwindcss';
+
+/* ════════════════════════════════════════════════════════════════════════════
+   HAVEN — SYSTEM OF RECORD
+   Design language: "The Record & The Observatory"
+
+   Two worlds, one lightness geometry.
+
+   THE RECORD (index, codex) is an institutional document: warm archival stock,
+   engraved hairlines, numbered sections, figure plates, marginalia, tabular
+   evidence. The register is a central-bank annual report or a museum catalogue
+   raisonné — not a product page. Density is the point. Authority comes from
+   apparatus: numbering, cross-reference, citation, seal.
+
+   THE OBSERVATORY (atlas) inverts to void black. The network becomes the only
+   light source. Same token names, inverted lightness ramp, so every component
+   authored for the Record survives the flip untouched.
+
+   Colour is authored in OKLCH: the two worlds are perceptual inversions of one
+   hue geometry rather than two unrelated palettes.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* ── Typefaces ─────────────────────────────────────────────────────────────
+     Registered by Astro's font pipeline (see astro.config.mjs). Three voices:
+     editorial argues, institution explains, ledger proves. */
+  --font-editorial: var(--font-editorial), 'Iowan Old Style', Georgia, serif;
+  --font-institution: var(--font-institution), 'Helvetica Neue', Arial, sans-serif;
+  --font-ledger: var(--font-ledger), 'SFMono-Regular', Menlo, monospace;
+  --font-sans: var(--font-institution);
+  --font-serif: var(--font-editorial);
+  --font-mono: var(--font-ledger);
+
+  /* ── Stock & ink ───────────────────────────────────────────────────────────
+     Never pure white. Pure white reads as an unfinished web page; 0.974 L with
+     a whisper of yellow reads as paper that cost money. */
+  --color-stock: oklch(0.974 0.0075 84);
+  --color-stock-deep: oklch(0.947 0.011 82);
+  --color-stock-sunk: oklch(0.918 0.0145 80);
+  --color-stock-raised: oklch(0.995 0.004 88);
+  --color-stock-invert: oklch(0.165 0.016 268);
+
+  /* The dim end of this ramp is constrained by contrast, not by taste: --ink-3
+     and --ink-4 both carry 10–13px mono labels, which WCAG treats as normal
+     text and therefore requires 4.5:1 against the stock. Measured against
+     --color-stock these land at roughly 5.0:1 and 4.6:1. --ink-5 is decorative
+     only and never carries information. */
+  --color-ink: oklch(0.19 0.013 264);
+  --color-ink-2: oklch(0.4 0.014 264);
+  --color-ink-3: oklch(0.455 0.014 264);
+  --color-ink-4: oklch(0.5 0.013 264);
+  --color-ink-5: oklch(0.66 0.011 264);
+
+  /* Engraved rules. Ink at low alpha — never grey. Grey hairlines read cold
+     against warm stock and immediately cheapen it. */
+  --color-rule: oklch(0.19 0.013 264 / 0.145);
+  --color-rule-soft: oklch(0.19 0.013 264 / 0.07);
+  --color-rule-strong: oklch(0.19 0.013 264 / 0.34);
+  --color-rule-heavy: oklch(0.19 0.013 264 / 0.62);
+
+  /* ── The seal ──────────────────────────────────────────────────────────────
+     Exactly one accent in the Record. Ember: the wax seal, the stamp, the
+     overprint. Restraint here is the entire look. */
+  --color-ember: oklch(0.575 0.203 33);
+  --color-ember-lift: oklch(0.652 0.196 38);
+  --color-ember-deep: oklch(0.44 0.166 31);
+  --color-ember-wash: oklch(0.575 0.203 33 / 0.085);
+  --color-ember-edge: oklch(0.575 0.203 33 / 0.34);
+
+  /* ── Protocol hues ─────────────────────────────────────────────────────────
+     Four public networks, four fixed hues. These encode DATA. They appear only
+     on marks that mean a network — never as decoration, never as a gradient
+     for its own sake. */
+  --color-arkiv: oklch(0.6 0.16 152);
+  --color-icp: oklch(0.53 0.19 284);
+  --color-evm: oklch(0.63 0.15 66);
+  --color-filecoin: oklch(0.59 0.13 220);
+
+  /* ── Type scale ────────────────────────────────────────────────────────────
+     Desktop-first. The lower clamp bound is a safety floor; the design target
+     is 1440–2560px, where the display sizes get genuinely architectural. */
+  --text-monument: clamp(4rem, -0.5rem + 13vw, 17rem);
+  --text-colossus: clamp(3.25rem, 0.4rem + 8.2vw, 10.5rem);
+  --text-display: clamp(2.5rem, 0.9rem + 5vw, 6.75rem);
+  --text-headline: clamp(2rem, 1.1rem + 2.8vw, 4rem);
+  --text-title: clamp(1.5rem, 1.1rem + 1.3vw, 2.375rem);
+  --text-subtitle: clamp(1.1875rem, 1.05rem + 0.5vw, 1.5rem);
+  --text-lede: clamp(1.0625rem, 0.94rem + 0.52vw, 1.375rem);
+  --text-body: clamp(0.9375rem, 0.9rem + 0.18vw, 1.0625rem);
+  --text-small: 0.8125rem;
+  --text-fine: 0.75rem;
+  --text-micro: 0.6875rem;
+  --text-nano: 0.625rem;
+
+  /* ── Motion ────────────────────────────────────────────────────────────────
+     One curve for entrances, one for symmetric moves, one true spring authored
+     with linear(). Consistency is what separates designed from animated. */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quint: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-snap: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --ease-spring: linear(
+    0, 0.0039, 0.0157, 0.0352, 0.0625, 0.0977, 0.1407, 0.1914, 0.25, 0.3164,
+    0.3906, 0.4727, 0.5625, 0.6602, 0.7656, 0.8789, 1, 1.0742, 1.1211, 1.1426,
+    1.1406, 1.1191, 1.0839, 1.0439, 1.0087, 0.9873, 0.9814, 0.9873, 0.9971,
+    1.0034, 1.0049, 1.0029, 1
+  );
+
+  /* ── Measure ───────────────────────────────────────────────────────────────
+     The Record exposes its grid: 12 columns, visible gutters, crop marks. */
+  --spacing-gutter: clamp(1.5rem, 0.4rem + 3.4vw, 5.5rem);
+  --container-record: 1560px;
+  --container-prose: 70ch;
+  --container-wide: 1840px;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   Registered custom properties — needed so gradients, sweeps and glows can be
+   interpolated by the compositor instead of snapping.
+   ════════════════════════════════════════════════════════════════════════════ */
+@property --sweep {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 0%;
+}
+@property --tilt {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+@property --lum {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+@property --seal-spread {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   Semantic aliases. Components reference these, never the raw ramp — which is
+   what lets the Observatory invert the whole system by redefining ten values.
+   ════════════════════════════════════════════════════════════════════════════ */
+:root {
+  color-scheme: light;
+
+  --surface: var(--color-stock);
+  --surface-deep: var(--color-stock-deep);
+  --surface-sunk: var(--color-stock-sunk);
+  --surface-raised: var(--color-stock-raised);
+
+  --fg: var(--color-ink);
+  --fg-2: var(--color-ink-2);
+  --fg-3: var(--color-ink-3);
+  --fg-4: var(--color-ink-4);
+  --fg-5: var(--color-ink-5);
+
+  --line: var(--color-rule);
+  --line-soft: var(--color-rule-soft);
+  --line-strong: var(--color-rule-strong);
+  --line-heavy: var(--color-rule-heavy);
+
+  --seal: var(--color-ember);
+  --seal-lift: var(--color-ember-lift);
+  --seal-deep: var(--color-ember-deep);
+  --seal-wash: var(--color-ember-wash);
+  --seal-edge: var(--color-ember-edge);
+  /* Ember set at label sizes. The display value is 4.47:1 on stock — correct for
+     a filled control, one notch short of AA for 10–12px text. */
+  --seal-text: oklch(0.5 0.19 32);
+
+  /* SOLID EMBER FILLS
+     A filled button needs a different ember from a hairline or a label. The plain
+     seal is mid-lightness on paper, so near-white text on it lands at 4.47:1 —
+     just under AA — and the hover lift made it worse by going lighter still.
+     Rather than darken the fill into brick and lose the brand colour, the fill
+     uses the BRIGHT ember with dark text, which is what the void tone already
+     does. It clears AA comfortably and makes the primary action look the same on
+     every surface. */
+  --seal-solid: oklch(0.715 0.19 44);
+  --seal-solid-lift: oklch(0.79 0.175 50);
+  --seal-solid-text: oklch(0.16 0.018 60);
+
+  /* Paper does not glow. It casts a short, warm, tight shadow — a card resting
+     on stock — plus a hairline that defines the edge. */
+  --lift-1: 0 1px 1px oklch(0.19 0.013 264 / 0.04),
+    0 2px 6px oklch(0.19 0.013 264 / 0.035);
+  --lift-2: 0 1px 2px oklch(0.19 0.013 264 / 0.05),
+    0 10px 26px -10px oklch(0.19 0.013 264 / 0.1);
+  --lift-3: 0 2px 6px oklch(0.19 0.013 264 / 0.06),
+    0 30px 60px -20px oklch(0.19 0.013 264 / 0.16);
+
+  --chrome-h: 4.25rem;
+  --grain-opacity: 0.055;
+  --plate-ink: oklch(0.19 0.013 264 / 0.55);
+  --plate-ink-faint: oklch(0.19 0.013 264 / 0.16);
+}
+
+/* ── THE OBSERVATORY / VOID TONE ────────────────────────────────────────────
+   Applied either to the whole document (<html data-world="observatory">) or to
+   a single section (<section data-tone="void">). Ten redefinitions invert the
+   world, which is what lets one component library serve both.  */
+[data-world='observatory'],
+[data-tone='void'] {
+  color-scheme: dark;
+
+  --surface: oklch(0.132 0.017 268);
+  --surface-deep: oklch(0.104 0.015 268);
+  --surface-sunk: oklch(0.078 0.013 268);
+  --surface-raised: oklch(0.178 0.021 268);
+
+  --fg: oklch(0.968 0.005 90);
+  --fg-2: oklch(0.8 0.012 264);
+  --fg-3: oklch(0.68 0.016 264);
+  --fg-4: oklch(0.645 0.018 264);
+  --fg-5: oklch(0.46 0.016 264);
+
+  --line: oklch(0.98 0.01 90 / 0.13);
+  --line-soft: oklch(0.98 0.01 90 / 0.065);
+  --line-strong: oklch(0.98 0.01 90 / 0.3);
+  --line-heavy: oklch(0.98 0.01 90 / 0.55);
+
+  /* The seal must lift in the dark or it goes muddy against the void. */
+  --seal: oklch(0.715 0.19 44);
+  --seal-lift: oklch(0.8 0.17 54);
+  --seal-deep: oklch(0.55 0.19 36);
+  --seal-wash: oklch(0.715 0.19 44 / 0.12);
+  --seal-edge: oklch(0.715 0.19 44 / 0.42);
+  --seal-text: oklch(0.78 0.17 50);
+
+  /* On a dark ground the relationship inverts: the ember is bright, so the fill
+     carries dark text and the lift can safely brighten. */
+  --seal-solid: var(--seal);
+  --seal-solid-lift: var(--seal-lift);
+  --seal-solid-text: var(--surface);
+
+  /* Network hues run hot: in the observatory they ARE the light. */
+  --color-arkiv: oklch(0.83 0.2 152);
+  --color-icp: oklch(0.75 0.17 274);
+  --color-evm: oklch(0.86 0.17 78);
+  --color-filecoin: oklch(0.84 0.135 208);
+
+  /* In the void, elevation is emission, not shadow. */
+  --lift-1: 0 0 0 1px oklch(0.98 0.01 90 / 0.06),
+    0 8px 24px -12px oklch(0 0 0 / 0.7);
+  --lift-2: 0 0 0 1px oklch(0.98 0.01 90 / 0.08),
+    0 20px 48px -18px oklch(0 0 0 / 0.8);
+  --lift-3: 0 0 0 1px oklch(0.98 0.01 90 / 0.1),
+    0 48px 96px -28px oklch(0 0 0 / 0.9);
+
+  --grain-opacity: 0.07;
+  --plate-ink: oklch(0.98 0.01 90 / 0.55);
+  --plate-ink-faint: oklch(0.98 0.01 90 / 0.14);
+}
+
+/* ── STOCK TONE ─────────────────────────────────────────────────────────────
+   Forces the paper ramp back on, for a light panel nested inside a void act.
+   Explicitly re-declared rather than inherited so nesting depth never matters. */
+[data-tone='stock'] {
+  color-scheme: light;
+
+  --surface: var(--color-stock);
+  --surface-deep: var(--color-stock-deep);
+  --surface-sunk: var(--color-stock-sunk);
+  --surface-raised: var(--color-stock-raised);
+
+  --fg: var(--color-ink);
+  --fg-2: var(--color-ink-2);
+  --fg-3: var(--color-ink-3);
+  --fg-4: var(--color-ink-4);
+  --fg-5: var(--color-ink-5);
+
+  --line: var(--color-rule);
+  --line-soft: var(--color-rule-soft);
+  --line-strong: var(--color-rule-strong);
+  --line-heavy: var(--color-rule-heavy);
+
+  --seal: var(--color-ember);
+  --seal-lift: var(--color-ember-lift);
+  --seal-deep: var(--color-ember-deep);
+  --seal-wash: var(--color-ember-wash);
+  --seal-edge: var(--color-ember-edge);
+  --seal-text: oklch(0.5 0.19 32);
+
+  /* SOLID EMBER FILLS
+     A filled button needs a different ember from a hairline or a label. The plain
+     seal is mid-lightness on paper, so near-white text on it lands at 4.47:1 —
+     just under AA — and the hover lift made it worse by going lighter still.
+     Rather than darken the fill into brick and lose the brand colour, the fill
+     uses the BRIGHT ember with dark text, which is what the void tone already
+     does. It clears AA comfortably and makes the primary action look the same on
+     every surface. */
+  --seal-solid: oklch(0.715 0.19 44);
+  --seal-solid-lift: oklch(0.79 0.175 50);
+  --seal-solid-text: oklch(0.16 0.018 60);
+
+  --grain-opacity: 0.055;
+  --plate-ink: oklch(0.19 0.013 264 / 0.55);
+  --plate-ink-faint: oklch(0.19 0.013 264 / 0.16);
+}
+
+/* ── INK EDITION ────────────────────────────────────────────────────────────
+   An accessibility affordance, not a theme. The Record is light by design;
+   readers who need dark get the Observatory's lightness ramp on the story
+   surfaces via ⌘K → "Ink edition". */
+html[data-edition='ink'] {
+  color-scheme: dark;
+
+  --surface: oklch(0.142 0.016 268);
+  --surface-deep: oklch(0.115 0.015 268);
+  --surface-sunk: oklch(0.092 0.013 268);
+  --surface-raised: oklch(0.191 0.019 268);
+
+  --fg: oklch(0.958 0.006 90);
+  --fg-2: oklch(0.795 0.012 264);
+  --fg-3: oklch(0.675 0.016 264);
+  --fg-4: oklch(0.645 0.018 264);
+  --fg-5: oklch(0.46 0.016 264);
+
+  --line: oklch(0.98 0.01 90 / 0.13);
+  --line-soft: oklch(0.98 0.01 90 / 0.065);
+  --line-strong: oklch(0.98 0.01 90 / 0.3);
+  --line-heavy: oklch(0.98 0.01 90 / 0.55);
+
+  --seal: oklch(0.73 0.185 46);
+  --seal-lift: oklch(0.81 0.165 56);
+  --seal-deep: oklch(0.56 0.185 38);
+  --seal-wash: oklch(0.73 0.185 46 / 0.13);
+  --seal-edge: oklch(0.73 0.185 46 / 0.42);
+  --seal-text: oklch(0.79 0.165 52);
+
+  /* On a dark ground the relationship inverts: the ember is bright, so the fill
+     carries dark text and the lift can safely brighten. */
+  --seal-solid: var(--seal);
+  --seal-solid-lift: var(--seal-lift);
+  --seal-solid-text: var(--surface);
+
+  --color-arkiv: oklch(0.83 0.2 152);
+  --color-icp: oklch(0.75 0.17 274);
+  --color-evm: oklch(0.86 0.17 78);
+  --color-filecoin: oklch(0.84 0.135 208);
+
+  --lift-1: 0 0 0 1px oklch(0.98 0.01 90 / 0.06),
+    0 8px 24px -12px oklch(0 0 0 / 0.6);
+  --lift-2: 0 0 0 1px oklch(0.98 0.01 90 / 0.08),
+    0 20px 48px -18px oklch(0 0 0 / 0.72);
+  --lift-3: 0 0 0 1px oklch(0.98 0.01 90 / 0.1),
+    0 48px 96px -28px oklch(0 0 0 / 0.86);
+
+  --grain-opacity: 0.075;
+  --plate-ink: oklch(0.98 0.01 90 / 0.55);
+  --plate-ink-faint: oklch(0.98 0.01 90 / 0.14);
+}

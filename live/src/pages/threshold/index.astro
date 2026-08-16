@@ -1,0 +1,173 @@
+---
+import Base from '../../layouts/Base.astro'
+import Masthead from '../../components/Masthead.astro'
+import Footer from '../../components/Footer.astro'
+import SectionHead from '../../components/SectionHead.astro'
+import { GATES } from '../../lib/chains.ts'
+import '../../styles/threshold.css'
+
+/**
+ * THE THRESHOLD — surface 04, the chooser
+ *
+ * The path is chosen before anything else happens, because these are three
+ * different people rather than three stages of one person. Someone who wants to
+ * watch a community's archive is not on their way to founding one, and a founder
+ * does not need to be walked through acquiring an NFT.
+ *
+ * Each path is its own route rather than a tab, so it prerenders, deep-links, and
+ * survives with scripting off. The chooser itself needs no JavaScript at all.
+ */
+
+const PATHS = [
+  {
+    folio: 'A',
+    href: '/threshold/read',
+    name: 'I want to watch',
+    who: 'The reader',
+    body: 'A community you follow has an archive, and you want in. You will need whatever that community gates on — usually one NFT, sometimes a balance of its token — and a reader app. Nothing else: browsing the index is free, and signing costs no gas.',
+    effort: 'Minutes',
+    needs: ['An asset from the community', 'A wallet you control', 'A reader app'],
+  },
+  {
+    folio: 'B',
+    href: '/threshold/publish',
+    name: 'I want to publish',
+    who: 'The publisher',
+    body: 'You have media to put into a community\u2019s archive — masters, stems, cuts, records. You encrypt locally, pay Filecoin to store it and keep proving it, and pay the index to record that it exists.',
+    effort: 'An afternoon',
+    needs: ['FIL and USDFC for Filecoin', 'GLM for index gas', 'The command-line publisher'],
+  },
+  {
+    folio: 'C',
+    href: '/threshold/found',
+    name: 'I want to start one',
+    who: 'The founder',
+    body: 'You want your own gated archive. You do not have to invent a token to do it: any NFT or token your community already holds can be the gate. If there is none yet, you can make one.',
+    effort: 'A day, once',
+    needs: ['An asset to gate on', 'A number: how much to require', 'The publisher\u2019s three balances'],
+  },
+] as const
+---
+
+<Base
+  title="The Threshold"
+  description="Three ways into Haven: read a community's archive, publish to one, or start your own. No accounts — authorisation is a balance you already hold."
+>
+  <Masthead slot="masthead" current="threshold" />
+
+  <main id="main">
+    {/* ── The premise ─────────────────────────────────────────────────────── */}
+    <section class="act act-opening" data-tone="void" aria-labelledby="threshold-title">
+      <div class="act-body frame">
+        <SectionHead folio="04" running="The Threshold" annotation="Enrolment" />
+
+        <h1 class="statement-colossus optical-hang" id="threshold-title">
+          <span class="mask-line" data-reveal><span>There is nothing</span></span>
+          <span class="mask-line" data-reveal style="--delay: 90ms"><span>to <em>join</em>.</span></span>
+        </h1>
+
+        <p class="lede" data-reveal style="--delay: 160ms">
+          Haven has no accounts, so it has no sign-up. Authorisation is a balance: hold what a
+          community gates on and the key derives for you; stop holding it and the next derivation
+          fails. There is nothing to apply for and nobody to approve you.
+        </p>
+
+        <p class="lede threshold-lede-second" data-reveal style="--delay: 220ms">
+          What that means in practice depends entirely on why you are here — so the next thing this
+          page does is ask.
+        </p>
+
+        {/* Without this a colossus-scale statement fills the viewport and reads
+            as the whole page. */}
+        <a class="threshold-scroll" href="#paths-title" data-reveal style="--delay: 300ms">
+          <span class="threshold-scroll-arrow" aria-hidden="true">↓</span>
+          <span>Choose your path</span>
+        </a>
+      </div>
+    </section>
+
+    {/* ── The three doors ─────────────────────────────────────────────────── */}
+    <section class="act act-pad-tall" data-tone="stock" aria-labelledby="paths-title">
+      <div class="act-body frame">
+        <SectionHead folio="04.1" running="Choose a path" annotation="Three, and they do not overlap" />
+
+        <h2 class="statement-headline optical-hang" id="paths-title">
+          <span class="mask-line" data-reveal><span>Which of these is you?</span></span>
+        </h2>
+
+        <p class="lede" data-reveal style="--delay: 100ms">
+          Pick the one that describes what you actually want. Each path only shows what its own
+          reader needs — no step you will never take, and no jargon left unexplained.
+        </p>
+
+        <ul class="door-grid" data-reveal style="--delay: 180ms">
+          {
+            PATHS.map((path) => (
+              <li class="door">
+                <a class="door-link" href={path.href}>
+                  <div class="door-head">
+                    <span class="folio">{path.folio}</span>
+                    <span class="label door-who">{path.who}</span>
+                  </div>
+
+                  <h3 class="door-name">{path.name}</h3>
+                  <p class="door-body">{path.body}</p>
+
+                  <div class="door-needs">
+                    <span class="label">What it takes</span>
+                    <ul>
+                      {path.needs.map((need) => (
+                        <li>{need}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <span class="door-go">
+                    <span class="label door-effort">{path.effort}</span>
+                    <span class="door-arrow" aria-hidden="true">→</span>
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+
+        <p class="door-note" data-reveal style="--delay: 260ms">
+          Unsure? Start with <a href="/threshold/read">the reader</a>. It is the shortest path, it
+          costs the least, and it is the only one that shows you what an archive actually feels like
+          before you commit to building one.
+        </p>
+      </div>
+    </section>
+
+    {/* ── What is never asked for ─────────────────────────────────────────── */}
+    <section class="act act-pad-tall" data-tone="void" aria-labelledby="absence-title">
+      <div class="act-body frame">
+        <SectionHead folio="04.2" running="The absence" annotation="On every path" />
+
+        <h2 class="statement-headline optical-hang" id="absence-title">
+          <span class="mask-line" data-reveal><span>What you are never asked for.</span></span>
+        </h2>
+
+        <ul class="absence-list" data-reveal style="--delay: 120ms">
+          <li><span class="absence-mark" aria-hidden="true">—</span> An email address</li>
+          <li><span class="absence-mark" aria-hidden="true">—</span> A password</li>
+          <li><span class="absence-mark" aria-hidden="true">—</span> A username</li>
+          <li><span class="absence-mark" aria-hidden="true">—</span> A subscription</li>
+          <li><span class="absence-mark" aria-hidden="true">—</span> Custody of your asset</li>
+          <li><span class="absence-mark" aria-hidden="true">—</span> A spending approval</li>
+          <li><span class="absence-mark" aria-hidden="true">—</span> Permission from Haven</li>
+        </ul>
+
+        <p class="lede" data-reveal style="--delay: 200ms">
+          None of these exist because none of them have anywhere to live. There is no Haven server
+          holding your account, because there is no Haven account and no Haven server — the shared
+          state is public blockchains, and nothing else. {GATES.length} communities are already
+          measurable on that basis in <a href="/atlas">the Atlas</a>.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Base>

@@ -1,0 +1,1137 @@
+/* ════════════════════════════════════════════════════════════════════════════
+   HAVEN — BASE
+   Reset, typographic registers, and the document apparatus.
+
+   "Apparatus" is the vocabulary an institutional document uses to establish
+   authority: folio numbers, engraved rules, figure plates, marginalia, running
+   heads, footnotes, seals, specimen tables. Those are the components below.
+   They are the design language — not cards and pills.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scrollbar-gutter: stable;
+    /* The Record's chrome is sticky; anchor targets must clear it. */
+    scroll-padding-top: calc(var(--chrome-h) + 2.5rem);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background-color: var(--surface);
+    color: var(--fg);
+    font-family: var(--font-institution);
+    font-size: var(--text-body);
+    font-weight: 400;
+    line-height: 1.62;
+    letter-spacing: -0.011em;
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-variant-numeric: tabular-nums;
+    overflow-x: clip;
+    min-height: 100dvh;
+    transition:
+      background-color 600ms var(--ease-in-out-quint),
+      color 600ms var(--ease-in-out-quint);
+  }
+
+  /* Every figure in an institutional document is set in tabular numerals so
+     columns of numbers align. This is one of those details nobody names but
+     everybody feels. */
+  :where(table, .tabular, .ledger, .datum, time, output) {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 400;
+    line-height: 1.06;
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  img,
+  svg,
+  canvas,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: none;
+    letter-spacing: inherit;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  ::selection {
+    background-color: var(--seal);
+    color: var(--surface);
+  }
+
+  /* A single, deliberate focus treatment across the whole system: the seal,
+     offset, squared. Institutional documents don't use rounded glows. */
+  :focus-visible {
+    outline: 2px solid var(--seal);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+
+  :where(hr) {
+    border: none;
+    border-top: 1px solid var(--line);
+  }
+
+  /* Available to any surface whose visible heading is drawn rather than typeset
+     — the Atlas, for instance, whose title is the map itself. */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Long documents: let the engine skip offscreen work. */
+  .contain-paint {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 640px;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   TYPOGRAPHIC REGISTERS
+   Four voices, each with a strict job. Mixing them is how the document reads
+   as edited rather than assembled.
+   ════════════════════════════════════════════════════════════════════════════ */
+@layer components {
+  /* ── Statement: the headline register. ───────────────────────────────────
+     Grotesk, very large, very tight, weight 500. At 100px+ a grotesk needs
+     negative tracking or the counters read as gaps; at 240px it needs more
+     still. That is why tracking is authored per size rather than globally. */
+  .statement-monument {
+    font-family: var(--font-institution);
+    font-size: var(--text-monument);
+    font-weight: 500;
+    line-height: 0.86;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+
+  .statement-colossus {
+    font-family: var(--font-institution);
+    font-size: var(--text-colossus);
+    font-weight: 500;
+    line-height: 0.92;
+    letter-spacing: -0.038em;
+    text-wrap: balance;
+  }
+
+  .statement-display {
+    font-family: var(--font-institution);
+    font-size: var(--text-display);
+    font-weight: 500;
+    line-height: 0.97;
+    letter-spacing: -0.032em;
+    text-wrap: balance;
+  }
+
+  .statement-headline {
+    font-family: var(--font-institution);
+    font-size: var(--text-headline);
+    font-weight: 500;
+    line-height: 1.04;
+    letter-spacing: -0.026em;
+    text-wrap: balance;
+  }
+
+  .statement-title {
+    font-family: var(--font-institution);
+    font-size: var(--text-title);
+    font-weight: 500;
+    line-height: 1.14;
+    letter-spacing: -0.021em;
+    text-wrap: balance;
+  }
+
+  /* Optical correction: a line that begins with a quote, a T or a V hangs into
+     the margin in properly typeset display copy. */
+  .optical-hang {
+    text-indent: -0.055em;
+  }
+
+  /* A subordinate clause set in the editorial face, mid-sentence. This single
+     mixed-register move is the signature of the whole type system. */
+  .statement-monument .voice-editorial,
+  .statement-colossus .voice-editorial,
+  .statement-display .voice-editorial,
+  .statement-headline .voice-editorial {
+    font-family: var(--font-editorial);
+    font-weight: 400;
+    font-style: italic;
+    letter-spacing: -0.03em;
+  }
+
+  /* ── Editorial: the argument. Serif, optical, tight. ───────────────────── */
+  .editorial {
+    font-family: var(--font-editorial);
+    font-weight: 400;
+    letter-spacing: -0.024em;
+    line-height: 1.02;
+    text-wrap: balance;
+    font-feature-settings: 'liga' 1, 'kern' 1;
+  }
+
+  .editorial-monument {
+    font-family: var(--font-editorial);
+    font-size: var(--text-monument);
+    font-weight: 400;
+    line-height: 0.87;
+    letter-spacing: -0.042em;
+    text-wrap: balance;
+  }
+
+  .editorial-colossus {
+    font-family: var(--font-editorial);
+    font-size: var(--text-colossus);
+    font-weight: 400;
+    line-height: 0.93;
+    letter-spacing: -0.036em;
+    text-wrap: balance;
+  }
+
+  .editorial-display {
+    font-family: var(--font-editorial);
+    font-size: var(--text-display);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  .editorial-headline {
+    font-family: var(--font-editorial);
+    font-size: var(--text-headline);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.026em;
+    text-wrap: balance;
+  }
+
+  /* Italic in this family is a genuinely different drawing, so it earns its
+     place as an emphasis register rather than a slant. */
+  .editorial em,
+  .editorial-monument em,
+  .editorial-colossus em,
+  .editorial-display em,
+  .editorial-headline em,
+  .voice-italic {
+    font-style: italic;
+    letter-spacing: -0.028em;
+  }
+
+  /* ── Institution: the explanation. Grotesk, quiet, exact. ──────────────── */
+  .lede {
+    font-size: var(--text-lede);
+    line-height: 1.52;
+    letter-spacing: -0.016em;
+    color: var(--fg-2);
+    text-wrap: pretty;
+  }
+
+  .prose-body {
+    font-size: var(--text-body);
+    line-height: 1.7;
+    color: var(--fg-2);
+    max-width: var(--container-prose);
+    text-wrap: pretty;
+  }
+
+  /* ── Ledger: the evidence. Mono, uppercase, wide. ──────────────────────── */
+  .label {
+    font-family: var(--font-ledger);
+    font-size: var(--text-micro);
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fg-3);
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .label-seal {
+    color: var(--seal-text);
+  }
+
+  .label-ink {
+    color: var(--fg);
+  }
+
+  .datum {
+    font-family: var(--font-ledger);
+    font-size: var(--text-small);
+    letter-spacing: -0.01em;
+    color: var(--fg-2);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .addr {
+    font-family: var(--font-ledger);
+    font-size: 0.78em;
+    letter-spacing: -0.02em;
+    color: var(--fg-3);
+    word-break: break-all;
+  }
+
+  /* ── Folio: the section number. The single strongest authority signal in
+     print. Set large, light, and in the seal. ────────────────────────────── */
+  .folio {
+    font-family: var(--font-ledger);
+    font-size: var(--text-fine);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    color: var(--seal-text);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     RULES — engraved, not drawn
+     A hairline in print has weight and a little shadow. Two stacked hairlines
+     at different alphas read as engraved; one flat line reads as a CSS border.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .rule {
+    border: none;
+    height: 1px;
+    background-color: var(--line);
+    width: 100%;
+  }
+
+  .rule-engraved {
+    border: none;
+    height: 3px;
+    width: 100%;
+    background-image: linear-gradient(
+      to bottom,
+      var(--line-strong) 0 1px,
+      transparent 1px 2px,
+      var(--line) 2px 3px
+    );
+  }
+
+  .rule-heavy {
+    border: none;
+    height: 2px;
+    width: 100%;
+    background-color: var(--line-heavy);
+  }
+
+  /* A rule that draws itself when scrolled into view. */
+  .rule-draw {
+    transform: scaleX(var(--draw, 0));
+    transform-origin: left center;
+    transition: transform 1400ms var(--ease-out-expo);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     THE FRAME — an exposed grid
+     A twelve-column measure with visible gutter rules. Institutional documents
+     show their construction; the grid is part of the credibility.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .frame {
+    width: 100%;
+    max-width: var(--container-record);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+  }
+
+  .frame-wide {
+    width: 100%;
+    max-width: var(--container-wide);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+  }
+
+  .grid-12 {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 1.4vw, 2rem);
+  }
+
+  /* Faint vertical column rules, drawn behind content. Switched on per-section
+     — used everywhere it becomes wallpaper. */
+  .columns-visible {
+    position: relative;
+  }
+
+  .columns-visible::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline: var(--spacing-gutter);
+    pointer-events: none;
+    z-index: 0;
+    /* One hairline every twelfth of the measure. Authored as a single
+       repeating gradient — combining it with background-size doubles the
+       frequency and produces moiré at most viewport widths. */
+    background-image: repeating-linear-gradient(
+      to right,
+      var(--line-soft) 0 1px,
+      transparent 1px calc(100% / 12)
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent,
+      black 14%,
+      black 86%,
+      transparent
+    );
+  }
+
+  .columns-visible > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Crop marks — the corner registration marks of a printed plate. */
+  .crop-marks {
+    position: relative;
+  }
+
+  .crop-marks::before,
+  .crop-marks::after {
+    content: '';
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .crop-marks::before {
+    top: 0;
+    left: 0;
+    border-top: 1px solid var(--line-strong);
+    border-left: 1px solid var(--line-strong);
+  }
+
+  .crop-marks::after {
+    bottom: 0;
+    right: 0;
+    border-bottom: 1px solid var(--line-strong);
+    border-right: 1px solid var(--line-strong);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     SECTION HEAD
+     Folio number, running title, rule. Every major section is numbered, which
+     is what makes the page read as a document of record.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .section-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 1.5rem;
+    padding-bottom: 0.875rem;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .section-head-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     MARGINALIA
+     The side channel. Cross-references, definitions, dissent. Set small, in a
+     narrow measure, with a hanging rule — the critical-edition convention.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .marginalia {
+    font-size: var(--text-fine);
+    line-height: 1.55;
+    color: var(--fg-3);
+    border-top: 1px solid var(--line);
+    padding-top: 0.625rem;
+    max-width: 26ch;
+    text-wrap: pretty;
+  }
+
+  .marginalia strong,
+  .marginalia b {
+    color: var(--fg-2);
+    font-weight: 500;
+  }
+
+  .footnote {
+    font-size: var(--text-fine);
+    line-height: 1.6;
+    color: var(--fg-3);
+    display: grid;
+    grid-template-columns: 1.75rem minmax(0, 1fr);
+    gap: 0.5rem;
+  }
+
+  .footnote-mark {
+    font-family: var(--font-ledger);
+    font-size: var(--text-nano);
+    letter-spacing: 0.1em;
+    color: var(--seal-text);
+    padding-top: 0.2em;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     THE SEAL
+     A stamped mark. Squared, overprinted, slightly rotated — as if applied by
+     hand after the sheet was printed.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .seal-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid var(--seal-edge);
+    color: var(--seal);
+    background-color: var(--seal-wash);
+    font-family: var(--font-ledger);
+    font-size: var(--text-nano);
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .seal-stamp {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid var(--seal-edge);
+    color: var(--seal);
+    font-family: var(--font-ledger);
+    font-size: var(--text-nano);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 0.45rem 0.7rem;
+    rotate: -2.4deg;
+    background-color: color-mix(in oklab, var(--seal) 6%, transparent);
+  }
+
+  /* Overprint: the ember-on-ink mark used for the one word per page that
+     carries the argument. Uses a real underline offset, not a border. */
+  .overprint {
+    color: var(--seal-text);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+    text-decoration-color: var(--seal-edge);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     PLATES & FIGURES
+     Technical drawings are rendered live to canvas (see lib/plates.ts) and
+     framed like patent illustrations: hairline box, corner marks, numbered
+     caption underneath in mono.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .plate {
+    position: relative;
+    border: 1px solid var(--line);
+    background-color: color-mix(in oklab, var(--surface-deep) 60%, transparent);
+    overflow: hidden;
+  }
+
+  .plate-caption {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--line);
+    margin-top: 0.75rem;
+    font-size: var(--text-fine);
+    color: var(--fg-3);
+    text-wrap: pretty;
+  }
+
+  .plate-number {
+    font-family: var(--font-ledger);
+    font-size: var(--text-nano);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--seal-text);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     SPECIMEN TABLES
+     Dense evidence. Hairline rows, mono figures, uppercase micro headers. No
+     zebra striping, no rounded corners — this is a register, not a dashboard.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .specimen {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-small);
+  }
+
+  .specimen thead th {
+    font-family: var(--font-ledger);
+    font-size: var(--text-nano);
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fg-3);
+    text-align: left;
+    padding: 0 0.9rem 0.55rem 0;
+    border-bottom: 1px solid var(--line-strong);
+    white-space: nowrap;
+  }
+
+  .specimen tbody td {
+    padding: 0.7rem 0.9rem 0.7rem 0;
+    border-bottom: 1px solid var(--line-soft);
+    color: var(--fg-2);
+    vertical-align: baseline;
+  }
+
+  .specimen tbody tr:last-child td {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .specimen tbody tr {
+    transition: background-color var(--dur-1, 140ms) ease;
+  }
+
+  .specimen tbody tr:hover {
+    background-color: color-mix(in oklab, var(--seal) 3.5%, transparent);
+  }
+
+  .specimen td:first-child,
+  .specimen th:first-child {
+    padding-left: 0;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     KEYLINE PANELS
+     The Record's container. A hairline box on stock, with an optional inset
+     second line — the "double keyline" of a certificate.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .panel {
+    border: 1px solid var(--line);
+    background-color: color-mix(in oklab, var(--surface-raised) 70%, transparent);
+  }
+
+  .panel-double {
+    border: 1px solid var(--line-strong);
+    outline: 1px solid var(--line-soft);
+    outline-offset: 4px;
+    background-color: color-mix(in oklab, var(--surface-raised) 70%, transparent);
+  }
+
+  .panel-sunk {
+    border: 1px solid var(--line);
+    background-color: color-mix(in oklab, var(--surface-sunk) 55%, transparent);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     ACTIONS
+     Two buttons in the whole system. A sealed primary (filled, squared, with a
+     mono label) and a keyline secondary. Anything else is a link.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .action {
+    --_shift: 0px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.95rem 1.5rem;
+    font-family: var(--font-ledger);
+    font-size: var(--text-micro);
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    line-height: 1;
+    white-space: nowrap;
+    isolation: isolate;
+    transition:
+      translate 400ms var(--ease-out-expo),
+      background-color 300ms var(--ease-out-expo),
+      color 300ms var(--ease-out-expo),
+      border-color 300ms var(--ease-out-expo);
+  }
+
+  .action-sealed {
+    /* Solid fills use their own ember pair rather than --seal/--surface: on a
+       light ground the plain seal is not dark enough to carry white text at AA,
+       and the ordinary hover lift made it lighter still. See --seal-solid. */
+    background-color: var(--seal-solid);
+    color: var(--seal-solid-text);
+    border: 1px solid var(--seal-solid);
+  }
+
+  .action-sealed::after {
+    /* A hard offset shadow-block — letterpress, not glow. */
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border: 1px solid var(--seal-solid);
+    translate: 5px 5px;
+    transition: translate 400ms var(--ease-out-expo);
+  }
+
+  .action-sealed:hover {
+    background-color: var(--seal-solid-lift);
+    border-color: var(--seal-solid-lift);
+    translate: -1px -1px;
+  }
+
+  .action-sealed:hover::after {
+    translate: 8px 8px;
+  }
+
+  .action-sealed:active {
+    translate: 2px 2px;
+  }
+
+  .action-sealed:active::after {
+    translate: 2px 2px;
+  }
+
+  .action-keyline {
+    border: 1px solid var(--line-strong);
+    color: var(--fg);
+  }
+
+  .action-keyline:hover {
+    border-color: var(--seal);
+    color: var(--seal);
+    background-color: var(--seal-wash);
+  }
+
+  /* Text link with a rule that grows from the left on hover. */
+  .link-rule {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 2px;
+    color: var(--fg);
+    background-image: linear-gradient(var(--seal), var(--seal));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 1px;
+    transition:
+      background-size 480ms var(--ease-out-expo),
+      color 300ms ease;
+  }
+
+  .link-rule:hover {
+    background-size: 100% 1px;
+    color: var(--seal);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     NETWORK MARKS
+     Where a network hue is allowed to appear.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .net-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    flex-shrink: 0;
+    background-color: var(--net, var(--fg-3));
+    border-radius: 50%;
+  }
+
+  .net-arkiv {
+    --net: var(--color-arkiv);
+  }
+  .net-icp {
+    --net: var(--color-icp);
+  }
+  .net-evm {
+    --net: var(--color-evm);
+  }
+  .net-filecoin {
+    --net: var(--color-filecoin);
+  }
+  .net-haven {
+    --net: var(--seal);
+  }
+
+  /* A live status pip: two rings, the outer one breathing. */
+  .pip {
+    position: relative;
+    display: inline-flex;
+    width: 7px;
+    height: 7px;
+    flex-shrink: 0;
+  }
+
+  .pip::before,
+  .pip::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background-color: var(--net, var(--seal));
+  }
+
+  .pip::after {
+    animation: pip-breathe 2.6s var(--ease-in-out-quint) infinite;
+  }
+
+  .pip-idle::after {
+    animation: none;
+    opacity: 0.35;
+  }
+
+  @keyframes pip-breathe {
+    0% {
+      opacity: 0.7;
+      scale: 1;
+    }
+    70%,
+    100% {
+      opacity: 0;
+      scale: 3.4;
+    }
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   MATERIAL
+   Grain and reading light. These two effects are why the surface reads as a
+   physical sheet rather than an RGB rectangle. Both are fixed overlays that
+   never intercept pointer events.
+   ════════════════════════════════════════════════════════════════════════════ */
+@layer components {
+  .material-grain {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    pointer-events: none;
+    opacity: var(--grain-opacity);
+    mix-blend-mode: multiply;
+    background-image: url('/grain.svg');
+    background-size: 168px 168px;
+  }
+
+  [data-world='observatory'] .material-grain,
+  html[data-edition='ink'] .material-grain {
+    mix-blend-mode: screen;
+  }
+
+  /* A warm radial light that follows the pointer across the stock. Extremely
+     subtle — you should never be able to point at it, only miss it when it is
+     removed. Driven by --px/--py set on <html> from a pointer listener. */
+  .material-light {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(
+      620px circle at var(--px, 50%) var(--py, 40%),
+      color-mix(in oklab, var(--seal) 5%, transparent),
+      transparent 72%
+    );
+    opacity: 0;
+    transition: opacity 900ms var(--ease-out-expo);
+  }
+
+  html[data-pointer='fine'] .material-light {
+    opacity: 1;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   REVEALS
+   Authored twice on purpose. Where scroll-driven animations are supported the
+   browser owns the timeline entirely (no JS, no observer, perfectly scrubbed).
+   Everywhere else an IntersectionObserver flips [data-shown] once.
+   ════════════════════════════════════════════════════════════════════════════ */
+@layer components {
+  /* The reveal API is the `data-reveal` ATTRIBUTE, and every hidden state below
+     is gated on html[data-js]. Without scripting the document renders complete —
+     which matters most for the hero, whose headline is masked rather than faded
+     and would otherwise be invisible. */
+  html[data-js] [data-reveal] {
+    --_y: 1.35rem;
+    --_blur: 0px;
+    opacity: 0;
+    translate: 0 var(--_y);
+    filter: blur(var(--_blur));
+  }
+
+  html[data-js] [data-reveal][data-shown='true'] {
+    opacity: 1;
+    translate: 0 0;
+    filter: blur(0);
+    transition:
+      opacity 900ms var(--ease-out-expo),
+      translate 1000ms var(--ease-out-expo),
+      filter 900ms var(--ease-out-expo);
+    transition-delay: var(--delay, 0ms);
+  }
+
+  /* Line-mask reveal: type rises out of its own baseline. The premium tell —
+     fades read as generic, masks read as typeset. */
+  .mask-line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.08em;
+  }
+
+  html[data-js] .mask-line > * {
+    display: block;
+    translate: 0 105%;
+    rotate: 1.1deg;
+    transform-origin: left top;
+  }
+
+  html[data-js] [data-shown='true'] .mask-line > *,
+  html[data-js] .mask-line[data-shown='true'] > * {
+    translate: 0 0;
+    rotate: 0deg;
+    transition:
+      translate 1150ms var(--ease-out-expo),
+      rotate 1150ms var(--ease-out-expo);
+    transition-delay: var(--delay, 0ms);
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .scroll-rise {
+        animation: scroll-rise linear both;
+        animation-timeline: view();
+        animation-range: entry 4% cover 26%;
+      }
+
+      .scroll-fade-edges {
+        animation: scroll-fade-edges linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 34%;
+      }
+
+      /* Parallax authored declaratively against the scroll progress of the
+         nearest scroll container. */
+      .scroll-drift {
+        animation: scroll-drift linear both;
+        animation-timeline: view();
+        animation-range: cover 0% cover 100%;
+      }
+
+      .scroll-rule {
+        animation: scroll-rule linear both;
+        animation-timeline: view();
+        animation-range: entry 10% cover 30%;
+      }
+    }
+  }
+
+  @keyframes scroll-rise {
+    from {
+      opacity: 0;
+      translate: 0 2.25rem;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+
+  @keyframes scroll-fade-edges {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes scroll-drift {
+    from {
+      translate: 0 var(--drift-from, 3rem);
+    }
+    to {
+      translate: 0 var(--drift-to, -3rem);
+    }
+  }
+
+  @keyframes scroll-rule {
+    from {
+      scale: 0 1;
+    }
+    to {
+      scale: 1 1;
+    }
+  }
+
+  /* Reading progress driven by the document's own scroll timeline. */
+  @supports (animation-timeline: scroll(root)) {
+    .progress-rule {
+      animation: progress-rule linear both;
+      animation-timeline: scroll(root block);
+      transform-origin: left center;
+    }
+  }
+
+  @keyframes progress-rule {
+    from {
+      scale: 0 1;
+    }
+    to {
+      scale: 1 1;
+    }
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   VIEW TRANSITIONS
+   The Record → Observatory jump is the one theatrical moment in the system: the
+   sheet is wiped away and the void is revealed beneath it. Authored as a real
+   cross-document transition so it survives a full navigation.
+   ════════════════════════════════════════════════════════════════════════════ */
+@layer components {
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-group(root) {
+    animation-duration: 720ms;
+    animation-timing-function: var(--ease-in-out-quint);
+  }
+
+  ::view-transition-old(root) {
+    animation: sheet-lift 620ms var(--ease-in-out-quint) both;
+  }
+
+  ::view-transition-new(root) {
+    animation: void-reveal 720ms var(--ease-out-expo) both;
+  }
+
+  @keyframes sheet-lift {
+    from {
+      opacity: 1;
+      scale: 1;
+      filter: blur(0);
+    }
+    to {
+      opacity: 0;
+      scale: 1.035;
+      filter: blur(7px);
+    }
+  }
+
+  @keyframes void-reveal {
+    from {
+      opacity: 0;
+      clip-path: inset(0 0 100% 0);
+    }
+    to {
+      opacity: 1;
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  /* Elements that persist across the navigation, morphing rather than
+     re-entering: the wordmark and the primary action. */
+  .vt-wordmark {
+    view-transition-name: haven-wordmark;
+  }
+
+  .vt-chrome {
+    view-transition-name: haven-chrome;
+  }
+
+  ::view-transition-group(haven-wordmark),
+  ::view-transition-group(haven-chrome) {
+    animation-duration: 620ms;
+    animation-timing-function: var(--ease-out-expo);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none;
+      opacity: 1;
+    }
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   REDUCED MOTION — a real implementation, not a blanket kill switch.
+   Movement is removed; opacity and colour transitions are kept so the
+   interface still communicates state.
+   ════════════════════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  .mask-line > * {
+    opacity: 1 !important;
+    translate: none !important;
+    rotate: none !important;
+    filter: none !important;
+  }
+
+  .rule-draw {
+    transform: none !important;
+  }
+
+  .pip::after {
+    animation: none;
+    opacity: 0.3;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}

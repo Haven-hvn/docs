@@ -1,0 +1,367 @@
+/* ════════════════════════════════════════════════════════════════════════════
+   HAVEN — MATERIAL
+   Surfaces, light, depth, and the choreography of a pinned sequence.
+
+   The premise: a screen is a light source, so a high-production interface
+   should behave like one. Every surface here has an edge that catches light, a
+   body that transmits or absorbs it, and a shadow that agrees with the others
+   about where the light is coming from — from above, slightly left, always.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@layer components {
+  /* ══════════════════════════════════════════════════════════════════════════
+     ACTS
+     A page is a sequence of full-bleed acts that alternate tone. The alternation
+     is the pacing device: light acts argue, dark acts demonstrate.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .act {
+    position: relative;
+    background-color: var(--surface);
+    color: var(--fg);
+    isolation: isolate;
+  }
+
+  .act-pad {
+    padding-block: clamp(5rem, 3rem + 8vw, 12rem);
+  }
+
+  .act-pad-tall {
+    padding-block: clamp(7rem, 4rem + 12vw, 18rem);
+  }
+
+  /* A void act gets a vignette so the edges fall away and the centre holds the
+     eye. Without this, dark sections read as flat black rectangles. */
+  .act[data-tone='void']::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        130% 80% at 50% 0%,
+        color-mix(in oklab, var(--surface-raised) 55%, transparent),
+        transparent 62%
+      ),
+      radial-gradient(
+        100% 70% at 50% 110%,
+        color-mix(in oklab, var(--surface-sunk) 85%, transparent),
+        transparent 70%
+      );
+  }
+
+  .act > .act-body {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* The seam between two acts of different tone. A hard 1px line is crude; a
+     short gradient bleed reads as two materials meeting. */
+  .act-seam {
+    position: relative;
+    height: 1px;
+    background-color: var(--line);
+  }
+
+  .act-seam::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 88px;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--surface-sunk) 42%, transparent),
+      transparent
+    );
+    pointer-events: none;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     GLASS
+     Backdrop blur alone looks like a filter. Real glass has three parts: a
+     blurred body, a bright specular top edge where light grazes it, and a
+     darker bottom edge where it sits on the surface beneath.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .glass {
+    position: relative;
+    background-color: color-mix(in oklab, var(--surface) 62%, transparent);
+    backdrop-filter: blur(20px) saturate(1.7);
+    -webkit-backdrop-filter: blur(20px) saturate(1.7);
+    border: 1px solid var(--line);
+  }
+
+  .glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-top: 1px solid
+      color-mix(in oklab, var(--fg) 12%, transparent);
+    border-bottom: 1px solid
+      color-mix(in oklab, var(--surface-sunk) 55%, transparent);
+  }
+
+  .glass-heavy {
+    background-color: color-mix(in oklab, var(--surface) 82%, transparent);
+    backdrop-filter: blur(36px) saturate(1.9);
+    -webkit-backdrop-filter: blur(36px) saturate(1.9);
+  }
+
+  @supports not (backdrop-filter: blur(1px)) {
+    .glass,
+    .glass-heavy {
+      background-color: color-mix(in oklab, var(--surface) 96%, transparent);
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     SPECULAR & ANODIZED
+     Two treatments for a solid surface. Specular adds a raking highlight that
+     tracks the pointer. Anodized is a machined-aluminium body: a vertical
+     lightness ramp with a bright top bevel and a dark bottom bevel.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .specular {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .specular::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(
+      340px circle at var(--mx, 50%) var(--my, 50%),
+      color-mix(in oklab, var(--fg) 9%, transparent),
+      transparent 68%
+    );
+    transition: opacity 520ms var(--ease-out-expo);
+  }
+
+  .specular:hover::after {
+    opacity: 1;
+  }
+
+  .anodized {
+    background-image: linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--surface-raised) 100%, transparent),
+      color-mix(in oklab, var(--surface-deep) 100%, transparent)
+    );
+    box-shadow:
+      inset 0 1px 0 color-mix(in oklab, var(--fg) 9%, transparent),
+      inset 0 -1px 0 color-mix(in oklab, var(--surface-sunk) 70%, transparent),
+      var(--lift-2);
+  }
+
+  /* Emission — for dark acts only. A surface that is itself a light source.
+     Three stacked shadows: tight core, mid halo, wide atmosphere. */
+  .emit {
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--emit-hue, var(--seal)) 34%, transparent),
+      0 0 12px -2px color-mix(in oklab, var(--emit-hue, var(--seal)) 46%, transparent),
+      0 0 44px -6px color-mix(in oklab, var(--emit-hue, var(--seal)) 30%, transparent),
+      0 0 120px -20px color-mix(in oklab, var(--emit-hue, var(--seal)) 24%, transparent);
+  }
+
+  .emit-text {
+    text-shadow:
+      0 0 18px color-mix(in oklab, var(--emit-hue, var(--seal)) 36%, transparent),
+      0 0 64px color-mix(in oklab, var(--emit-hue, var(--seal)) 22%, transparent);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     HAIRLINES
+     On a 2× display a 1px CSS border is 2 device pixels and reads heavy. This
+     halves it where the display can resolve it — the kind of correction nobody
+     notices except as an overall impression of sharpness.
+     ══════════════════════════════════════════════════════════════════════════ */
+  @media (min-resolution: 2dppx) {
+    .hairline-crisp {
+      border-width: 0.5px;
+    }
+
+    .rule,
+    .specimen thead th,
+    .specimen tbody td {
+      background-size: 100% 0.5px;
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     DEPTH
+     A shallow perspective scene. Layers translate on Z rather than Y so the
+     parallax is perspective-correct instead of a fake offset.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .depth-scene {
+    perspective: 1400px;
+    perspective-origin: 50% 42%;
+    transform-style: preserve-3d;
+  }
+
+  .depth-layer {
+    transform: translate3d(0, 0, var(--z, 0px));
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  /* Pointer-driven tilt for a whole scene. --rx/--ry are written by JS. */
+  .tilt {
+    rotate: y var(--ry, 0deg);
+    transform: rotateX(var(--rx, 0deg));
+    transition: rotate 900ms var(--ease-out-expo), transform 900ms var(--ease-out-expo);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     PINNED SEQUENCES
+     The Apple-page device: a tall scroll region with a viewport-height stage
+     pinned inside it. Scroll position becomes the timeline for whatever the
+     stage is showing. Progress is exposed as --seq (0→1) by JS, and where the
+     browser supports scroll-driven animations the CSS drives itself.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .sequence {
+    position: relative;
+  }
+
+  .sequence-stage {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    display: grid;
+    place-items: center;
+    overflow: clip;
+  }
+
+  /* Each beat of a sequence: shown only when it is the active index. */
+  .beat {
+    opacity: 0;
+    translate: 0 1.5rem;
+    filter: blur(6px);
+    transition:
+      opacity 620ms var(--ease-out-expo),
+      translate 720ms var(--ease-out-expo),
+      filter 620ms var(--ease-out-expo);
+    pointer-events: none;
+  }
+
+  .beat[data-active='true'] {
+    opacity: 1;
+    translate: 0 0;
+    filter: blur(0);
+    pointer-events: auto;
+  }
+
+  /* A beat that has already passed leaves upward, not downward — so the
+     sequence reads as a single object moving through states. */
+  .beat[data-passed='true'] {
+    opacity: 0;
+    translate: 0 -1.5rem;
+    filter: blur(6px);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     MAGNETIC
+     Interactive elements lean toward the pointer by a few pixels. --dx/--dy are
+     written by JS on pointermove and released on leave.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .magnetic {
+    translate: var(--dx, 0px) var(--dy, 0px);
+    transition: translate 620ms var(--ease-spring);
+  }
+
+  .magnetic[data-engaged='true'] {
+    transition: translate 120ms linear;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     MARQUEE
+     A continuous ledger strip. Duplicated content and a translation of exactly
+     -50% is the only implementation that never shows a seam.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .marquee {
+    display: flex;
+    overflow: hidden;
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 6%,
+      black 94%,
+      transparent
+    );
+    user-select: none;
+  }
+
+  .marquee-track {
+    display: flex;
+    flex-shrink: 0;
+    gap: 0;
+    animation: marquee-run var(--marquee-dur, 44s) linear infinite;
+    will-change: transform;
+  }
+
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee-run {
+    from {
+      translate: 0 0;
+    }
+    to {
+      translate: -50% 0;
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     CANVAS STAGES
+     Every WebGL/2D surface sits in one of these: absolutely positioned, behind
+     content, never interactive unless explicitly enabled.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .stage {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: clip;
+  }
+
+  .stage-interactive {
+    pointer-events: auto;
+  }
+
+  .stage canvas,
+  .stage-interactive canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* While a WebGL island is hydrating, hold the space with a plate of the same
+     tone so there is never a flash of empty background.
+
+     It must never be hit-testable. It covers the full stage and only fades to
+     transparent when ready — it is not removed — so without this it silently
+     swallows every pointer event bound for the canvas underneath: no picking,
+     no hover, no orbit drag. An invisible element that still takes the pointer
+     is the most expensive kind of decoration there is. */
+  .stage-placeholder {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        60% 50% at 50% 45%,
+        color-mix(in oklab, var(--seal) 7%, transparent),
+        transparent 70%
+      ),
+      var(--surface);
+    opacity: 1;
+    transition: opacity 900ms var(--ease-out-expo);
+  }
+
+  .stage-placeholder[data-ready='true'] {
+    opacity: 0;
+  }
+}

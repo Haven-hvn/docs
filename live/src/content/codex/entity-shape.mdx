@@ -1,0 +1,76 @@
+---
+title: The entity shape
+summary: Every surface reads and writes the same container — Ident32 keys, typed attributes, a payload, and a content type — enforced at the precompile, not by convention.
+part: The Rule Set
+folio: 'II.03'
+order: 3
+status: settled
+sources:
+  - docs/entities/ENTITY_SHAPE.md
+  - docs/entities/MEDIA_CONTENT_SPEC.md
+  - docs/architecture/05-arkiv-chain.md
+---
+
+## The container
+
+An entity is the atomic unit of the Arkiv state trie. It is not a row in a database; it is an account in an Ethereum-compatible state, stored at the precompile address `0x4400000000000000000000000000000000000044`. The shape is enforced in the precompile itself — a malformed entity is rejected at execution time, not at indexing time.
+
+The container has five components:
+
+```solidity
+struct Operation {
+  uint8   operationType;   // 1=CREATE, 2=UPDATE, 3=EXTEND, 4=TRANSFER, 5=DELETE, 6=EXPIRE
+  bytes32 entityKey;       // Ident32
+  bytes   payload;         // application/json, base64
+  Mime128 contentType;     // 4×bytes32, 128-byte MIME, validated
+  Attribute[] attributes;  // searchable typed fields
+  BlockNumber32 btl;       // blocks-to-live (uint32)
+  address newOwner;        // used only by TRANSFER
+}
+```
+
+Entities are written atomically via `execute(Operation[])`. The precompile processes the entire batch or reverts — there is no partial commit.
+
+## Primitive types
+
+Three user-defined value types enforce constraints at the precompile level:
+
+| Type | Definition | Constraint |
+| --- | --- | --- |
+| `Ident32` | `bytes32` | ≤32 bytes, lowercase `a–z0–9_./\-`, left-aligned, validated byte-by-byte |
+| `Mime128` | `bytes32[4]` | 128-byte content-type string, zero-padded, validated |
+| `BlockNumber32` | `uint32` | Distinct type for TTL and expiry fields |
+
+An `Ident32` key that contains an uppercase letter, a space, or an emoji will be rejected with `Ident32InvalidByte(position, value)`. This is not a convention; it is a revert.
+
+## Attributes
+
+Each attribute carries a name (an `Ident32`), a value type, and a four-word value:
+
+| Code | Name | Semantics |
+| --- | --- | --- |
+| 1 | `ATTR_UINT` | `value[0]` only; remaining words must be zero |
+| 2 | `ATTR_STRING` | 128-byte string, zero-padded, no embedded null after content |
+| 3 | `ATTR_ENTITY_KEY` | `value[0]` only; references another entity by key |
+
+The precompile validates the encoding: `AttributeValueMalformed` and `AttributeStringInvalidByte` catch any deviation. This means the query layer can trust that every attribute it reads conforms to its declared type without defensive parsing.
+
+## Media specialisation
+
+For media entities, Haven defines a standardised set of attribute keys. These are conventions over the container — the precompile does not mandate them, but all five surfaces agree to use them:
+
+| Key | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `title` | STRING | Yes | Display title, ≤128 bytes |
+| `is_encrypted` | UINT | Yes | `1` if encrypted, `0` or absent if clear |
+| `duration` | UINT | Recommended | Seconds |
+| `creator_handle` | STRING | Recommended | Lowercased handle |
+| `encrypted_cid` | STRING | If encrypted | Filecoin CID of the ciphertext |
+
+The payload field carries the extended metadata as base64-encoded JSON — fields like `encryption_metadata`, `codec_variants`, `segment_metadata`, and `thumbnail_cid` that are too large or too complex for on-chain attributes.
+
+## Why the shape is shared, not the code
+
+ADR-001 mandates that no two surfaces share a library. The entity shape is therefore defined once in `EntityRegistry.sol` and consumed verbatim by each surface in its own language: Rust in `arkiv-entitydb`, TypeScript in `haven-dapp/src/types/arkiv.ts`, Python in `haven-cli/media`, Kotlin in `haven-mobile`. There is no generated binding and no shared package. The precompile is the authority; the surface implementations are transcriptions.
+
+This costs duplication. It buys the guarantee that a canister upgrade, a mobile release, and a CLI patch can each ship without coordinating a shared dependency version.

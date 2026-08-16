@@ -1,0 +1,61 @@
+---
+title: dapp, cli, mobile — the clients
+summary: Three independent clients obey the same rule set in three languages. They share no library, no backend, and no database — only the contracts defined by the gate and the entity shape.
+part: Surfaces
+folio: 'III.03'
+order: 3
+status: settled
+sources:
+  - docs/architecture/02-haven-dapp.md
+  - docs/architecture/03-haven-cli.md
+  - docs/architecture/04-haven-mobile.md
+  - docs/decisions/ADR-001-decoupled-boundaries.md
+---
+
+## Three surfaces, one rule set
+
+Haven's client layer is deliberately polyglot. Each surface is written in a different language, deployed through a different channel, and operates against a different runtime assumption. What they share is not code but contracts: the Candid methods of `haven-aol`, the entity shape of `arkiv-chain`, and the EIP-712 typed data that binds them.
+
+| Surface | Language | Runtime | Deploys via |
+| --- | --- | --- | --- |
+| `haven-dapp` | TypeScript (Next.js 15) | Browser | Static export to IPFS (`pinme`) |
+| `haven-cli` | Python 3.11+ | Local machine | `pip install haven-cli` or Docker |
+| `haven-mobile` | Kotlin (Compose, Media3, Room) | Android | APK / Play Store |
+
+No surface depends on another. There is no shared backend between them, no shared queue, and no shared library — ADR-001 mandates this explicitly.
+
+## haven-dapp — the web reader
+
+The dapp is a discovery and playback client. It connects a wallet, queries Arkiv for gated content, requests decryption keys from `haven-aol` via the TypeScript SDK, and decrypts ciphertext entirely in the browser. Playback uses a standard Media Source Extensions pipeline.
+
+Key architectural properties:
+
+- **Offline-first caching.** A service worker (`haven-sw.js`) and IndexedDB store decrypted media bytes with LRU eviction, TTL, and quota policies.
+- **Batch V3 decryption.** A single `batchRequestDecryptionKeyV3` call returns one epoch-scoped key replicated across up to 20 CIDs — the entire library unlocks in a single round trip.
+- **Attestation verification.** Ed25519 attestations (`lib/attestation.ts`) render verified badges without re-deriving keys.
+- **Static deployment.** The build output is a static `out/` directory pinned to IPFS. There is no server to seize.
+
+## haven-cli — the publisher
+
+The CLI is the only surface that encrypts. A publisher runs it on their own machine; it takes plaintext media, encrypts it locally under AES with gate parameters, submits the ciphertext to Filecoin, and writes entity metadata to Arkiv. It never decrypts — that path belongs to clients.
+
+Key architectural properties:
+
+- **Event-driven pipeline.** Media processing (transcoding, perceptual hashing, VLM analysis, thumbnail extraction) is a DAG of stages, not a monolith.
+- **Permissionless-local.** The CLI uses a local SQLite database. There is no shared Postgres, no hosted queue, and no remote state.
+- **Filecoin pin submission.** Ciphertext is pinned via the Onchain Cloud contracts on Filecoin FEVM. Payment is in USDFC.
+- **`haven-aol` Python SDK.** Used only for encryption (deriving the key to seal under). The CLI does not perform balance checks or gating logic.
+
+## haven-mobile — the offline viewer
+
+The mobile client is a port of the dapp's core flows to Android, not a superset. It connects a wallet (Reown AppKit, WalletConnect v2), derives keys via `ic-kotlin`, decrypts, and plays back with Media3 (ExoPlayer). It supports offline playback from a Room-backed local cache.
+
+Key architectural properties:
+
+- **Generalised `MediaKind`.** Not just video: audio (MP3, FLAC, OGG, WAV), images, PDFs, and generic files follow the same encrypt–cache–play pipeline.
+- **FOC cache.** A local-first caching layer (`foc-cache`) with LRU + TTL + quota + hedged-race fetch — independent of the dapp's IndexedDB/service-worker strategy.
+- **Security cleanup.** On wallet disconnect, the app purges Room, FOC cache, and Android Keystore material. No residual plaintext survives a session end.
+
+## The cost of decoupling
+
+Duplication. Each surface implements its own caching policy, its own EIP-712 signing path, its own error handling. The benefit that pays for this cost: any surface can ship, scale, and fail alone. A canister upgrade does not block a mobile release. A dapp regression does not affect the CLI. The protocol's reliability is the product of independent failure domains, not the weakest link in a shared dependency chain.

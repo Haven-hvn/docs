@@ -1,0 +1,390 @@
+---
+import Mark from './Mark.astro'
+import { AOL, ARKIV, HAVEN, NETWORKS, SURFACES, TOPOLOGY } from '../lib/protocol.ts'
+// ARKIV is aliased: protocol.ts exports its own ARKIV record, used above.
+import { ARKIV as ARKIV_NETWORK, CHAINS, ICP, STORAGE } from '../lib/chains.ts'
+
+const YEAR = new Date().getFullYear()
+
+const COLUMNS = [
+  {
+    heading: 'The Record',
+    links: [
+      { label: 'The premise', href: '/#premise-title' },
+      { label: 'The mechanism', href: '/#mechanism-title' },
+      { label: 'The movements', href: '/#movements-title' },
+      { label: 'The evidence', href: '/#evidence-title' },
+      { label: 'The horizon', href: '/#horizon-title' },
+    ],
+  },
+  {
+    heading: 'The Codex',
+    links: [
+      { label: 'What Haven is', href: '/codex/what-haven-is' },
+      { label: 'Four networks, one rule set', href: '/codex/layers' },
+      { label: 'The gate', href: '/codex/the-gate' },
+      { label: 'Key derivation and epochs', href: '/codex/key-derivation' },
+      { label: 'The entity shape', href: '/codex/entity-shape' },
+      { label: 'Verify it yourself', href: '/codex/verify-it-yourself' },
+    ],
+  },
+  {
+    heading: 'The Threshold',
+    links: [
+      { label: 'Choose a path', href: '/threshold' },
+      { label: 'Read an archive', href: '/threshold/read' },
+      { label: 'Publish an archive', href: '/threshold/publish' },
+      { label: 'Start an archive', href: '/threshold/found' },
+    ],
+  },
+  {
+    heading: 'Surfaces',
+    links: SURFACES.map((surface) => ({
+      label: `${surface.name} · ${surface.language}`,
+      href: `/codex/${surface.id === 'haven-aol' ? 'haven-aol' : surface.id === 'arkiv-chain' ? 'arkiv-chain' : 'clients'}`,
+    })),
+  },
+  {
+    heading: 'Verify',
+    links: [
+      { label: 'Ethereum', href: CHAINS.ethereum.explorer, external: true },
+      { label: 'Filecoin', href: CHAINS.filecoin.explorer, external: true },
+      { label: 'Gate canister', href: ICP.dashboard, external: true },
+      { label: 'Pin contract', href: CHAINS.filecoin.explorerAddress(STORAGE.mainnet.warmStorage), external: true },
+      { label: 'Payment rails', href: CHAINS.filecoin.explorerAddress(STORAGE.mainnet.filecoinPay), external: true },
+      { label: 'Arkiv node (503)', href: ARKIV.rpc, external: true },
+    ],
+  },
+] as const
+---
+
+<footer class="colophon" data-tone="void">
+  {/* ── Register: the four networks, restated as addresses ────────────────── */}
+  <div class="frame-wide colophon-register">
+    <dl class="register">
+      {
+        NETWORKS.map((network) => (
+          <div class="register-entry" data-pending={network.id === 'arkiv' ? 'true' : undefined}>
+            <dt class="register-head">
+              <span class:list={['net-dot', `net-${network.id}`]} aria-hidden="true" />
+              <span class="register-name">{network.name}</span>
+            </dt>
+            <dd class="label register-label">{network.identifierLabel}</dd>
+            <dd class="addr register-id">{network.identifier}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+
+  {/* ── Sitemap ──────────────────────────────────────────────────────────── */}
+  <div class="frame-wide colophon-body">
+    <div class="colophon-lockup">
+      <a href="/" class="lockup colophon-brand" aria-label={HAVEN.name}>
+        <Mark size={26} />
+        <span class="colophon-wordmark">{HAVEN.name}</span>
+      </a>
+      <p class="colophon-thesis editorial">{HAVEN.thesis}</p>
+      <dl class="colophon-facts">
+        <div>
+          <dt class="label">Services</dt>
+          <dd>{TOPOLOGY.services}</dd>
+        </div>
+        <div>
+          <dt class="label">Private datastores</dt>
+          <dd>{TOPOLOGY.privateDatastores}</dd>
+        </div>
+        <div>
+          <dt class="label">Epoch</dt>
+          <dd>{AOL.epochSeconds.toLocaleString('en-US')}s</dd>
+        </div>
+      </dl>
+    </div>
+
+    <nav class="colophon-columns" aria-label="Site">
+      {
+        COLUMNS.map((column) => (
+          <div class="colophon-column">
+            <h2 class="label label-ink colophon-heading">{column.heading}</h2>
+            <ul>
+              {column.links.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    class="colophon-link"
+                    rel={'external' in link && link.external ? 'noreferrer noopener' : undefined}
+                    target={'external' in link && link.external ? '_blank' : undefined}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </nav>
+  </div>
+
+  {/* ── Imprint: how this document reports figures ────────────────────────── */}
+  <div class="frame-wide colophon-imprint">
+    <p class="colophon-note">
+      Figures on this site are read live, in your browser, from public endpoints — no key, no proxy.
+      Storage is aggregated from the Filecoin pin contracts on FEVM; capitalisation comes from a market
+      source, because price is not an on-chain fact. Arkiv, the metadata index, has no public network — {ARKIV_NETWORK.codename} was retired on {ARKIV_NETWORK.retiredOn} and the next public testnet is expected {ARKIV_NETWORK.nextPublicTestnet}. The
+      values that depend on it are drawn unlit rather than estimated.
+    </p>
+    <div class="colophon-meta">
+      <span class="label">© {YEAR} {HAVEN.name}</span>
+      <span class="label">Est. {HAVEN.established}</span>
+      <span class="label">{HAVEN.version}</span>
+      <span class="label colophon-typefaces">Newsreader · Inter · JetBrains Mono</span>
+      <button class="colophon-edition label" data-edition-toggle type="button" aria-pressed="false">
+        <span data-edition-label>Ink</span> edition
+      </button>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .colophon {
+    position: relative;
+    background-color: var(--surface-deep);
+    color: var(--fg);
+    border-top: 1px solid var(--line);
+  }
+
+  /* ── Register ─────────────────────────────────────────────────────────── */
+  .colophon-register {
+    padding-block: 1.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .register {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0;
+  }
+
+  .register-entry {
+    display: grid;
+    gap: 0.28rem;
+    padding-inline: clamp(0.75rem, 1.4vw, 1.75rem);
+    border-left: 1px solid var(--line);
+    min-width: 0;
+  }
+
+  .register-entry:first-child {
+    padding-left: 0;
+    border-left: none;
+  }
+
+  .register-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .register-name {
+    font-size: var(--text-small);
+    font-weight: 500;
+    color: var(--fg);
+    letter-spacing: -0.014em;
+  }
+
+  .register-label,
+  .register-id {
+    margin: 0;
+  }
+
+  .register-label {
+    color: var(--fg-4);
+  }
+
+  .register-id {
+    font-size: 0.6875rem;
+    color: var(--fg-3);
+    overflow-wrap: anywhere;
+  }
+
+  .register-entry[data-pending] .register-name,
+  .register-entry[data-pending] .register-id {
+    color: var(--fg-4);
+  }
+
+  /* ── Body ─────────────────────────────────────────────────────────────── */
+  .colophon-body {
+    display: grid;
+    grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+    gap: clamp(2rem, 1rem + 4vw, 6rem);
+    padding-block: clamp(3rem, 2rem + 3vw, 5rem);
+  }
+
+  .colophon-lockup {
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+  }
+
+  .colophon-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--seal);
+  }
+
+  .colophon-wordmark {
+    font-size: 1.375rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: var(--fg);
+  }
+
+  .colophon-thesis {
+    font-size: var(--text-subtitle);
+    line-height: 1.25;
+    color: var(--fg-2);
+    max-width: 22ch;
+  }
+
+  /* Three figures in a row inside a 22rem column: it has to wrap, or the last
+     cell overflows into the sitemap. */
+  .colophon-facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
+    gap: 0.875rem 0;
+    margin: 0;
+    border-top: 1px solid var(--line);
+    padding-top: 0.875rem;
+  }
+
+  .colophon-facts > div {
+    display: grid;
+    gap: 0.28rem;
+    align-content: start;
+    padding-inline: 0.875rem;
+    border-left: 1px solid var(--line);
+    min-width: 0;
+  }
+
+  .colophon-facts > div:first-child {
+    padding-left: 0;
+    border-left: none;
+  }
+
+  .colophon-facts dd {
+    margin: 0;
+    font-family: var(--font-ledger);
+    font-size: var(--text-body);
+    color: var(--fg);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Columns ──────────────────────────────────────────────────────────── */
+  .colophon-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: clamp(1.5rem, 1rem + 2vw, 3rem);
+  }
+
+  .colophon-column ul {
+    list-style: none;
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .colophon-heading {
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--line);
+    display: block;
+  }
+
+  .colophon-link {
+    font-size: var(--text-fine);
+    color: var(--fg-3);
+    transition: color 260ms var(--ease-out-expo);
+    display: inline-block;
+  }
+
+  .colophon-link:hover {
+    color: var(--seal);
+  }
+
+  /* ── Imprint ──────────────────────────────────────────────────────────── */
+  .colophon-imprint {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: clamp(1.5rem, 1rem + 3vw, 4rem);
+    padding-block: 1.5rem 2rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .colophon-note {
+    font-size: var(--text-fine);
+    line-height: 1.55;
+    color: var(--fg-3);
+    max-width: 76ch;
+    text-wrap: pretty;
+  }
+
+  .colophon-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .colophon-meta .label {
+    color: var(--fg-4);
+  }
+
+  .colophon-typefaces {
+    letter-spacing: 0.1em;
+  }
+
+  .colophon-edition {
+    color: var(--fg-3);
+    border: 1px solid var(--line);
+    padding: 0.4rem 0.6rem;
+    transition:
+      color 260ms ease,
+      border-color 260ms ease;
+  }
+
+  .colophon-edition:hover {
+    color: var(--seal);
+    border-color: var(--seal-edge);
+  }
+
+  @media (max-width: 1080px) {
+    .colophon-body,
+    .colophon-imprint {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .register {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.25rem 0;
+    }
+    .register-entry:nth-child(3) {
+      padding-left: 0;
+      border-left: none;
+    }
+    .colophon-meta {
+      justify-content: flex-start;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .register {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .register-entry {
+      padding-left: 0;
+      border-left: none;
+    }
+  }
+</style>

@@ -1,0 +1,276 @@
+---
+import Base from '../../layouts/Base.astro'
+import Masthead from '../../components/Masthead.astro'
+import Footer from '../../components/Footer.astro'
+import SectionHead from '../../components/SectionHead.astro'
+import Action from '../../components/Action.astro'
+import Explain from '../../components/Explain.astro'
+import GateInspector from '../../components/react/threshold/GateInspector.tsx'
+import { ARKIV, ARKIV_GAS } from '../../lib/chains.ts'
+import '../../styles/threshold.css'
+
+/**
+ * PATH C — THE FOUNDER
+ *
+ * The path with the most unfamiliar vocabulary, so it carries the most
+ * hand-holding. The central claim is deliberately deflationary: founding a gated
+ * archive does not require inventing a token, and most communities already own
+ * everything they need.
+ */
+---
+
+<Base
+  title="Start an archive — The Threshold"
+  description="Turn any NFT or token into the gate for your own archive — or create one. Test any contract live to see whether it can gate, then choose the only policy that matters: how much someone must hold."
+>
+  <Masthead slot="masthead" current="threshold" />
+
+  <main id="main">
+    <section class="act act-opening" data-tone="void" aria-labelledby="found-title">
+      <div class="act-body frame">
+        <SectionHead folio="04 · C" running="Start an archive" annotation="The founder" />
+
+        <p class="path-back" data-reveal>
+          <a href="/threshold">← All three paths</a>
+        </p>
+
+        <h1 class="statement-colossus optical-hang" id="found-title">
+          <span class="mask-line" data-reveal><span>You probably already</span></span>
+          <span class="mask-line" data-reveal style="--delay: 90ms"><span>have the <em>key</em>.</span></span>
+        </h1>
+
+        <p class="lede" data-reveal style="--delay: 160ms">
+          Founding a gated archive does not require inventing a currency. Haven asks a gate exactly
+          one question — does this address hold at least this much? — so anything that can answer it
+          can be a gate. If your community already has an NFT or a token, you are done choosing.
+        </p>
+
+        <a class="threshold-scroll" href="#gate-title" data-reveal style="--delay: 300ms">
+          <span class="threshold-scroll-arrow" aria-hidden="true">↓</span>
+          <span>Test your asset</span>
+        </a>
+      </div>
+    </section>
+
+    {/* ── Step 1 · the gate ───────────────────────────────────────────────── */}
+    <section class="act act-pad-tall" data-tone="stock" aria-labelledby="gate-title">
+      <div class="act-body frame">
+        <SectionHead folio="01" running="Choose the gate" annotation="Any contract" />
+
+        <h2 class="statement-headline optical-hang" id="gate-title">
+          <span class="mask-line" data-reveal><span>Test any contract</span></span>
+          <span class="mask-line" data-reveal style="--delay: 90ms"><span>against the gate.</span></span>
+        </h2>
+
+        <p class="lede" data-reveal style="--delay: 100ms">
+          Paste any NFT or token contract and this will read it live and tell you, in plain terms,
+          whether Haven can gate on it — what it is, what a balance means there, whether anything has
+          been issued, and whether it answers the one call that matters.
+        </p>
+
+        <div data-reveal style="--delay: 180ms">
+          <GateInspector client:visible />
+        </div>
+
+        <div data-reveal>
+          <Explain term="What is a contract address?" open>
+            <p>
+              Every NFT collection and every token is a program deployed at an address on a
+              blockchain — a string starting <code>0x</code>. That address is the collection's
+              permanent identity: it cannot be renamed, transferred or faked.
+            </p>
+            <p>
+              You can find it on any marketplace or explorer listing for the collection, usually
+              labelled "contract". Haven identifies gates by address rather than by name for exactly
+              that reason: names are editorial, addresses are not.
+            </p>
+          </Explain>
+
+          <Explain term="What is the difference between an NFT and a token here?">
+            <p>
+              An NFT collection (ERC-721) holds distinct items, so a balance is a count: holding two
+              means holding two pieces. A threshold of one means "any piece from the collection".
+            </p>
+            <p>
+              A token (ERC-20) is divisible, so a balance is an amount. Thresholds become quantities —
+              "hold at least 5,000" — and Haven converts for the token's decimal places itself, so you
+              never have to write out base units.
+            </p>
+          </Explain>
+
+          <Explain term="Can I gate on something my community does not control?">
+            <p>
+              Technically yes: gating only reads a balance, and reading is permissionless. Practically
+              it is a bad idea. If you do not influence the asset, you have no say over who can reach
+              your archive, and a large holder can hand access around without you.
+            </p>
+            <p>
+              Gate on something your community actually holds and cares about. The asset becomes the
+              membership boundary, so it should be one the community recognises as its own.
+            </p>
+          </Explain>
+        </div>
+      </div>
+    </section>
+
+    {/* ── Step 2 · if you have nothing yet ────────────────────────────────── */}
+    <section class="act act-pad-tall" data-tone="void" aria-labelledby="create-title">
+      <div class="act-body frame">
+        <SectionHead folio="02" running="If you have none yet" annotation="Optional" />
+
+        <h2 class="statement-headline optical-hang" id="create-title">
+          <span class="mask-line" data-reveal><span>Making one is a</span></span>
+          <span class="mask-line" data-reveal style="--delay: 90ms"><span>smaller job than it sounds.</span></span>
+        </h2>
+
+        <p class="lede" data-reveal style="--delay: 100ms">
+          Haven does not issue assets and has no opinion about how you make yours. These are the
+          standard routes, and none of them involve us — deploy with whatever you already trust, then
+          come back and test the address above.
+        </p>
+
+        <ol class="path-steps" data-reveal style="--delay: 160ms">
+          <li class="path-step">
+            <span class="folio">01</span>
+            <div>
+              <h3 class="path-step-title">Decide which kind you need</h3>
+              <p class="path-step-body">
+                A collection if membership should be a thing people hold one of — a pass, an edition, a
+                piece of the work. A token if membership should be a quantity, so that holding more
+                means more, and small holders can be excluded by a threshold.
+              </p>
+              <p class="path-step-detail">
+                Most archives want a collection. Quantities invite the question of how much is enough,
+                and that argument tends to outlive the archive.
+              </p>
+            </div>
+          </li>
+
+          <li class="path-step">
+            <span class="folio">02</span>
+            <div>
+              <h3 class="path-step-title">Generate and deploy it</h3>
+              <p class="path-step-body">
+                Standard contracts are a solved problem: you do not need to write Solidity, and you
+                certainly should not write it for this. Generate an audited standard implementation,
+                or use a platform that deploys one for you.
+              </p>
+              <div class="path-links">
+                <a href="https://wizard.openzeppelin.com/" target="_blank" rel="noreferrer noopener">
+                  OpenZeppelin Wizard<span aria-hidden="true"> ↗</span>
+                </a>
+                <a href="https://thirdweb.com/explore" target="_blank" rel="noreferrer noopener">
+                  thirdweb contracts<span aria-hidden="true"> ↗</span>
+                </a>
+                <a href="https://manifold.xyz/" target="_blank" rel="noreferrer noopener">
+                  Manifold<span aria-hidden="true"> ↗</span>
+                </a>
+              </div>
+              <p class="path-step-detail">
+                These are widely used third parties, not endorsements or integrations. Haven never
+                sees the deployment; it only ever reads the finished contract.
+              </p>
+              <Explain term="What does deploying cost?">
+                <p>
+                  A one-off gas fee on whichever chain you choose, paid to the network rather than to
+                  any company. It varies with congestion and with the chain — the same contract is
+                  dramatically cheaper on Base or Optimism than on Ethereum mainnet.
+                </p>
+                <p>
+                  Haven reads gates on all three, so the chain is your decision and cost is a fair
+                  basis for making it.
+                </p>
+              </Explain>
+            </div>
+          </li>
+
+          <li class="path-step">
+            <span class="folio">03</span>
+            <div>
+              <h3 class="path-step-title">Issue some before you publish</h3>
+              <p class="path-step-body">
+                A gate over a supply of zero excludes everybody, including you. Mint to yourself and to
+                the community first, then test the address above — the inspector will warn you if
+                nothing has been issued.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    {/* ── Step 3 · publish ────────────────────────────────────────────────── */}
+    <section class="act act-pad-tall" data-tone="stock" aria-labelledby="then-title">
+      <div class="act-body frame">
+        <SectionHead folio="03" running="Then publish into it" annotation="One blocked step" />
+
+        <h2 class="statement-headline optical-hang" id="then-title">
+          <span class="mask-line" data-reveal><span>The gate is the easy part.</span></span>
+        </h2>
+
+        <p class="lede" data-reveal style="--delay: 100ms">
+          With a gate chosen and a threshold set, founding is finished — what remains is publishing,
+          which is the same work for you as for anyone else contributing to a community's archive.
+        </p>
+
+        <ol class="path-steps" data-reveal style="--delay: 160ms">
+          <li class="path-step">
+            <span class="folio">01</span>
+            <div>
+              <h3 class="path-step-title">Follow the publisher's path</h3>
+              <p class="path-step-body">
+                FIL for Filecoin gas, USDFC for the storage, {ARKIV_GAS.symbol} for gas on the index,
+                and <code>haven-cli</code> to encrypt locally and pin the ciphertext. Your gate address
+                and threshold are parameters to that process, not a separate registration.
+              </p>
+              <div class="path-links">
+                <a href="/threshold/publish">The publisher's path →</a>
+              </div>
+            </div>
+          </li>
+
+          <li class="path-step path-step-blocked">
+            <span class="folio">02</span>
+            <div>
+              <h3 class="path-step-title">
+                Announce it
+                <span class="label path-blocked-mark">{ARKIV.statusShort}</span>
+              </h3>
+              <p class="path-step-body">
+                Registering your archive as an entity in Arkiv — a transaction paid in{' '}
+                {ARKIV_GAS.symbol} — is what makes it findable — it binds the
+                archive to your gate, records its piece CIDs, and lets the Atlas attribute the bytes to
+                your community. The protocol requires this layer; it is how any client knows your
+                archive exists.
+              </p>
+              <p class="path-step-detail">
+                Arkiv retired its {ARKIV.codename} testnet on {ARKIV.retiredOn} and the next public
+                one is expected {ARKIV.nextPublicTestnet}, so there is currently nowhere to write the
+                entity. Your archive would still exist, still be encrypted, still be proven, and still
+                open for anyone holding the gate asset who knows where to look — what waits on the
+                index is discovery.
+              </p>
+              <dl class="path-facts">
+                <div>
+                  <dt class="label">Retired endpoint</dt>
+                  <dd class="addr">{ARKIV.rpc}</dd>
+                </div>
+                <div>
+                  <dt class="label">Next public testnet</dt>
+                  <dd>{ARKIV.nextPublicTestnet}</dd>
+                </div>
+              </dl>
+            </div>
+          </li>
+        </ol>
+
+        <div class="threshold-actions" data-reveal style="--delay: 240ms">
+          <Action href="/threshold/publish" variant="sealed" size="large">Go to the publisher's path</Action>
+          <Action href="/atlas" variant="keyline" glyph="none">See existing communities</Action>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Base>

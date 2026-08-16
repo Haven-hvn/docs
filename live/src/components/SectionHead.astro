@@ -1,0 +1,81 @@
+---
+interface Props {
+  /** Folio number, e.g. '03'. */
+  folio: string
+  /** Running head — the section's name in the register. */
+  running: string
+  /** Optional right-hand annotation, usually a count or a stamp. */
+  annotation?: string
+  class?: string
+}
+
+const { folio, running, annotation, class: className = '' } = Astro.props
+---
+
+<div class:list={['head', className]} data-reveal>
+  <div class="head-meta">
+    <span class="folio">{folio}</span>
+    <span class="head-rule" aria-hidden="true"></span>
+    <span class="label label-ink">{running}</span>
+  </div>
+  {annotation && <span class="label head-annotation">{annotation}</span>}
+</div>
+
+<style>
+  .head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 2rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  /* Hidden only when scripting can reveal it again. */
+  :global(html[data-js]) .head {
+    opacity: 0;
+    translate: 0 0.75rem;
+  }
+
+  /* The `:global(html[data-js])` prefix has to be repeated here.
+     Astro scopes both selectors with a `[data-astro-cid-…]` attribute, which
+     makes the hide rule (one type + two attributes + one class) outrank a bare
+     `.head[data-shown='true']` (one class + two attributes). Without the prefix
+     the reveal never wins and every section head on every surface stays at
+     opacity 0 — silently, because the markup and the JS are both correct. */
+  :global(html[data-js]) .head[data-shown='true'] {
+    opacity: 1;
+    translate: 0 0;
+    transition:
+      opacity 800ms var(--ease-out-expo),
+      translate 900ms var(--ease-out-expo);
+  }
+
+  .head-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 0;
+  }
+
+  /* A short rule between the number and the name. Print does this; screens
+     almost never do, which is exactly why it reads as a document. */
+  .head-rule {
+    width: 2.5rem;
+    height: 1px;
+    background-color: var(--seal);
+    flex-shrink: 0;
+  }
+
+  .head-annotation {
+    color: var(--fg-3);
+    text-align: right;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .head {
+      opacity: 1;
+      translate: none;
+    }
+  }
+</style>

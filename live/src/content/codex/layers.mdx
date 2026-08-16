@@ -1,0 +1,44 @@
+---
+title: Four networks, one rule set
+summary: Haven contributes no infrastructure. It defines how four public networks compose into a single coherent guarantee.
+part: Foundations
+folio: 'I.03'
+order: 3
+status: settled
+sources:
+  - docs/architecture/WEB3_PARADIGM.md
+  - docs/architecture/05-arkiv-chain.md
+  - docs/architecture/01-haven-aol.md
+---
+
+import { ARKIV } from '../../lib/chains.ts'
+
+## The layer model
+
+Haven is not a chain. It is an application-layer protocol — L7 in OSI terms — that treats four independent public networks as its lower stack. Those networks provide consensus, storage, settlement, and threshold cryptography. Haven defines exactly one thing on top of them: how those four capabilities compose into gated, encrypted access.
+
+| Tier | Title | Provider | Haven defines |
+| --- | --- | --- | --- |
+| L1–L3 | Network · Consensus · Storage | Arkiv OP L3 entity trie, ICP subnet consensus, any EVM chain, Filecoin FEVM and IPFS | Nothing. These layers see bytes, an `eth_call` and an `ecrecover` — no Haven semantics whatsoever. |
+| L5–L6 | Session · Presentation | `haven-aol` EIP-712 typed data, VetKD contexts, Ed25519 attestations, `contractURI` resolution | How a reader proves holding and derives a key. The session key is scoped to (chain, token, threshold, epoch). |
+| L7 | Application — Haven | Entity shape, gate rule, attestation over `cidHash`, holder identity | The protocol itself: content is a CID on Filecoin, gated by a public token, discovered through Arkiv, and identity is the collection's own image. |
+
+The lower layers have no idea Haven exists. They see standard EVM transactions, standard Candid calls, standard Filecoin deals. That opacity is the point — it means they cannot be leaned on to single out Haven traffic.
+
+## The four networks
+
+**Arkiv OP L3** holds the metadata index. Entity records — keys, attributes, content types, payloads — live in a state trie behind a precompile at `0x4400000000000000000000000000000000000044`. Reads use the `arkiv_query` JSON-RPC method; writes use `execute(Operation[])` via standard EVM transactions. Arkiv has no public network at present: the {ARKIV.codename} testnet was retired on {ARKIV.retiredOn}, taking its faucet, block explorer and RPC with it, and its former node at `{ARKIV.rpc}` now answers 503. A limited devnet runs by request, and the next public testnet is expected {ARKIV.nextPublicTestnet}. Every previous devnet has served RPC, faucet and explorer from one host on the same path convention, so the next one is expected to as well.
+
+**DFINITY ICP** provides the gate. Canister `dciac-uaaaa-aaaad-qlzuq-cai` performs VetKD key derivation, EIP-712 signature recovery, and EVM balance checks. It is the only component that touches threshold cryptographic material, and it does so without assembling a full key.
+
+**Any EVM chain** supplies the criterion. A balance — `balanceOf` or `ownerOf` — on Ethereum, Base, Optimism, or Arbitrum One is the whole authorisation model. The protocol does not privilege one chain over another; `haven-aol` accepts any chain in its `validChains` set: `EthMainnet`, `EthSepolia`, `BaseMainnet`, `ArbitrumOne`, `OptimismMainnet`.
+
+**Filecoin FEVM and IPFS** provide the vault. Ciphertext bytes are pinned on Filecoin through the Onchain Cloud contracts — `FilecoinPay`, `FilecoinWarmStorageService`, `PDPVerifier` — with payment settled in USDFC. The pin contracts enforce provable data possession; the bytes themselves are always encrypted before submission.
+
+## Why not one chain
+
+A single chain cannot simultaneously offer cheap state for high-frequency metadata writes, threshold cryptography with no precompile, sub-second finality for session management, and terabyte-scale provable storage. Each of these four networks exists because it optimised for exactly one of those properties. Haven's contribution is the rule set that lets them interoperate without a coordinator.
+
+## What this means for failure
+
+Each network can fail independently without cascading. If Arkiv is offline, metadata cannot be resolved — but ciphertext remains on Filecoin, gating remains live on ICP, and balances remain readable on EVM. If the ICP subnet halts, no new keys derive — but existing sessions continue until their epoch expires. The protocol degrades gracefully because it was never integrated tightly.

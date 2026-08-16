@@ -1,0 +1,53 @@
+---
+title: What Haven refuses to know
+summary: The protocol's security posture is defined not by what it protects, but by what it is structurally unable to learn.
+part: Foundations
+folio: 'I.02'
+order: 2
+status: settled
+epigraph: The safest secret is the one no system was ever asked to hold.
+sources:
+  - docs/architecture/WEB3_PARADIGM.md
+  - docs/architecture/01-haven-aol.md
+  - docs/decisions/ADR-001-decoupled-boundaries.md
+---
+
+## The posture
+
+Haven's threat model is subtractive. Rather than enumerating what it defends against, the protocol is designed so that certain categories of information never enter the system at all. An operator who is compelled, compromised, or corrupt cannot disclose what the architecture prevented it from possessing.
+
+Five services, zero private datastores. That topology — verified by graph build — is not an efficiency measure. It is the threat model stated as infrastructure.
+
+## What no component holds
+
+| Information | Why Haven never sees it |
+| --- | --- |
+| Plaintext media | Encrypted on the publisher's machine by `haven-cli` before any network is contacted. Only ciphertext reaches Filecoin. |
+| Decryption keys at rest | VetKD derives material per-request inside canister `dciac-uaaaa-aaaad-qlzuq-cai`. The canister holds threshold shares, never assembled keys. |
+| Reader identity beyond address | The gate recovers a bare `secp256k1` address via `ecrecover`. There is no profile, no email, no session cookie. |
+| Viewing history | Decryption occurs in the reader's client. No surface reports back what was opened or when. |
+| Credential material | There is no password to reset because there is no password. The credential is a public balance, readable by anyone with an RPC endpoint. |
+
+## Why decoupling is a security property
+
+ADR-001 mandates that each surface shares no mutable state with any other. The consequence for the threat model is that compromising one surface yields nothing actionable against the others:
+
+- Compromising `haven-dapp` reveals no keys — it holds only a transient in-memory LRU of already-decrypted AES material, scoped to a browser session.
+- Compromising `haven-cli` reveals only locally cached ciphertext and the publisher's own encryption parameters.
+- Compromising the canister's execution environment still requires reconstructing a VetKD key from threshold shares distributed across the ICP subnet — a liveness assumption, not a single-point secret.
+
+The IPC boundary is Candid over HTTPS. There is no shared library, no message queue, and no database join that would let lateral movement escalate privilege.
+
+## What the protocol does trust
+
+No design is trust-free. Haven makes three explicit trust assumptions:
+
+1. **ICP subnet honesty.** The VetKD derivation assumes a threshold of subnet replicas behave correctly. If a supermajority colludes, they could reconstruct derived keys. The mitigation is that ICP's economic and governance model makes this expensive relative to the value of any individual archive.
+
+2. **EVM finality.** The balance check uses `eth_call` against a public RPC at read time. A reorg that reverses a token transfer could grant access to a reader who no longer holds. The epoch length of 2,592,000 seconds (30 days) bounds the window: once a new epoch begins, a stale approval cannot derive a fresh key.
+
+3. **Filecoin storage persistence.** Ciphertext availability depends on Filecoin deal renewals and the PDP (Provable Data Possession) proof cycle. If a provider disappears and no redundant deal exists, the bytes become unavailable — still encrypted, still addressed, but unresolvable. The pin contracts (`PDPVerifier`, `FilecoinWarmStorageService`) on FEVM enforce proof, but not redundancy.
+
+## The line drawn
+
+Haven does not attempt to prevent a holder from sharing decrypted content. Once a reader derives a key and decrypts locally, the protocol's responsibility ends. The guarantee is narrower and more honest: *only a proven holder can derive*, and *the system itself never possesses the means to derive on anyone's behalf*.

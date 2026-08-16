@@ -1,0 +1,4679 @@
+{
+  "mainnet": {
+    "network": "mainnet",
+    "chainId": 314,
+    "blockNumber": "6280260",
+    "capturedAt": "2026-08-14T13:31:44.026Z",
+    "dataSetsCreated": 1472,
+    "liveDataSets": 845,
+    "totalLeaves": "2172785557116",
+    "totalBytes": "69529137827712",
+    "activeProviders": 34,
+    "providers": [
+      {
+        "provider": "0x3DE6c9F2a3b1009f18431F6124009A6d12ff3537",
+        "bytes": "18751171328512",
+        "dataSets": 1,
+        "share": 0.26968
+      },
+      {
+        "provider": "0xD3C7Dc643a8720B18a7aDCCc2f66AdD8434eB108",
+        "bytes": "17866613679488",
+        "dataSets": 1,
+        "share": 0.25696
+      },
+      {
+        "provider": "0x7B7Fd1531767736acB4FBB5B20a5ABA8C675028A",
+        "bytes": "14595614594944",
+        "dataSets": 1,
+        "share": 0.20992
+      },
+      {
+        "provider": "0x32c90c26bCA6eD3945De9b29BA4e19D38314D618",
+        "bytes": "6058531608800",
+        "dataSets": 154,
+        "share": 0.08713
+      },
+      {
+        "provider": "0x89B5899619d93A180d38011B8aeC849DEEa3F573",
+        "bytes": "2742992181440",
+        "dataSets": 50,
+        "share": 0.03945
+      },
+      {
+        "provider": "0xd2d13Ac4CC6D968D404623768c259Cae7FA45b07",
+        "bytes": "2573359802944",
+        "dataSets": 20,
+        "share": 0.03701
+      },
+      {
+        "provider": "0x010ecc2436E0c5eA4741CD25A27A5476fE7A252c",
+        "bytes": "2180354374528",
+        "dataSets": 176,
+        "share": 0.03135
+      },
+      {
+        "provider": "0x55bC49Caca448Bb810710eDBF5Cec721FF8ebaD2",
+        "bytes": "1334636809600",
+        "dataSets": 2,
+        "share": 0.01919
+      },
+      {
+        "provider": "0x40dbb5c4dc728b9d5f23444A1e5449D655CE0224",
+        "bytes": "1325807030144",
+        "dataSets": 35,
+        "share": 0.01906
+      },
+      {
+        "provider": "0xaFD1f948E8aeF14c0b39058aA2fCFf4EcB7C585d",
+        "bytes": "300411232384",
+        "dataSets": 34,
+        "share": 0.00432
+      },
+      {
+        "provider": "0xe686D370D8E53f72E543DafE978Da41e7E0505cc",
+        "bytes": "233985633920",
+        "dataSets": 1,
+        "share": 0.00336
+      },
+      {
+        "provider": "0xB8f10dA7A39AA54D696246C8E68A1a4aA123a5Cd",
+        "bytes": "207558104672",
+        "dataSets": 68,
+        "share": 0.00298
+      },
+      {
+        "provider": "0x846e8CAd00fAD118604623A283fc472d902B89c2",
+        "bytes": "197873848256",
+        "dataSets": 14,
+        "share": 0.00284
+      },
+      {
+        "provider": "0xE2730269EF3bFCBC081A8d028E5C31d9A308A802",
+        "bytes": "196592069088",
+        "dataSets": 65,
+        "share": 0.00282
+      },
+      {
+        "provider": "0xA77da4ec1e07EB65bd3a00BD8dB62E072a21e8f4",
+        "bytes": "174703693952",
+        "dataSets": 6,
+        "share": 0.00251
+      },
+      {
+        "provider": "0xbd0FfC89500920349140b8e6016416cc7eD96C52",
+        "bytes": "160598863648",
+        "dataSets": 21,
+        "share": 0.0023
+      },
+      {
+        "provider": "0x994b21F3Ae6960eBCfA0926EA0aCF1Bb9321B2f4",
+        "bytes": "143467578752",
+        "dataSets": 6,
+        "share": 0.00206
+      },
+      {
+        "provider": "0x1674F650fEB5b696F30E1BB920626C15BC62af30",
+        "bytes": "107071883520",
+        "dataSets": 66,
+        "share": 0.00153
+      },
+      {
+        "provider": "0xC1ABa8CE560aD630C5a640cC4EC8A434327616d9",
+        "bytes": "70819052160",
+        "dataSets": 1,
+        "share": 0.00101
+      },
+      {
+        "provider": "0x4de3d41C4Fc6A80c9A5C908f3c6F4e48975637fd",
+        "bytes": "70734954112",
+        "dataSets": 1,
+        "share": 0.00101
+      },
+      {
+        "provider": "0x21F15b5a2711eF55D9463cf66cC793eB17Ce087f",
+        "bytes": "69337165184",
+        "dataSets": 1,
+        "share": 0.00099
+      },
+      {
+        "provider": "0x86d026029052c6582d277d9b28700Edc9670B150",
+        "bytes": "57999383168",
+        "dataSets": 20,
+        "share": 0.00083
+      },
+      {
+        "provider": "0xA4440ADd7C5d9BAA1859cDE7Cd83b88816Bc1362",
+        "bytes": "36998095072",
+        "dataSets": 10,
+        "share": 0.00053
+      },
+      {
+        "provider": "0x6c8E9cE0a324EC85de5BA9147909B289D56Bd796",
+        "bytes": "36405566720",
+        "dataSets": 16,
+        "share": 0.00052
+      },
+      {
+        "provider": "0x14604725892Bf205ae8F4BCd12225Dc90f99c7eE",
+        "bytes": "17157143232",
+        "dataSets": 16,
+        "share": 0.00024
+      },
+      {
+        "provider": "0x0Ed1f7f75C96598aE97e10Ba45573B57e5f02AB5",
+        "bytes": "8363449024",
+        "dataSets": 15,
+        "share": 0.00012
+      },
+      {
+        "provider": "0x74075B4A9e00304C2DdDBAe4a76399830c917544",
+        "bytes": "7491046048",
+        "dataSets": 4,
+        "share": 0.0001
+      },
+      {
+        "provider": "0xDe594DA6c5d78A947B4312fd80748e203614B00B",
+        "bytes": "2486893760",
+        "dataSets": 15,
+        "share": 0.00003
+      },
+      {
+        "provider": "0x749Cd123A331002E888748A9b1009347c5994b04",
+        "bytes": "753984",
+        "dataSets": 21,
+        "share": 0
+      },
+      {
+        "provider": "0x5Df2ff00be0c8f320009f9621Adb48B861aB4c52",
+        "bytes": "6656",
+        "dataSets": 1,
+        "share": 0
+      },
+      {
+        "provider": "0x4f1BAAC6ef581FC7D388501F8D8b1878407a81dc",
+        "bytes": "0",
+        "dataSets": 2,
+        "share": 0
+      },
+      {
+        "provider": "0x3fA2A4C02478F1e57d3Dd2868484164647C45038",
+        "bytes": "0",
+        "dataSets": 1,
+        "share": 0
+      }
+    ],
+    "uploaders": [
+      {
+        "uploader": "0xf60C59aCdc9925D06E38aA2eB35afB07844A3843",
+        "bytes": "3126181826560",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0.18905
+      },
+      {
+        "uploader": "0x5D59abc30eFF32ACdA6A342455df6531058Aa9d0",
+        "bytes": "3120585014592",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0.18871
+      },
+      {
+        "uploader": "0x9b68333791834e67dB8Dd7F95D0Ba0D728AE820a",
+        "bytes": "2885929932288",
+        "dataSets": 4,
+        "providers": 3,
+        "share": 0.17452
+      },
+      {
+        "uploader": "0x1f91DDE7f314B93156F5E377dce1A3f440f1A8F3",
+        "bytes": "1705296766656",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0.10312
+      },
+      {
+        "uploader": "0x3E4E5f067cfdA2F16Aade21912B8324c3D9624F8",
+        "bytes": "1688113901472",
+        "dataSets": 66,
+        "providers": 16,
+        "share": 0.10208
+      },
+      {
+        "uploader": "0x4Aa07D74F1126d1ecB9d8294e21DB50B056c55eB",
+        "bytes": "1419192849440",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.08582
+      },
+      {
+        "uploader": "0x7C36114A9B42e555C1C7A5BD8455A1bE3D64771C",
+        "bytes": "610916608800",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.03694
+      },
+      {
+        "uploader": "0x305025D07c1DEe47F25a4990179eFf2becddCA0B",
+        "bytes": "433543114048",
+        "dataSets": 203,
+        "providers": 14,
+        "share": 0.02621
+      },
+      {
+        "uploader": "0xD19d84c77bbb901971e460830e310933A210dbaA",
+        "bytes": "283547970784",
+        "dataSets": 5,
+        "providers": 2,
+        "share": 0.01714
+      },
+      {
+        "uploader": "0x70626ad6fC6299d782597A76cd2004E0D7AC8896",
+        "bytes": "250970523808",
+        "dataSets": 15,
+        "providers": 2,
+        "share": 0.01517
+      },
+      {
+        "uploader": "0xa5F90bc2AA73a2E0Bad4D7092a932644d5dD5d71",
+        "bytes": "208451792192",
+        "dataSets": 202,
+        "providers": 12,
+        "share": 0.0126
+      },
+      {
+        "uploader": "0xf382e9425224C123746F7312fb0DBEC81B51A10C",
+        "bytes": "164537119520",
+        "dataSets": 47,
+        "providers": 2,
+        "share": 0.00995
+      },
+      {
+        "uploader": "0xbB33701edEeF929199e219C292480735fA260724",
+        "bytes": "108925675648",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00658
+      },
+      {
+        "uploader": "0x7C7FfBcbf920a72fED8242876bA170d85841Cd60",
+        "bytes": "83900876512",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00507
+      },
+      {
+        "uploader": "0xA962c76aE0686C84cF0192Be9647D5fB3D317F20",
+        "bytes": "44190957280",
+        "dataSets": 5,
+        "providers": 5,
+        "share": 0.00267
+      },
+      {
+        "uploader": "0xa3da26a8E80A523aC43518EafBDf2d195968e002",
+        "bytes": "35361754144",
+        "dataSets": 4,
+        "providers": 2,
+        "share": 0.00213
+      },
+      {
+        "uploader": "0x2001e8DF54d84b7D69E4E139a28E2EB4833B49ef",
+        "bytes": "30567840320",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0.00184
+      },
+      {
+        "uploader": "0xdB0C5AeBfC72b7BB38A5ffA0289E7f419657476F",
+        "bytes": "27495692032",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00166
+      },
+      {
+        "uploader": "0xC8033E3EE7bffE3a282DDd423a931bb663eE720c",
+        "bytes": "19500017344",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00117
+      },
+      {
+        "uploader": "0x4F50270454Be59148fa561828d8719De7677829A",
+        "bytes": "19115482656",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00115
+      },
+      {
+        "uploader": "0x772D6638f69de238DA8b01f7D64d94c00F8C2562",
+        "bytes": "19068371424",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00115
+      },
+      {
+        "uploader": "0x759f14A7A96cb86190a81D4c801c083375222591",
+        "bytes": "19028668704",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00115
+      },
+      {
+        "uploader": "0x87a7457e51204E060941F92030Fbe5364607096e",
+        "bytes": "19026629600",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00115
+      },
+      {
+        "uploader": "0xA1efaFBc8F5dEE7DF37e42f2D2815e41221A4622",
+        "bytes": "18945958400",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00114
+      },
+      {
+        "uploader": "0xbc2A4A54Ab94546c5C233B99bca213Ff4472d4Dc",
+        "bytes": "18906497024",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00114
+      },
+      {
+        "uploader": "0xeCcBa9A2b2e79cD3b30f91d9481496273fdd2FD3",
+        "bytes": "18904275360",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00114
+      },
+      {
+        "uploader": "0xd3C49AF96042935CF82444544939b553b8becF08",
+        "bytes": "18823290400",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00113
+      },
+      {
+        "uploader": "0x4714C4F258978D9a261bE4994dA5431a5e483e4d",
+        "bytes": "16727330624",
+        "dataSets": 4,
+        "providers": 3,
+        "share": 0.00101
+      },
+      {
+        "uploader": "0x2ea6baCCa51cda6A276E94924BE808E0c374C45e",
+        "bytes": "14976313792",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.0009
+      },
+      {
+        "uploader": "0x46E0EAfc092b72ae49F81Bfd1F673e3885181c0d",
+        "bytes": "14937543360",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.0009
+      },
+      {
+        "uploader": "0xa25c6A909987D68a5636bc94B99C9EaF566f671c",
+        "bytes": "14935259552",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.0009
+      },
+      {
+        "uploader": "0xB2613E02F232d00bCf060c2c70A9b60d0930959A",
+        "bytes": "10819712064",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00065
+      },
+      {
+        "uploader": "0x66BF1C4cd6F36d7682b38Dd0627f63E0f1aDAB9A",
+        "bytes": "8926046880",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00053
+      },
+      {
+        "uploader": "0x1201342220Bb435FDb4B9c9c0888c8521B19B3f4",
+        "bytes": "8827194176",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00053
+      },
+      {
+        "uploader": "0x4523D7f30BDB452049cC90D8cA77c2a2FF48CC01",
+        "bytes": "7289946720",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00044
+      },
+      {
+        "uploader": "0x93328206e944f39dC380e844ebAD84a3BC9F30c4",
+        "bytes": "5602612864",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00033
+      },
+      {
+        "uploader": "0x0f368bE6FB51e3B3bDF37c1642dB956F6F3f2146",
+        "bytes": "5601951680",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00033
+      },
+      {
+        "uploader": "0x63b35cD633Acd7e3193196Bd0dcEc3545587b525",
+        "bytes": "3328197472",
+        "dataSets": 5,
+        "providers": 2,
+        "share": 0.0002
+      },
+      {
+        "uploader": "0xa53BBc04a0A2b7a7e62A78A24dD6C9280F611b97",
+        "bytes": "2980609920",
+        "dataSets": 5,
+        "providers": 3,
+        "share": 0.00018
+      },
+      {
+        "uploader": "0x12e83C954051B7c91F70d001F80dc9Ff91737b83",
+        "bytes": "2574573248",
+        "dataSets": 7,
+        "providers": 3,
+        "share": 0.00015
+      },
+      {
+        "uploader": "0x35A22ADB536f4C324f50A5D25eb2b0d9fAc6D46d",
+        "bytes": "2516862144",
+        "dataSets": 9,
+        "providers": 2,
+        "share": 0.00015
+      },
+      {
+        "uploader": "0xd4C79Fd41a0ab3C594BEAE73ca313be162416b6d",
+        "bytes": "1967365888",
+        "dataSets": 3,
+        "providers": 2,
+        "share": 0.00011
+      },
+      {
+        "uploader": "0xd28283fCb6e484fCccD3d5b0D24C6ED7Eb28cE86",
+        "bytes": "1071381408",
+        "dataSets": 5,
+        "providers": 1,
+        "share": 0.00006
+      },
+      {
+        "uploader": "0x0B5b1118Ef102501d67A95863F2f75e8e450c5A1",
+        "bytes": "1007434720",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00006
+      },
+      {
+        "uploader": "0xa19e9653CF4FFd32a6160f7aD525e9007287f64A",
+        "bytes": "899955552",
+        "dataSets": 2,
+        "providers": 1,
+        "share": 0.00005
+      },
+      {
+        "uploader": "0xB32dBBd87b948238fdC92931E269aBAb826b8FED",
+        "bytes": "890643648",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00005
+      },
+      {
+        "uploader": "0xffd636C1f7f8Ec9754f608bc2DCcDcf1BE5D666E",
+        "bytes": "858164800",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00005
+      },
+      {
+        "uploader": "0xa63fE1a55fb3353BF22DC2825140e7DC0A6c48f1",
+        "bytes": "820709440",
+        "dataSets": 3,
+        "providers": 2,
+        "share": 0.00004
+      },
+      {
+        "uploader": "0x6a2bF4E46DEdC8b5A9e2dB06aae13A4E0A83f341",
+        "bytes": "818151168",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00004
+      },
+      {
+        "uploader": "0xe904F20b2B07E59118b6Ca7936c23DF5E2E847F4",
+        "bytes": "644267936",
+        "dataSets": 5,
+        "providers": 2,
+        "share": 0.00003
+      },
+      {
+        "uploader": "0x087b06241BEe147189d7Db089629Dd18D068553C",
+        "bytes": "643780800",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00003
+      },
+      {
+        "uploader": "0x515cb32E4643b6C36adE32EA0044aFCEf655e28E",
+        "bytes": "622815136",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00003
+      },
+      {
+        "uploader": "0xDD55F1be37A22f2B535911CbCF7FbdBfD0a5d39e",
+        "bytes": "431033792",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00002
+      },
+      {
+        "uploader": "0x4F26A44FC90B88a770b31F39e7822ef3CD1B2989",
+        "bytes": "385642816",
+        "dataSets": 4,
+        "providers": 2,
+        "share": 0.00002
+      },
+      {
+        "uploader": "0x7D3F0Ca48194490D7C8B60feA6225e817eC52AA9",
+        "bytes": "369277056",
+        "dataSets": 6,
+        "providers": 2,
+        "share": 0.00002
+      },
+      {
+        "uploader": "0xe6aB4aca93020dDa853cEB54285D23A82F6f3CCD",
+        "bytes": "330733280",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00002
+      },
+      {
+        "uploader": "0x3D0fb1eeC9Be99c9108FC3EC208f0D474E1B83dB",
+        "bytes": "330660480",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0xF557909631DEa5fB147fb8cfe6c8dbbb1cab60F6",
+        "bytes": "330660480",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0xB23C210A37989a36C4361dFc42FeC4011AfA85b9",
+        "bytes": "330660480",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0x0e6E4F9F8E663967971aEE094dF3524E4Aca5EcA",
+        "bytes": "330660480",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0xE713EbFE8277A5c83C375557C71f1Ccb71091873",
+        "bytes": "330587648",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0xC795A476bf837b6761E0E2ef82157C26Edf0eFc2",
+        "bytes": "330587648",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0xf628A52d70f90c3757dE5289C33fe4BB588000F2",
+        "bytes": "312857856",
+        "dataSets": 5,
+        "providers": 3,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0x3F72f8d40A819b2F9F1dc791C5A38f7Fb4EE517D",
+        "bytes": "289337024",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0x4596e00b95C4963b0Adb6C73b1B91Da4d2002040",
+        "bytes": "289337024",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0x8a3F485c0daDBb12e99eDdBd64Ef9e603fC81A8f",
+        "bytes": "289264192",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0xad6389d85649b97F1B450BfbBC84Ed6fd1FE8705",
+        "bytes": "270652608",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0x77C69844F6EC66c9DE349A8BD101f6C9eD4a2436",
+        "bytes": "262910464",
+        "dataSets": 4,
+        "providers": 2,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0xAf992Fbc0c22BC941A232c63dc1b0c0cD572D145",
+        "bytes": "213667264",
+        "dataSets": 4,
+        "providers": 2,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0x1355E92db86A862295e2afE4c37564adcbaf2ae8",
+        "bytes": "203528768",
+        "dataSets": 4,
+        "providers": 2,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0x934E20411C9E8E92946BD8786D7c3E5bC4DB1387",
+        "bytes": "202531200",
+        "dataSets": 8,
+        "providers": 5,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0x8D0D0c27bA200E3656e930FB144FBe5ba9BdFFe7",
+        "bytes": "195553088",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0x0a5526fAa23C37A40b67eA9E8c15046F70DB48b5",
+        "bytes": "184039104",
+        "dataSets": 7,
+        "providers": 1,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0x84600C1C3472e47062eb5Dbb4eDff8dcC99d750E",
+        "bytes": "161000000",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xD47f5823B1858DF3C4928FD24AA0A3D48579E3c4",
+        "bytes": "119850976",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x98D1FBa8faF8167AA4A92f66B79A84768AD4A467",
+        "bytes": "94973824",
+        "dataSets": 4,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x86d026029052c6582d277d9b28700Edc9670B150",
+        "bytes": "75010208",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x427b89769457e7324FF88f584FCe84fFA88F49a0",
+        "bytes": "59530560",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xF88c59cF5ba1e904079079c8CE03148490cB09f8",
+        "bytes": "37780768",
+        "dataSets": 3,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xe09eA48Fc6aA3fe9dE9b115e70f7Ea8Dc1C1f5ED",
+        "bytes": "30686336",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x37c5835DBd07c5f1E9525aA2852c960BCfD1177f",
+        "bytes": "15455968",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x21C67656DaD51Eb947cf5bB49dE8EC58267901A0",
+        "bytes": "13836416",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x0427F15140bcf6E181797D578BB4aB24D7520Cca",
+        "bytes": "13029888",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x10B948c0f51D00C4a219A7D47F539b4B40690E82",
+        "bytes": "12216960",
+        "dataSets": 8,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0x95ee775083C3534F9391908b56A6034eFC42B123",
+        "bytes": "12200992",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xA863A049Be89986cA65909Aa20D3B15399B09F10",
+        "bytes": "11583296",
+        "dataSets": 3,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x28F9e65e004Cf83BB6201B7EC969333aC1269ec9",
+        "bytes": "11094784",
+        "dataSets": 5,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xfa75eD868C65970bbFDfc238d82D6cfCFd7D9031",
+        "bytes": "5370272",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x2127C3a31F54B81B5E9AD1e29C36c420d3D6ecC5",
+        "bytes": "4750336",
+        "dataSets": 7,
+        "providers": 6,
+        "share": 0
+      },
+      {
+        "uploader": "0xE2bdE36E3DEbEdA087A945FA95a6e6E8376035f7",
+        "bytes": "2708160",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xd7f16091fbE0C069fD21ACF6c67544930031d558",
+        "bytes": "2502304",
+        "dataSets": 5,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x741c0A74B858396c966FB139Db17E4aD484CC446",
+        "bytes": "1466176",
+        "dataSets": 2,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x2b3032B035B4067cA239f2a6D5B8c8c6F78b8754",
+        "bytes": "1440352",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x331Fa1B0B9476Ef8bd87bFeFe395b4E077562903",
+        "bytes": "1269408",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x52208d61D5e063C58f32A9AC8a090EDAD15c917c",
+        "bytes": "1240032",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x3693BC71Ff1Dd32eB5152680041f4b0F07c86738",
+        "bytes": "952320",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0x61052560D7E1aFCabe183A656C658585e85cF3C9",
+        "bytes": "844032",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x4108Dd10c89470Ce36b6FF23cd6BA23567262829",
+        "bytes": "520704",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x727f198c3a25781210C54c58DaF1963A592d80C4",
+        "bytes": "364736",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x4A73FE27A65916F2f90e1bdd53f5F0a99603eA5a",
+        "bytes": "212800",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x190a970191049CC0a94D4FC3c86d8e73770c944F",
+        "bytes": "75680",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xBf345897ABc29B4FdF2c11af821537FA84c924C6",
+        "bytes": "63936",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x0D1781F0b693b35939A49831A6C799B938Bd2F80",
+        "bytes": "25408",
+        "dataSets": 4,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x679fc4e02D25FeB7A595E9f0f98682C670E190Fe",
+        "bytes": "24128",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x4fAcD2854A66ad835e90eF9Ce0b5A7d9bCf38a45",
+        "bytes": "23808",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x7CC1df78D1166B7dDcEDC9ee53bBF06854FcB290",
+        "bytes": "19264",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x3C926EA189e8729929d29175b6f75481422295cA",
+        "bytes": "17696",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x918cDa6f4fc924c0847B27E629E2001949c63D99",
+        "bytes": "14848",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xd9e498C77a51B679171917f0A42d165b6AdCb588",
+        "bytes": "12096",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xea16AAdd113f1752E23935e6Ee866D9902033b94",
+        "bytes": "9504",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x5Df2ff00be0c8f320009f9621Adb48B861aB4c52",
+        "bytes": "6656",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xB08520fa365a4C4A35753F19492CD893711e47cE",
+        "bytes": "6656",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x6de669c9Da78b62c7504D41412de43D3d7C7e9EF",
+        "bytes": "1152",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xD6a42821C6a24A8eb25c49d9B48Cc822608300dF",
+        "bytes": "1024",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xB4a90507B68F186114C6e9119A079C5Ad5358fae",
+        "bytes": "576",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0
+      }
+    ],
+    "attributedBytes": "16536224609792",
+    "unattributedBytes": "52992913217920",
+    "unattributedDataSets": 12,
+    "usdfc": {
+      "address": "0x80B98d3aa09ffff255c3ba4A241111Ff1262F045",
+      "payRails": "0x23b1e018F08BB982348b15a86ee926eEBf7F4DAa",
+      "symbol": "USDFC",
+      "decimals": 18,
+      "supply": "148039531277899486971742",
+      "escrowed": "5458503874002601052207"
+    }
+  },
+  "calibration": {
+    "network": "calibration",
+    "chainId": 314159,
+    "blockNumber": "3979595",
+    "capturedAt": "2026-08-14T13:32:24.501Z",
+    "dataSetsCreated": 27711,
+    "liveDataSets": 16989,
+    "totalLeaves": "744874542303",
+    "totalBytes": "23835985353696",
+    "activeProviders": 31,
+    "providers": [
+      {
+        "provider": "0xbCdf1bdc1a97D071a5a8EF03F1F05225b6E2a1Ba",
+        "bytes": "7420000309760",
+        "dataSets": 2940,
+        "share": 0.31129
+      },
+      {
+        "provider": "0xCb9e86945cA31E6C3120725BF0385CBAD684040c",
+        "bytes": "2478315605504",
+        "dataSets": 2843,
+        "share": 0.10397
+      },
+      {
+        "provider": "0x3bD99eAe098aB0553C88Ee669042A30ec55fF6B4",
+        "bytes": "1861062845664",
+        "dataSets": 468,
+        "share": 0.07807
+      },
+      {
+        "provider": "0xa3971A7234a3379A1813d9867B531e7EeB20ae07",
+        "bytes": "1629151407520",
+        "dataSets": 2522,
+        "share": 0.06834
+      },
+      {
+        "provider": "0x9b9336B0813CD1d9dFD369129b28Cc0EC7877FcA",
+        "bytes": "1554672916352",
+        "dataSets": 21,
+        "share": 0.06522
+      },
+      {
+        "provider": "0x0925823819D63d33E58baDE46eBB14710130ed6E",
+        "bytes": "1548579145472",
+        "dataSets": 10,
+        "share": 0.06496
+      },
+      {
+        "provider": "0x5fEC0B69514E63EA10c9ABEE5A4a6Ce23385f8c9",
+        "bytes": "1547077503360",
+        "dataSets": 10,
+        "share": 0.0649
+      },
+      {
+        "provider": "0x86d026029052c6582d277d9b28700Edc9670B150",
+        "bytes": "1056414453120",
+        "dataSets": 1414,
+        "share": 0.04432
+      },
+      {
+        "provider": "0xB709A785c765d7d3F7d94dbA367DA6a611D7972b",
+        "bytes": "862303516160",
+        "dataSets": 695,
+        "share": 0.03617
+      },
+      {
+        "provider": "0x6c8E9cE0a324EC85de5BA9147909B289D56Bd796",
+        "bytes": "712163733920",
+        "dataSets": 1419,
+        "share": 0.02987
+      },
+      {
+        "provider": "0x5E9996C57E10eC48436621F038D86d4107017c87",
+        "bytes": "600442629952",
+        "dataSets": 581,
+        "share": 0.02519
+      },
+      {
+        "provider": "0x9790c7BFCfe6264f78Da6D3402566766aB6fDA5C",
+        "bytes": "576797330784",
+        "dataSets": 64,
+        "share": 0.02419
+      },
+      {
+        "provider": "0x682467D59F5679cB0BF13115d4C94550b8218CF2",
+        "bytes": "543588718944",
+        "dataSets": 776,
+        "share": 0.0228
+      },
+      {
+        "provider": "0x483F1CD029EFCFE5ebe382a8D63E73b0E53c7778",
+        "bytes": "429571199296",
+        "dataSets": 519,
+        "share": 0.01802
+      },
+      {
+        "provider": "0x6ABcF87adC44e27582a3e2bB5EDe97bcFe40043F",
+        "bytes": "356389013120",
+        "dataSets": 489,
+        "share": 0.01495
+      },
+      {
+        "provider": "0xAfdd652756bAe790559cD07a96Caee310D3C6381",
+        "bytes": "227520055552",
+        "dataSets": 407,
+        "share": 0.00954
+      },
+      {
+        "provider": "0xc16C5665C1F0Fb30985Fbd215cB3606A6734D416",
+        "bytes": "111147783296",
+        "dataSets": 2,
+        "share": 0.00466
+      },
+      {
+        "provider": "0xbd0FfC89500920349140b8e6016416cc7eD96C52",
+        "bytes": "78800512416",
+        "dataSets": 344,
+        "share": 0.0033
+      },
+      {
+        "provider": "0xcBde77257745728752D2D918bFEb9dF626584150",
+        "bytes": "56932822752",
+        "dataSets": 294,
+        "share": 0.00238
+      },
+      {
+        "provider": "0x1a6C98aB444870d10b5A3398Fb0079683c970CFA",
+        "bytes": "36470778912",
+        "dataSets": 49,
+        "share": 0.00153
+      },
+      {
+        "provider": "0x398841f7e26A1Ce8E5137F4Ec119A5E410A1002b",
+        "bytes": "25182500000",
+        "dataSets": 345,
+        "share": 0.00105
+      },
+      {
+        "provider": "0x93208ADe35f80FF4A7C66d7E11F18bDfFD5F1fAA",
+        "bytes": "24006871456",
+        "dataSets": 16,
+        "share": 0.001
+      },
+      {
+        "provider": "0xFfcB09BE0a04001e9C76078c566fC973Bca2D80E",
+        "bytes": "16043792384",
+        "dataSets": 9,
+        "share": 0.00067
+      },
+      {
+        "provider": "0x6226517d5689cAd191eD39f5036e7fc8ca2b6519",
+        "bytes": "15657271584",
+        "dataSets": 394,
+        "share": 0.00065
+      },
+      {
+        "provider": "0x81b0Beba292A5310558049f73d04daFb18642c1c",
+        "bytes": "10607332608",
+        "dataSets": 1,
+        "share": 0.00044
+      },
+      {
+        "provider": "0x3DE6c9F2a3b1009f18431F6124009A6d12ff3537",
+        "bytes": "10145245056",
+        "dataSets": 1,
+        "share": 0.00042
+      },
+      {
+        "provider": "0x168f1B0CBbc2D45FC2c50fe183e9D2491eEdd7fD",
+        "bytes": "9971903872",
+        "dataSets": 1,
+        "share": 0.00041
+      },
+      {
+        "provider": "0x49a31A4F620eDAD30263895e9596E60CD18Ec7e6",
+        "bytes": "9596433792",
+        "dataSets": 2,
+        "share": 0.0004
+      },
+      {
+        "provider": "0x462016af45C40E4B081610761475BAeE2A238CF5",
+        "bytes": "8433732992",
+        "dataSets": 1,
+        "share": 0.00035
+      },
+      {
+        "provider": "0x65fBF724FB503676d4c08D7d52FcFfc26E3a2594",
+        "bytes": "8263785536",
+        "dataSets": 14,
+        "share": 0.00034
+      },
+      {
+        "provider": "0x122a5E628a698505653b4413E261EFD12DFcDC2c",
+        "bytes": "5556698624",
+        "dataSets": 182,
+        "share": 0.00023
+      },
+      {
+        "provider": "0xDf4e39AFF9BcAcb1fAf6B2A16663DC35Ec2a05Ad",
+        "bytes": "1914016768",
+        "dataSets": 7,
+        "share": 0.00008
+      },
+      {
+        "provider": "0xc9dBd4809368e64EccaF3Fd87ee9Bc4a592b0759",
+        "bytes": "1207881888",
+        "dataSets": 17,
+        "share": 0.00005
+      },
+      {
+        "provider": "0x8c8c7a9BE47ed491B33B941fBc0276BD2ec25E7e",
+        "bytes": "1097115584",
+        "dataSets": 62,
+        "share": 0.00004
+      },
+      {
+        "provider": "0x8C49F6Da5350C4b8714d358C7F73dE3351504862",
+        "bytes": "524022784",
+        "dataSets": 3,
+        "share": 0.00002
+      },
+      {
+        "provider": "0xf73Aa7b26Cd1fd30A7D5039842E13A8C7344CfEe",
+        "bytes": "276049760",
+        "dataSets": 44,
+        "share": 0.00001
+      },
+      {
+        "provider": "0x14604725892Bf205ae8F4BCd12225Dc90f99c7eE",
+        "bytes": "74192512",
+        "dataSets": 6,
+        "share": 0
+      },
+      {
+        "provider": "0xdC3b29822aB7BFe330971fcc31Ca444127135a56",
+        "bytes": "16777216",
+        "dataSets": 2,
+        "share": 0
+      },
+      {
+        "provider": "0xE3e842B9D89ed2Ee3976b9b8916827302618c29e",
+        "bytes": "6341376",
+        "dataSets": 2,
+        "share": 0
+      },
+      {
+        "provider": "0xE08cBA964b57d6f87f74B8a1f4B0bbec6e980790",
+        "bytes": "1056864",
+        "dataSets": 1,
+        "share": 0
+      },
+      {
+        "provider": "0xbB10E066f4bA883383ef7e87932982178C88f971",
+        "bytes": "48128",
+        "dataSets": 2,
+        "share": 0
+      },
+      {
+        "provider": "0x608a522E9C72a916CAF014b7dD04D0656f6B77De",
+        "bytes": "1056",
+        "dataSets": 1,
+        "share": 0
+      },
+      {
+        "provider": "0x8c04A1AD757bc02069489DDE155Fd1379c58980e",
+        "bytes": "0",
+        "dataSets": 3,
+        "share": 0
+      },
+      {
+        "provider": "0x99abbbF8848bC0bC9b156e5f21d981BB1670A394",
+        "bytes": "0",
+        "dataSets": 1,
+        "share": 0
+      },
+      {
+        "provider": "0x0C9c82Ad916c68A0e07C4053C2c31362d57A4978",
+        "bytes": "0",
+        "dataSets": 3,
+        "share": 0
+      },
+      {
+        "provider": "0x081bBd8d1F0ee6C95c3df88c9bAe29243539cf5a",
+        "bytes": "0",
+        "dataSets": 1,
+        "share": 0
+      },
+      {
+        "provider": "0x3fd7b91467b50fC09b9bb7AA72DBb40f6b8C2a10",
+        "bytes": "0",
+        "dataSets": 1,
+        "share": 0
+      }
+    ],
+    "uploaders": [
+      {
+        "uploader": "0xf56fA23B2709Cd9e85B69e18B9fbE32757776448",
+        "bytes": "3954214086336",
+        "dataSets": 9,
+        "providers": 7,
+        "share": 0.20786
+      },
+      {
+        "uploader": "0xA9754849171d642a908fc4EcFd708D9FD70fa602",
+        "bytes": "3510243280352",
+        "dataSets": 30,
+        "providers": 4,
+        "share": 0.18452
+      },
+      {
+        "uploader": "0xE1C7eb2f5Da0F5b8662b3c9a11464Fa703d5ed5e",
+        "bytes": "2168959123680",
+        "dataSets": 5,
+        "providers": 3,
+        "share": 0.11401
+      },
+      {
+        "uploader": "0xa5F90bc2AA73a2E0Bad4D7092a932644d5dD5d71",
+        "bytes": "1239138201984",
+        "dataSets": 399,
+        "providers": 17,
+        "share": 0.06513
+      },
+      {
+        "uploader": "0x0502238026D77cbd928A0974f15721B8ACB90E09",
+        "bytes": "1227596817632",
+        "dataSets": 111,
+        "providers": 17,
+        "share": 0.06453
+      },
+      {
+        "uploader": "0x44f08D1beFe61255b3C3A349C392C560FA333759",
+        "bytes": "1213534119456",
+        "dataSets": 982,
+        "providers": 14,
+        "share": 0.06379
+      },
+      {
+        "uploader": "0x4FC1f5bBF39A46842E5704d7b925233863a1f004",
+        "bytes": "895813660768",
+        "dataSets": 202,
+        "providers": 18,
+        "share": 0.04709
+      },
+      {
+        "uploader": "0xa108Be4331296Ec8b8C47c2Cd2FbfDDF06E27523",
+        "bytes": "632693136352",
+        "dataSets": 2274,
+        "providers": 16,
+        "share": 0.03325
+      },
+      {
+        "uploader": "0x305025D07c1DEe47F25a4990179eFf2becddCA0B",
+        "bytes": "432664697888",
+        "dataSets": 6605,
+        "providers": 13,
+        "share": 0.02274
+      },
+      {
+        "uploader": "0x5134C19C59613A5243d39084Aa539998EEcD2396",
+        "bytes": "422785793376",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0.02222
+      },
+      {
+        "uploader": "0xB2613E02F232d00bCf060c2c70A9b60d0930959A",
+        "bytes": "412404660512",
+        "dataSets": 50,
+        "providers": 2,
+        "share": 0.02167
+      },
+      {
+        "uploader": "0x253638142CB4FF04053c14eA1cfA3f963021fb3D",
+        "bytes": "365442023904",
+        "dataSets": 161,
+        "providers": 19,
+        "share": 0.01921
+      },
+      {
+        "uploader": "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf",
+        "bytes": "337715082016",
+        "dataSets": 18,
+        "providers": 11,
+        "share": 0.01775
+      },
+      {
+        "uploader": "0xb24CA10fb6907A2D94b0Dc5DbeA6B5E379D19FfD",
+        "bytes": "323446392224",
+        "dataSets": 5,
+        "providers": 3,
+        "share": 0.017
+      },
+      {
+        "uploader": "0x08482eF7aaF06a51C5cE49f4F321935Fe86a2C97",
+        "bytes": "252572655200",
+        "dataSets": 57,
+        "providers": 15,
+        "share": 0.01327
+      },
+      {
+        "uploader": "0xB6a7a2aA86905F48ea0721731D208123a3FA3913",
+        "bytes": "169754565600",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00892
+      },
+      {
+        "uploader": "0xA27774aC5eDFb083805CD4e8d9Aa35b89648Bc79",
+        "bytes": "135799403840",
+        "dataSets": 1697,
+        "providers": 18,
+        "share": 0.00713
+      },
+      {
+        "uploader": "0xA65920F5F3672dacf04e20DBAA99DE4053324d96",
+        "bytes": "123476349824",
+        "dataSets": 1091,
+        "providers": 14,
+        "share": 0.00649
+      },
+      {
+        "uploader": "0x97EaBCAfD777ea76D1075Ccb7CB3739a0b8E9fEb",
+        "bytes": "123367245504",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0.00648
+      },
+      {
+        "uploader": "0xd7f16091fbE0C069fD21ACF6c67544930031d558",
+        "bytes": "109548490784",
+        "dataSets": 3,
+        "providers": 1,
+        "share": 0.00575
+      },
+      {
+        "uploader": "0x6ddCc25cCaf06Be3595D5163f2aE4475191249F8",
+        "bytes": "40353632928",
+        "dataSets": 8,
+        "providers": 5,
+        "share": 0.00212
+      },
+      {
+        "uploader": "0x7e4ABd63A7C8314Cc28D388303472353D884f292",
+        "bytes": "35201225376",
+        "dataSets": 13,
+        "providers": 3,
+        "share": 0.00185
+      },
+      {
+        "uploader": "0x80e6FdA9cB4F5bC14A5Cb3Ae00c8b436AA207207",
+        "bytes": "25491445312",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00134
+      },
+      {
+        "uploader": "0x9289350e85a0E411868dF615BCd7732D7BeF5455",
+        "bytes": "25383707488",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00133
+      },
+      {
+        "uploader": "0xaD39ac69AD7bf36140A18471e4B39220bBF48dEC",
+        "bytes": "25176279744",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00132
+      },
+      {
+        "uploader": "0x84C9a9DC48D38Cf7B1Fb3450DA077baaaAB4c041",
+        "bytes": "25164164576",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00132
+      },
+      {
+        "uploader": "0x99c5A677F73AE0F9ec9600497F28aff91e9ed8bA",
+        "bytes": "24940608384",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00131
+      },
+      {
+        "uploader": "0xa6c9Cc67d059Dbfd242a665A7D8db5b75F554a4e",
+        "bytes": "24916335808",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.0013
+      },
+      {
+        "uploader": "0x0A05cB2477f28FaC1F32002515C0fe02873592D0",
+        "bytes": "24634675712",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00129
+      },
+      {
+        "uploader": "0x3B31C2BCb146D0177987CFa2eC6A6EDc1ab6EAE0",
+        "bytes": "24581857344",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00129
+      },
+      {
+        "uploader": "0x57911815D8E5CaBF1B20D36542e2a0c419e77f12",
+        "bytes": "24581134432",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00129
+      },
+      {
+        "uploader": "0xd4140baBFE408027539Cf53a92555E82643Be761",
+        "bytes": "24575016960",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00129
+      },
+      {
+        "uploader": "0xEFecCb7Ba6FE5170e4624fCbf38D17AbB008B8FC",
+        "bytes": "24059010208",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00126
+      },
+      {
+        "uploader": "0xC936A936E64Db5933A42DD3320feBFd488Ed5908",
+        "bytes": "23308313312",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00122
+      },
+      {
+        "uploader": "0x2CE50d59D069682528B6Dabf18BB16E42E886FD7",
+        "bytes": "22758115296",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00119
+      },
+      {
+        "uploader": "0x2ECE521D2Bc10f03593Aa08F00c8103A550eA2ba",
+        "bytes": "22699197600",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00119
+      },
+      {
+        "uploader": "0x647E0414f8F8fb2A1d8d78367eA70cB7A02839fC",
+        "bytes": "22676405280",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00119
+      },
+      {
+        "uploader": "0x739441C52c9b06e640Ab24bb9685b47580a4d759",
+        "bytes": "22225727840",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00116
+      },
+      {
+        "uploader": "0x17Bdb1a38A16F392e9dA483bDb398615300b78Ac",
+        "bytes": "20614144576",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00108
+      },
+      {
+        "uploader": "0xE1a355F87D6c40983627Bb7B4a5A187482554DDB",
+        "bytes": "20519160992",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00107
+      },
+      {
+        "uploader": "0x7dA10Fa42F78a9b8DC67F6e16657c2c22a91E6C7",
+        "bytes": "20396261568",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00107
+      },
+      {
+        "uploader": "0xf8ef0acF77D9b63FBa9C1D36f0aBc8a00536F082",
+        "bytes": "20330445024",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00106
+      },
+      {
+        "uploader": "0x82F7E5aF0cC972319988a75D96836323E0fa200a",
+        "bytes": "20265214176",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00106
+      },
+      {
+        "uploader": "0x270d26232CedAa11B2Efe13e174f4B28e41FFeD0",
+        "bytes": "17570386912",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00092
+      },
+      {
+        "uploader": "0x48f4FA64a8eF7F2423FBa50529CF1bDaF56696be",
+        "bytes": "17535196288",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00092
+      },
+      {
+        "uploader": "0xa57f0a9E9949E69442BD83304981d6f89660420D",
+        "bytes": "17386208736",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00091
+      },
+      {
+        "uploader": "0x10dF3c6ED98Eb0F064492eA16A168A7394Ccb707",
+        "bytes": "17038850752",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00089
+      },
+      {
+        "uploader": "0x5Cf10F4D66dC12EC27bf9a54EBE042A2030741b0",
+        "bytes": "16811161728",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00088
+      },
+      {
+        "uploader": "0x6471d57Aa71d4556b6ddD19FE7e36a0E8Ae1EbF4",
+        "bytes": "15998523776",
+        "dataSets": 8,
+        "providers": 1,
+        "share": 0.00084
+      },
+      {
+        "uploader": "0x2a2cd810147449D829f160Fc713a6CBDDF0f04E4",
+        "bytes": "15204217728",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00079
+      },
+      {
+        "uploader": "0x2D86B964064D63252E9B917c6Aadb0499081b102",
+        "bytes": "14979487296",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00078
+      },
+      {
+        "uploader": "0x9f413AeB3ECef3131C5419Cd4FDE0510600aBA3d",
+        "bytes": "14937101632",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00078
+      },
+      {
+        "uploader": "0xE63Ca73835Aa39A949DF4F70Bb243C021CaB5c63",
+        "bytes": "14708875936",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00077
+      },
+      {
+        "uploader": "0xCeC6B16A4BCa8e4b69e212344ac8B96Aa61F1058",
+        "bytes": "14665989344",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00077
+      },
+      {
+        "uploader": "0x57d43308fC8f2d63D8BC459F77e6e0BC9387e41b",
+        "bytes": "14626568576",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00076
+      },
+      {
+        "uploader": "0xFa57E3f4ba04c3bf02b534B8B70828Fed38654E1",
+        "bytes": "12895540992",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00067
+      },
+      {
+        "uploader": "0x3a4C2B8a68b28982Eea598481e2385d6290ab4E6",
+        "bytes": "12482002400",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00065
+      },
+      {
+        "uploader": "0xab4117B2541493490F0C9c1E100718214d06b678",
+        "bytes": "12345433760",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00064
+      },
+      {
+        "uploader": "0x8f2d1ADacA3f01851b82aF88AFCfC4de862283af",
+        "bytes": "12295327200",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00064
+      },
+      {
+        "uploader": "0x22832A8169De2A6fcE8A78e43712804dE69A4Bad",
+        "bytes": "12252660160",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00064
+      },
+      {
+        "uploader": "0x723b1B375b18840E67Bdd6f45a2b50C4A0B371a6",
+        "bytes": "12210119744",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00064
+      },
+      {
+        "uploader": "0xC38658920C2f47B5A6D311640210e14C8D2b8c88",
+        "bytes": "12192180064",
+        "dataSets": 7,
+        "providers": 3,
+        "share": 0.00064
+      },
+      {
+        "uploader": "0x1201342220Bb435FDb4B9c9c0888c8521B19B3f4",
+        "bytes": "12051750176",
+        "dataSets": 7,
+        "providers": 4,
+        "share": 0.00063
+      },
+      {
+        "uploader": "0xBE5e45771ec33b6eFcE4ae71C9887837d9aE9b49",
+        "bytes": "10909091648",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00057
+      },
+      {
+        "uploader": "0x2967A38c41b5cc2a846A21b8EC7331a01657a73E",
+        "bytes": "7685787200",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.0004
+      },
+      {
+        "uploader": "0xEED1abA1EFAFc226042c7F88bB98B4D9948C955e",
+        "bytes": "7519698528",
+        "dataSets": 22,
+        "providers": 13,
+        "share": 0.00039
+      },
+      {
+        "uploader": "0xD19d84c77bbb901971e460830e310933A210dbaA",
+        "bytes": "6472032608",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00034
+      },
+      {
+        "uploader": "0xFa4950dE4579f67d7D161D3F9817a37E7e5FE5ff",
+        "bytes": "5429620160",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00028
+      },
+      {
+        "uploader": "0x79525C4Fc20b5354aE619dC1ef1e6f4484760762",
+        "bytes": "5369178432",
+        "dataSets": 13,
+        "providers": 3,
+        "share": 0.00028
+      },
+      {
+        "uploader": "0x73F193FabA19136e7640705617cA519e54270f6b",
+        "bytes": "5277648672",
+        "dataSets": 13,
+        "providers": 3,
+        "share": 0.00027
+      },
+      {
+        "uploader": "0x12e83C954051B7c91F70d001F80dc9Ff91737b83",
+        "bytes": "5254925088",
+        "dataSets": 13,
+        "providers": 4,
+        "share": 0.00027
+      },
+      {
+        "uploader": "0xc40A33e22e284b5246bcaB9a15746b5E68125101",
+        "bytes": "4446936736",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00023
+      },
+      {
+        "uploader": "0xCe340D9A71b2aa8F7FAa2f989158f14BEDE3E1b2",
+        "bytes": "4043453024",
+        "dataSets": 36,
+        "providers": 6,
+        "share": 0.00021
+      },
+      {
+        "uploader": "0x0A1947904e7173b440d0F1C977BcCE7230331E56",
+        "bytes": "3948958176",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.0002
+      },
+      {
+        "uploader": "0x0542C82a785fAB8b53C7C59aAaD7093D87265F3A",
+        "bytes": "3883432608",
+        "dataSets": 21,
+        "providers": 5,
+        "share": 0.0002
+      },
+      {
+        "uploader": "0x4c4e48D2d478778FbF810832462f182aEa255480",
+        "bytes": "3425123424",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00018
+      },
+      {
+        "uploader": "0xA4eA7FA1da2061aB3C7757722935e52B5E57EE58",
+        "bytes": "3341260224",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0.00017
+      },
+      {
+        "uploader": "0x1D993C955f60eD6F92dBBB8B4325172c69b8813E",
+        "bytes": "3263438048",
+        "dataSets": 15,
+        "providers": 5,
+        "share": 0.00017
+      },
+      {
+        "uploader": "0xb86707875b596613f923035BFA0784e35ff25743",
+        "bytes": "3121892192",
+        "dataSets": 5,
+        "providers": 4,
+        "share": 0.00016
+      },
+      {
+        "uploader": "0xCb555E9c6185E213a21A1F0E9fc3a14d9a0821d8",
+        "bytes": "2857426272",
+        "dataSets": 18,
+        "providers": 4,
+        "share": 0.00015
+      },
+      {
+        "uploader": "0xBa1A3b1a5bdf3850eDE0ADdF79e097dbB68C3703",
+        "bytes": "2318642368",
+        "dataSets": 4,
+        "providers": 2,
+        "share": 0.00012
+      },
+      {
+        "uploader": "0x93328206e944f39dC380e844ebAD84a3BC9F30c4",
+        "bytes": "2046907456",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.0001
+      },
+      {
+        "uploader": "0x2ECB8a183eceC3a5127E2549D62027db92E76E35",
+        "bytes": "1928182112",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0.0001
+      },
+      {
+        "uploader": "0xEcb9CcA4d97d689e218c21D5DeC44B810491C319",
+        "bytes": "1841034656",
+        "dataSets": 5,
+        "providers": 2,
+        "share": 0.00009
+      },
+      {
+        "uploader": "0x1b566dD535D9be8D7C328aA2F79210E8cD18F663",
+        "bytes": "1837594816",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00009
+      },
+      {
+        "uploader": "0x0D1781F0b693b35939A49831A6C799B938Bd2F80",
+        "bytes": "1546914848",
+        "dataSets": 24,
+        "providers": 5,
+        "share": 0.00008
+      },
+      {
+        "uploader": "0x971376DDe8D3120e74Dd853Eb4107Bae6aDbA398",
+        "bytes": "1528683168",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00008
+      },
+      {
+        "uploader": "0x7bDF6e49470677B89Eb77408F57f4abe86a57694",
+        "bytes": "1445580416",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00007
+      },
+      {
+        "uploader": "0xBa72cC366471486102620893327EA19465047A24",
+        "bytes": "1369654976",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0.00007
+      },
+      {
+        "uploader": "0x09148C2c48FeD4da763b6DfFB76E8687207775b0",
+        "bytes": "971888576",
+        "dataSets": 61,
+        "providers": 8,
+        "share": 0.00005
+      },
+      {
+        "uploader": "0x2B3d0b827BAded638279C637d7ef21a266994c9E",
+        "bytes": "941367712",
+        "dataSets": 4,
+        "providers": 4,
+        "share": 0.00004
+      },
+      {
+        "uploader": "0xB051ef8462f937148ae11EEC1695d37CCACffE2c",
+        "bytes": "903151136",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0.00004
+      },
+      {
+        "uploader": "0xAf992Fbc0c22BC941A232c63dc1b0c0cD572D145",
+        "bytes": "863640256",
+        "dataSets": 21,
+        "providers": 6,
+        "share": 0.00004
+      },
+      {
+        "uploader": "0xa36EcC2989E594e246BE46D0020F04F3afe8ADad",
+        "bytes": "832656448",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00004
+      },
+      {
+        "uploader": "0x4FEfA09B3f0FF6b1BA062dbE7938a16EdF9D3CFE",
+        "bytes": "663612320",
+        "dataSets": 2,
+        "providers": 1,
+        "share": 0.00003
+      },
+      {
+        "uploader": "0x94181082d70A04f0e37D8a6A127cF6c152b1B8Bf",
+        "bytes": "634295360",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00003
+      },
+      {
+        "uploader": "0x2CDaEA63dc53afA2784B75c3F10155D2Aa552Cb4",
+        "bytes": "576718784",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00003
+      },
+      {
+        "uploader": "0x9b68333791834e67dB8Dd7F95D0Ba0D728AE820a",
+        "bytes": "440701760",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00002
+      },
+      {
+        "uploader": "0x807D5d346d67FCCECfb9900b0AAf849DFeEB842c",
+        "bytes": "400484416",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00002
+      },
+      {
+        "uploader": "0x68343Aa0598b7FCAA102769D172e59cdDfae10f2",
+        "bytes": "386988064",
+        "dataSets": 11,
+        "providers": 5,
+        "share": 0.00002
+      },
+      {
+        "uploader": "0x633Bf69702c5F7De0f6e36cA3205e28F2ac4BC90",
+        "bytes": "380596800",
+        "dataSets": 4,
+        "providers": 2,
+        "share": 0.00002
+      },
+      {
+        "uploader": "0x131ca8FA02b915eD4Da4b0915247CAE5d1970Dba",
+        "bytes": "358184896",
+        "dataSets": 7,
+        "providers": 3,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0x0843baa174a77df36168cd93F682283F6C4932Ea",
+        "bytes": "354704448",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0xD08316c7C3bbE0f8D1CA9Bf12beC3b351C737100",
+        "bytes": "347068224",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0x9c92159D296F5c01A2b2668b61B8A097356E4bB4",
+        "bytes": "335983232",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0xbB197ec860fD38E25392c0e380597d5FC43B0343",
+        "bytes": "334241888",
+        "dataSets": 5,
+        "providers": 3,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0x7D3F0Ca48194490D7C8B60feA6225e817eC52AA9",
+        "bytes": "320157984",
+        "dataSets": 4,
+        "providers": 4,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0x4a4298ddD74C2362818fe0e4068700A7C83933A0",
+        "bytes": "317097920",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0x68761c8547ABe4e03DA9928F997F880260aAF192",
+        "bytes": "308447136",
+        "dataSets": 7,
+        "providers": 1,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0x1bB38d9F94804A36EEE5FB8e18D012B5Aa687563",
+        "bytes": "199258624",
+        "dataSets": 29,
+        "providers": 4,
+        "share": 0.00001
+      },
+      {
+        "uploader": "0xD117738595dfAFe4c2f96bcF63Ed381788E08d39",
+        "bytes": "174944000",
+        "dataSets": 13,
+        "providers": 4,
+        "share": 0
+      },
+      {
+        "uploader": "0x2eaD48f8459B5231ebbF56aaCE077FFF1938D235",
+        "bytes": "172022944",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xC8fe8d1eaFacD3F629F7c01F427220a8fE957f6C",
+        "bytes": "162849024",
+        "dataSets": 4,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x9299eac94952235Ae86b94122D2f7c77F7F6Ad30",
+        "bytes": "148651584",
+        "dataSets": 8,
+        "providers": 4,
+        "share": 0
+      },
+      {
+        "uploader": "0x5991fd6Ecc5634C4de497b47Eb0Aa0065fffb214",
+        "bytes": "132083328",
+        "dataSets": 16,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x76C30604E4f2595eAccDc6fA73247dCb162093Af",
+        "bytes": "130579584",
+        "dataSets": 6,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x290C51F674ecf478E7ec20810b600BB6526622B4",
+        "bytes": "112592992",
+        "dataSets": 27,
+        "providers": 7,
+        "share": 0
+      },
+      {
+        "uploader": "0x04DACB48d9Ee6833039af459b805e64382462aB3",
+        "bytes": "112029536",
+        "dataSets": 8,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x3B559cf662fdFe485eC216C036D4Cee91FBd1D39",
+        "bytes": "111683584",
+        "dataSets": 4,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xCc2A70883526bBE55CeaB3F688764331572ACd68",
+        "bytes": "111350400",
+        "dataSets": 4,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x2ca7794A8c141eEc949084e158bd50F16e023219",
+        "bytes": "107070080",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x5C32469325d4093aB142DDdC1305F91d76e45141",
+        "bytes": "104866272",
+        "dataSets": 4,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xf5Fb6672233c93545BbA4b51B6E07D660f359A3D",
+        "bytes": "103707360",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x351F3A0FAfc8fF97d5359f793A0e5d5206D9BB0D",
+        "bytes": "101484672",
+        "dataSets": 8,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0x6080Df36FD9B74D04dB3ecCC23b17D6b748CDc26",
+        "bytes": "95992288",
+        "dataSets": 9,
+        "providers": 5,
+        "share": 0
+      },
+      {
+        "uploader": "0x8E5C0F86749A2AFc202Bde06279253cb2029528d",
+        "bytes": "92731744",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x22B4c5FE406A772ddbade3067247E649c5A4c8E8",
+        "bytes": "92538240",
+        "dataSets": 7,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xc6dEF3285d50748FcA23eBA0886E6fa5851Ee8A7",
+        "bytes": "92474464",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xcA57C104874faa3Ce8b824Fc2215686058325eb5",
+        "bytes": "92181472",
+        "dataSets": 7,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0x9Be0ac30F4342ab61CE8ED279224a479c9E9F6A1",
+        "bytes": "77241472",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xC2BE42867c5264De7f7B1A4D16a71Ee77d8C9eCE",
+        "bytes": "76026304",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x3f59898fA81E6666A854B6EBc41500E3a1294002",
+        "bytes": "74452672",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xcd4E9682172f67f2eA8cf0a9eCF199F3b78e57aD",
+        "bytes": "70150368",
+        "dataSets": 13,
+        "providers": 4,
+        "share": 0
+      },
+      {
+        "uploader": "0x00B1286e153A5980C635789E1196811125E49D5d",
+        "bytes": "69016960",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x13E42139ed7AA119290834843a437D2436f1B67e",
+        "bytes": "59561152",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xF00DCE36817586672B47480FB48C94177A97278B",
+        "bytes": "56190624",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xe904F20b2B07E59118b6Ca7936c23DF5E2E847F4",
+        "bytes": "53722848",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xef89158c3Ae716e79e08b0EC842782Ee2B0b98CE",
+        "bytes": "51785632",
+        "dataSets": 6,
+        "providers": 5,
+        "share": 0
+      },
+      {
+        "uploader": "0x47Dab689CA48E4c58337528470aE282d6515A4c8",
+        "bytes": "45268608",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xbB10E066f4bA883383ef7e87932982178C88f971",
+        "bytes": "44728096",
+        "dataSets": 19,
+        "providers": 4,
+        "share": 0
+      },
+      {
+        "uploader": "0x480c51Fe9Fc90E01FA742c51300cc29e151a71Cd",
+        "bytes": "43410400",
+        "dataSets": 14,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x44061AA8Df5b33a997CE97d80c700d0C655Dc3f2",
+        "bytes": "42540224",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x79Bf2bDDa64e8A5EC2C3fA97C9FE880279d47e7A",
+        "bytes": "35715648",
+        "dataSets": 13,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x44896a716F7b5Ed343C6962b3D56FaA5377Cd052",
+        "bytes": "34917472",
+        "dataSets": 4,
+        "providers": 4,
+        "share": 0
+      },
+      {
+        "uploader": "0xF32692337d39768aFae1dDfc9F2D2e6076E92376",
+        "bytes": "33991552",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x66770997fdFCC5D6b7CDC7c888CB2A756a0E776d",
+        "bytes": "32478976",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x9C5e3cAC8166eD93F76BC0469b8Bf3ca715bA6B7",
+        "bytes": "29529696",
+        "dataSets": 8,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0x89b5C4D18BA9B5502b19b19f7C3665B61367f636",
+        "bytes": "27398016",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xC1F39FAcbB12C6abE4082D1448A7E79132bC4853",
+        "bytes": "27098048",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x15896e731c51ecB7BdB1447600DF126ea1d6969A",
+        "bytes": "26810144",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x838294AdDe22F9dCc62A0e6ed99aaad4D037cA3A",
+        "bytes": "26064736",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x99C3E00face02cA6e0e2232953a30a26d3F4abAD",
+        "bytes": "24926240",
+        "dataSets": 10,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xaAA42c6B0c88E5C6B6728645040235B642d23F2D",
+        "bytes": "24796640",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x5233E4253bC38e8CF517c0768dbC8aCC886F32B3",
+        "bytes": "23318112",
+        "dataSets": 20,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x64CCBE20893A9a79370Fd28Ad813bE210A0BeBDe",
+        "bytes": "22257216",
+        "dataSets": 18,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x8b53a3D017751bDbF1fe17016eB2345bacf9D8cF",
+        "bytes": "21175776",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x38c44D001aE2351975A5Da85f19DC00C0E7A6F3b",
+        "bytes": "20065024",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xF4Bb939A574397f3de3e776c1B61E43fa0001739",
+        "bytes": "19879712",
+        "dataSets": 19,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xFEf3D86997092E27b5F5FAEe5eDd88cB4E5adb6d",
+        "bytes": "19023552",
+        "dataSets": 9,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xB8223a6e8F38098E59940d8339e8E79399AcF57b",
+        "bytes": "18215904",
+        "dataSets": 6,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xC38c0E39A98aB14227a5dd91d041d02AED8FDCC8",
+        "bytes": "18002944",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xaC87375e70f9890E2C3a490368A70Fb2925DB691",
+        "bytes": "17666432",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x0357389806ef93C66B307562D29b4D704D1554a3",
+        "bytes": "16906112",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xFab572f5bA6Ad0333c5E5c9fFdfE265c53cab2B5",
+        "bytes": "16874368",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xb41F7aFBc047641fF6FA374c2bF81A4F115c9128",
+        "bytes": "16458752",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xa3da26a8E80A523aC43518EafBDf2d195968e002",
+        "bytes": "15795936",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x2659FB6b08930Eb400DAB496F670c22d603E5612",
+        "bytes": "15619936",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x9AC55dE113f4b4f7F9cA86582D2b56355a39126E",
+        "bytes": "15270400",
+        "dataSets": 4,
+        "providers": 4,
+        "share": 0
+      },
+      {
+        "uploader": "0x0f7282924209a35dE7416d2fb6Bf5c98dC131fA6",
+        "bytes": "14801280",
+        "dataSets": 8,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x86d026029052c6582d277d9b28700Edc9670B150",
+        "bytes": "14688416",
+        "dataSets": 4,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0x0492902AD222EbfcbCE4F7Ee6145CB1f71cad51F",
+        "bytes": "14677024",
+        "dataSets": 2,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x75Fa0ae17Ecb9f31D1AD2d29A2BaEf8E66BFE5ad",
+        "bytes": "14565024",
+        "dataSets": 20,
+        "providers": 4,
+        "share": 0
+      },
+      {
+        "uploader": "0x90b0273D515AAB31A68404e02A1c4341dFC6bb44",
+        "bytes": "14268288",
+        "dataSets": 15,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xB316e097285C5E802587eaDE1dc264FB12938d96",
+        "bytes": "13180096",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x886dDD4D1b378A0E3529BEA92470ce5F8F5c3d1F",
+        "bytes": "12682368",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0x11a92dEDF6AFd11461519a2462E2876dbb816Cb3",
+        "bytes": "12360512",
+        "dataSets": 3,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xb3dd624f5ffb9a5a5144A67d596a4D2fA7c6479D",
+        "bytes": "11867776",
+        "dataSets": 4,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xe7D1b14eAC0dcE3d6867C2Ef06b5bdFF52362C84",
+        "bytes": "11472320",
+        "dataSets": 22,
+        "providers": 8,
+        "share": 0
+      },
+      {
+        "uploader": "0x36A2F7bc5C94aE2A0296121D6D1e11E222D25339",
+        "bytes": "11329024",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xb4c13d764f2E12D640C9280Ad742D10D6929103f",
+        "bytes": "11256064",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xF88c59cF5ba1e904079079c8CE03148490cB09f8",
+        "bytes": "11208352",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x19E7E376E7C213B7E7e7e46cc70A5dD086DAff2A",
+        "bytes": "10589312",
+        "dataSets": 2,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xf73Aa7b26Cd1fd30A7D5039842E13A8C7344CfEe",
+        "bytes": "10569472",
+        "dataSets": 10,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x4a3f820255A51F33DfA720E042Fd0d382cA13ACB",
+        "bytes": "10032512",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x2127C3a31F54B81B5E9AD1e29C36c420d3D6ecC5",
+        "bytes": "9294304",
+        "dataSets": 9,
+        "providers": 7,
+        "share": 0
+      },
+      {
+        "uploader": "0x6DB5feDDcc935379F3a1302b6F5348A0CAe9Bf21",
+        "bytes": "8640352",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x02eD611363324eAAA10Dd81c26029570850B30B9",
+        "bytes": "8512416",
+        "dataSets": 7,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0x2604c897adFB5d6380dDCD627637884e0D87AB84",
+        "bytes": "8482688",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x98224F6ae0F21eBba74C4922958EfdBea524FDE2",
+        "bytes": "8225664",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xd388aB098ed3E84c0D808776440B48F685198498",
+        "bytes": "7398624",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x4650fE5F68A03aCFA9f745D3F750Fa79fA7a694F",
+        "bytes": "6977888",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x1dE77D2B9ABF9baf1AbE64F2138088F6f2d3Cb25",
+        "bytes": "6775648",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x57Fa625Fb0120Aa859731b19ca8fD13173FDbfc0",
+        "bytes": "6736704",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xdC3b29822aB7BFe330971fcc31Ca444127135a56",
+        "bytes": "6341376",
+        "dataSets": 2,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x7A2Eb67DaD6B4E5598880C138705cD8FE8A3BD77",
+        "bytes": "6333600",
+        "dataSets": 4,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xcCbe21c2a4Bb8251B29C24A4aDc3F0e7b81B246d",
+        "bytes": "6176640",
+        "dataSets": 628,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xF59E6a7DBC49dcF821cE7e3b961d7DD427BB6722",
+        "bytes": "6136128",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xbeE30c4Dd45A8FdcA4adb952E12C8a514B95f875",
+        "bytes": "6114752",
+        "dataSets": 4,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0x32ca5413Ad6dE556f9090596a788F292a987a89C",
+        "bytes": "6087392",
+        "dataSets": 4,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xC9e465e5346773c3Cb69e167B5733306FE7db75f",
+        "bytes": "5947360",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xd78DD08F6c794f2c61c62eC03C8d299D11EE2F63",
+        "bytes": "5882112",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x977e88856F3dff04d20037df8129589B8C9CcAc3",
+        "bytes": "5592384",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x1b1A9907E02e0fc0621f7B815106F8F93bFb38f8",
+        "bytes": "5590080",
+        "dataSets": 9,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xa145fCa5f7D5591ec4147A9D36ec55f953cdbd54",
+        "bytes": "5515776",
+        "dataSets": 40,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xaf87f935C96dFE596628c503E750e7A2d43753C8",
+        "bytes": "5402688",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x818a5eA3a76Bff7cFef0d027208a737854521Dac",
+        "bytes": "5217728",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x657a997c5DA1B0270623a2c5ee4bF1c6Cc0833aD",
+        "bytes": "5026752",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x5BBd606C457Aa3b27D8eCd779a527B441Ff471ed",
+        "bytes": "5000928",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xDdC3D1497F61e02Dc2E3d5f323D3473b99E131B7",
+        "bytes": "4463168",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xa6113b6170eb43C88e73fce55B7044B3C02E0998",
+        "bytes": "4357696",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x1105a3813F3362a90367B4346108C412Fa6B9480",
+        "bytes": "4344672",
+        "dataSets": 5,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x5DD86d2BFf46376e555BB0c10678c4d87fE00aBb",
+        "bytes": "4227456",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xB34d4c8E3AcCB5FA62455228281649Be525D4e59",
+        "bytes": "4227008",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x86F4CB13700C39678C1B07bEf74E003B3B60C2CC",
+        "bytes": "3478528",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xf2C8BE73456C64e9FA5890f0E025E6A81B74fa45",
+        "bytes": "3388128",
+        "dataSets": 4,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0x93095D151a1bd5a387b67F6D9EbE14827A6A3f4E",
+        "bytes": "3324928",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xc02Eb134b67FE3F2479a9650f435F4aCBB723B29",
+        "bytes": "3186784",
+        "dataSets": 2,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x7876e1aEB9bD3ddB4684aC777BaE0c8A82B73A88",
+        "bytes": "3170592",
+        "dataSets": 3,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xA830Cd34D83C10Ba3A8bB2F25ff8BBae9BcD0125",
+        "bytes": "3140960",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x0Cd17078769DC2b859950ea833E251D9D5ba410d",
+        "bytes": "2969408",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x09DcdC94D1b406549A8593c1580718B191e4318e",
+        "bytes": "2854752",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x7C0dC5575Fd62006F58b384aFC38d83ce2eEA734",
+        "bytes": "2675360",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x08Cada3bA17271acFD5FB73B3D153537F96e3b71",
+        "bytes": "2571072",
+        "dataSets": 4,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xf864570Cf0DF6e4A71Ba0FE670226f0ebA6aA666",
+        "bytes": "2542016",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x95a7061a09B7BE2F5B9d1C8Edb622985A90770fE",
+        "bytes": "2494976",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xFe643b54727d53C49835f9f6c1a2B9861E741d98",
+        "bytes": "2431744",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0x5D467A4D096Dc07419e3d86BbB713ec827a3C3a6",
+        "bytes": "2422464",
+        "dataSets": 920,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xA04387E22BD3EC465df1713665F1b6469070f38a",
+        "bytes": "2369792",
+        "dataSets": 3,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xe7Fb05243a7EDfdE3efa2BBf552191d41EFfA74D",
+        "bytes": "2341504",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xcA72272444C2DD0c330A6071e182eB78ed85306c",
+        "bytes": "2239040",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xc1F20Cb0Ad8928Ed95bF18c5e9AC49dCd740542a",
+        "bytes": "2172288",
+        "dataSets": 6,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xaD98591ad72F818F364017a7056C80eB399D0e61",
+        "bytes": "2125568",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x583cBcf01a27443cBe4188B3db654A9453bcDffe",
+        "bytes": "2113728",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xB0FD6929b9ad796171C47d6D130E3529B686B255",
+        "bytes": "2113728",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x7cAEdE70536f8384F61fa42864bAB1278ea1365f",
+        "bytes": "2102592",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xb5672308bE974f236C584C6975c351827c507110",
+        "bytes": "1925472",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xF98C5b0e6e72A02F0F643d1caB6BC9172a719Af3",
+        "bytes": "1823072",
+        "dataSets": 2,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xFF65DC5C653c2A6C7C11986b06E5f45D5Ba88076",
+        "bytes": "1816448",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x7D26625133a2964d133dcdF228da319877557ec1",
+        "bytes": "1723264",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xC4d9d1a93068d311Ab18E988244123430eB4F1CD",
+        "bytes": "1690528",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xD61dfbFAadD1f7d8feDC9318E8b1fa0AB895d7f7",
+        "bytes": "1632224",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x4Ce9FD2D0C4bDB4Bbc4bC5A4cFf102476696dE59",
+        "bytes": "1592256",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x6C345147d5c1DfceE7bA1A06eB3A0617d275758b",
+        "bytes": "1529472",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x603fb620aEd7D30ABAEf877022a46247dDf9fCae",
+        "bytes": "1525920",
+        "dataSets": 3,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x8e0325f37cd0431deb0BC1Cf6BBB4F65dBbF628C",
+        "bytes": "1459840",
+        "dataSets": 4,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+        "bytes": "1450144",
+        "dataSets": 14,
+        "providers": 4,
+        "share": 0
+      },
+      {
+        "uploader": "0x94C9a4511E47ad116CDFA476d215ebA3876FE819",
+        "bytes": "1387968",
+        "dataSets": 6,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xc1AE83faB1beDAA40AC59fed0F450428d807A28E",
+        "bytes": "1346176",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x0fb249b159543BCcE6f1f649DAdfe2f31a4a80D9",
+        "bytes": "1342688",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0x3C5E838fb3399105b23Df7Ef45443a93b756c6AE",
+        "bytes": "1327968",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x2493469663820b59a9432a104F2383Af41514ba7",
+        "bytes": "1177024",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x86aFf232C95Ed09AA89500A422a2E834902aCaBB",
+        "bytes": "1121760",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x2c80D330057523798c0ab0eF01aa00020087606f",
+        "bytes": "1121472",
+        "dataSets": 87,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x96c99E679a14f82fb9A9af7dD85e9ABb8663E097",
+        "bytes": "1056864",
+        "dataSets": 2,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xcCdcE6b2fc4c4b13366BFd59B52E97B422326b9A",
+        "bytes": "1056864",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xE08cBA964b57d6f87f74B8a1f4B0bbec6e980790",
+        "bytes": "1056864",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xF8158DC11A520B58Af28e3D2674499e90948DF7B",
+        "bytes": "905152",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x9D19251e5cb35D036a30B9dE69bCB3802FD0AF0a",
+        "bytes": "853184",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0x50B168a87BB6b1cd8235d914f914064A7Ed00F7d",
+        "bytes": "768032",
+        "dataSets": 2,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x4b3878517b780B5F07E3593CD421e5A8f9D7c88F",
+        "bytes": "754624",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xc83dBFDf61616778537211A7E5CA2e87ec6cF0ed",
+        "bytes": "733728",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x2832175B37b36f89bbb991dAb1A50103F18db19f",
+        "bytes": "733088",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x3C5f1294C17aA9Effd340d4dfbf01ED8E8Beac6d",
+        "bytes": "668512",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x450fBb7e035afd6fB7962319b68A39Ad40dFa610",
+        "bytes": "660896",
+        "dataSets": 8,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0x161814455AC1F812dc234ff032b1fE83488422bC",
+        "bytes": "660320",
+        "dataSets": 3,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x8b46180cA77Cd1f066293eAA15295731D5F057e2",
+        "bytes": "625728",
+        "dataSets": 6,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0x4bD5e6Ff683b97F9191A208038C55bEFd1828932",
+        "bytes": "613984",
+        "dataSets": 5,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xffd636C1f7f8Ec9754f608bc2DCcDcf1BE5D666E",
+        "bytes": "600416",
+        "dataSets": 5,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x8d6c44A12473Fa49F1ecF7236BD1c977c04AC87C",
+        "bytes": "578432",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xc2f1883D85A0E43827a7316A0394AB543341bbc9",
+        "bytes": "575488",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x8E73DC5259DDF0356d2b30EAF2c045EFA4546086",
+        "bytes": "540672",
+        "dataSets": 6,
+        "providers": 5,
+        "share": 0
+      },
+      {
+        "uploader": "0x7FC9BD8781bA4CaDa841F07cfaA34305B502DC16",
+        "bytes": "518208",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x8151A21cdAA1675A105497859AE181EDd3d0c5C2",
+        "bytes": "479424",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x42E43E39099780f5CC5c036D86642D42225B3ad5",
+        "bytes": "479264",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x311e26702ABa231c321C633d1ff6ecB4445f2308",
+        "bytes": "465440",
+        "dataSets": 2,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xC6E71534f3A5629c849a32FB8f1D513680730d9A",
+        "bytes": "436608",
+        "dataSets": 2,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x448635C957fb01382a9166360091f44D9Ec10Dd2",
+        "bytes": "431776",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x88af0bA8705c09C1e992fA1F0eb6Cf54f9C9e3AE",
+        "bytes": "410624",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xA4DEe7E50f72F46b81eCcfd7e9b789bf5c0B1e8F",
+        "bytes": "405440",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x6ece60C5566Fa310c83f37b4723eB43216b4bfF3",
+        "bytes": "402048",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xfCf90dFc96Ef3b8cdDD3F84cBc271EEBcBF4a157",
+        "bytes": "381760",
+        "dataSets": 3,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x9f93EebD463d4B7c991986a082d974E77b5a02Dc",
+        "bytes": "379936",
+        "dataSets": 4,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0x641C86bBA2ABd6D96f2927662CA712952f4F5189",
+        "bytes": "337856",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0x9b50133Ea767140B661d19F2e5eF7D90cA02d799",
+        "bytes": "329664",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xcAe798C0C6958df8299dF4f13726da433B8BA7bA",
+        "bytes": "322496",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xBCF6F77D2594a4C689BE86f14fC898A5064936a5",
+        "bytes": "306816",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xA984d22132e9aB553292eDd92E87B1C421B48ADA",
+        "bytes": "269728",
+        "dataSets": 6,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xfE04736190e62cB338d89B5906d298C9240D0391",
+        "bytes": "259104",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xa0Ee7A142d267C1f36714E4a8F75612F20a79720",
+        "bytes": "253024",
+        "dataSets": 3,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x65d558840810B9148C51afaE3f0632C8d119Fc50",
+        "bytes": "224736",
+        "dataSets": 2,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xD9a1048f900E57C0C320eF11eFfAF725d1a9353f",
+        "bytes": "219328",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0x14dC79964da2C08b23698B3D3cc7Ca32193d9955",
+        "bytes": "206720",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xA01C67Af4741cB2F9A671bDA762D455CBbCB5111",
+        "bytes": "177792",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0x946eF21AA60aA009A1f8Df1654BBF9F8a01B3e4c",
+        "bytes": "177696",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x3611152BcBAf74099fF33206cfA22ED53E8E78e8",
+        "bytes": "172288",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x253f67E218eB14B0Cee77f911615dAA52f956064",
+        "bytes": "162304",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x4c716929596FaB3046Fa70b33715316CD4e356fc",
+        "bytes": "146880",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x5a02D6268fCf95676BDBe2a735602Cd3d639345D",
+        "bytes": "119808",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xA619c0cbC12a06700c393832061F9387883f55EC",
+        "bytes": "117600",
+        "dataSets": 11,
+        "providers": 4,
+        "share": 0
+      },
+      {
+        "uploader": "0x6Bd07000C5F746af69BEe7f151eb30285a6678B2",
+        "bytes": "108640",
+        "dataSets": 2,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xB21b6800109cEDAc476eE5e5a9F1a7E5f22730cB",
+        "bytes": "103040",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x9Cf81e5e5Db44E544B8D74d24005e2B2975bDC23",
+        "bytes": "85376",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xA418Ee536e230569303d424a6EE40df6dD98dF9b",
+        "bytes": "83712",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x6B845996450ecf86cC2CBc4b92C69d37F87f42d4",
+        "bytes": "83392",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xf55769Dd7143d961Ed68Cef6e49ef002E0354A1a",
+        "bytes": "81248",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xad5c36d1e7d0a5698144215c88379D09e10a9cb5",
+        "bytes": "77184",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x4fE629f981cF9cA4F8613CA1c3aAeAcC7B6608EE",
+        "bytes": "76320",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x357896f612B4FbD4bdeA4be8B47e345aA5176c13",
+        "bytes": "75264",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x2e5Ab02383b56884150CB99Aae66E0f97488d78c",
+        "bytes": "73120",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x7487Ff6b77c576d42DaCbF02B06A9Ce7b1224Be9",
+        "bytes": "70048",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x6c0b0656e26675B0A4399aBab8EFd0349fea921c",
+        "bytes": "69760",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xc9dBd4809368e64EccaF3Fd87ee9Bc4a592b0759",
+        "bytes": "69344",
+        "dataSets": 2,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x7482F1E030070e62B3A62c0400E5ce849CcBceed",
+        "bytes": "68640",
+        "dataSets": 4,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xE7a461CA27d66404700Ea4b0EaB2164d361c38a7",
+        "bytes": "65216",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xaEF30c4730CF03b5dE26b57007A0e4a9752df82b",
+        "bytes": "64704",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xafB25ab3B6453802cc37e80DEA0Da86DD42261E6",
+        "bytes": "59392",
+        "dataSets": 7,
+        "providers": 4,
+        "share": 0
+      },
+      {
+        "uploader": "0xdE0e59D44Ef1aBE5843d55b034D146a72b9BE198",
+        "bytes": "58240",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x64d1CA9fF91b13c06e018843FA2dB2B3FAcA18fC",
+        "bytes": "55232",
+        "dataSets": 4,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xBd53a0Fa261c6BC0fdCbf8F239F0b292136655Ae",
+        "bytes": "53760",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xeeb3e0999D01f0d1Ed465513E414725a357F6ae4",
+        "bytes": "51008",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xf9Dd5d4920dddD0CC89e1cB3B32709f8E0B45A70",
+        "bytes": "48192",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xC07b695eC19DE38f1e62e825585B2818077B96cC",
+        "bytes": "44352",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x5A398A8365b2aC9e8f759133068BF459fb688A16",
+        "bytes": "43872",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xC9C13ace97AaFEf5e6bB5a33BB0196C85c6Ec032",
+        "bytes": "40000",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xac5Ddd35d0b9aDCe27ad9A3D59D4E20EA06A988c",
+        "bytes": "36448",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x5BAf030781b52f2948e5C9a86EF067f59c78FFAF",
+        "bytes": "35392",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xBFDC4E1AF115807CB4a2Bd309131a13Db873472B",
+        "bytes": "35104",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xe6058917512ef23Fa0e90715827f8e4912373E7B",
+        "bytes": "35104",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x3C926EA189e8729929d29175b6f75481422295cA",
+        "bytes": "34944",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x4e1AAb3F5E9253A281B5602ef4B9535e571F7C01",
+        "bytes": "33248",
+        "dataSets": 3,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x9456aec64179FE39a1d0a681de7613d5955E75D3",
+        "bytes": "32096",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xfb9f981B05f754e2d88951Df85ADF0302dad3006",
+        "bytes": "29888",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0x48884F0E81006CF3A3997Dc8B39e6632e70B2476",
+        "bytes": "29632",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xC72115c02b924d5D90DE21F83D9250bD59e97ad0",
+        "bytes": "27904",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xBD585D3c945123ec7A76e69e5Eb6917C098Bce63",
+        "bytes": "27776",
+        "dataSets": 3,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x9c858D31D2bD776E4dDf658DaE2792Fa43CF52d9",
+        "bytes": "24704",
+        "dataSets": 3,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xF4f8Babd6e258b97fda9C867651b98693380bdB8",
+        "bytes": "24576",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x23178ccD27CDa5D5D18B211aD6648e189c1e16E1",
+        "bytes": "24064",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xD410eF12B007Bbcf452767d0dD858E6fC29A4fA5",
+        "bytes": "23168",
+        "dataSets": 21,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x133E26aF79DCfACE6B9a5f1204Fc5B78AEB9B157",
+        "bytes": "18240",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x1CD10B5FB504934FADeF8F8fA44565155268bd01",
+        "bytes": "17792",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xA8a5a06e12c1589D06511Df75de514186060256f",
+        "bytes": "17600",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x2dFb441e8E3f81870bC60fc0F570E146bb905709",
+        "bytes": "16416",
+        "dataSets": 12,
+        "providers": 4,
+        "share": 0
+      },
+      {
+        "uploader": "0xfC18367F2c48104A387949392c27cbC8e906581A",
+        "bytes": "15872",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xB4B1DdE425959fbB8c2d40a561334142658C0f68",
+        "bytes": "14272",
+        "dataSets": 5,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xFB68dBB9d8ff2B68165495baec46BDeD1909F065",
+        "bytes": "14208",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xFAB6b22Fc40f3d8BFD8380C435DE3770A51765C4",
+        "bytes": "14112",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xAc4BDC8AA4E0F8229020cc89DE16e04CA47EbFb0",
+        "bytes": "13664",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xaeadEf680524E9C2F1E99ADF15f4b589c48e6FAE",
+        "bytes": "13088",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xC7fDd870f6fDCF51352666b2696b51fadaC2feA4",
+        "bytes": "12640",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x817cA93300590bF6AA0DFbFa592b055F7eb20090",
+        "bytes": "11136",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xDc3E85b5d25c9200F099Cc9d38769e9cCb445D8f",
+        "bytes": "10752",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x7640Ff9B9df8c88bCaB574704f4911FcA1708673",
+        "bytes": "10624",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xa86bd298eAa9105a6d8C937534e2bC7c6F74C01b",
+        "bytes": "10112",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x4657eb7961c4639aB5b9F594Ea8d289FaeA50cA7",
+        "bytes": "9152",
+        "dataSets": 3,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x15605703AE8385576FeAEF984dA72F00ffda2172",
+        "bytes": "8928",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x3b19a30d840167c98ECA2Aa8C6f4F110e8cD34F1",
+        "bytes": "8864",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xba33E177f1403C255BF9C77301e3f91a5075b754",
+        "bytes": "8352",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x40051D0B55FCb8B95C08F88eC99aadA6204C4871",
+        "bytes": "7808",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x59A9fFfEc1C84DF01Cdc3323008DF324594877e6",
+        "bytes": "7808",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x8a506A0c7576dBa25829306248F69C606d4A4376",
+        "bytes": "7232",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xb8Dfb270B458F19aD0749c442653bF0d04cde5D1",
+        "bytes": "7040",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xE8f90CB4998deb1ed75ec509E96eC265af03A60b",
+        "bytes": "6976",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xFfFB74788a18325960C93A1b3350dE1E1f3105B0",
+        "bytes": "6912",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xb3706c1AbEB52969dEE942240a37913Ed61E7D46",
+        "bytes": "6688",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x4FB5520C79913CbAaa7398EeD4b9d21AAe653490",
+        "bytes": "6144",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xDEeB2463A886d92A3E04d88d71fA75DC9e1720Eb",
+        "bytes": "6048",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xC59ea370944cF6161BA639d865bAf8869749c167",
+        "bytes": "5856",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x0f747a6138fa31E3587815e76907705956D718D5",
+        "bytes": "5632",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xfCF0814158e30A0A2d00609e393e1600c0b9f18A",
+        "bytes": "5312",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x95e1CF9174AbD55E47b9EDa1b3f0F2ba0f4369a0",
+        "bytes": "5216",
+        "dataSets": 5,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xE7f3e3311a67b2ab90da6AAA552A79d4054F345c",
+        "bytes": "4960",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x5cF87Ac4CF9FfA2661F150825395A04c9bEF2270",
+        "bytes": "4832",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x0Bc298a4a0a205875F5Ae3B19506669c55B38d01",
+        "bytes": "4736",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x53bed6F8E31E6df37cCC6B41B35e06D74b8d457D",
+        "bytes": "4608",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x1646b881cfc0838c767Af7abE8D5771973b12D9d",
+        "bytes": "4576",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xeE690eb05E783D819D31DE24A5A8379Ab3fceA8D",
+        "bytes": "4416",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x275bb4736FBD838852ba0556B4f1F565ebA8D6Cf",
+        "bytes": "4288",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xeED09Ed732aE030D58F36235FF445012992b9CDC",
+        "bytes": "4192",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x3127CB4E233387E7da86BD9a89f603c15F7c696A",
+        "bytes": "4064",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x541fc907d21077EEB3f06DcCA1C9273aD7bBbADA",
+        "bytes": "4032",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xa414bd1a1C8fdf7bc5fb18509f458fF720CB2388",
+        "bytes": "3712",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x044B595C9b94A17Adc489bD29696af40ccb3E4d2",
+        "bytes": "3712",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xd6167EA1A98264AF6E3f09395f366717A081627f",
+        "bytes": "3712",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x581c20c5085e398996cddA89103E40B91d4a9046",
+        "bytes": "3712",
+        "dataSets": 2,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x23ff4E96d304F34177d9ED2060098E0Db9998547",
+        "bytes": "3584",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x698FFdA9E5A0a4d7E32A2A8e3956BF8bEE736BA6",
+        "bytes": "3392",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x67767358d192406fF2b17310ef899330272532F9",
+        "bytes": "3392",
+        "dataSets": 13,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0xF1E46E2C81693Ea0845DFF05a571D56d6f91db79",
+        "bytes": "3264",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x6984Ce8eDF3Fd313bC37e07F515FFfB98E345576",
+        "bytes": "3168",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x5980dc5b091D5Cb68F2EABa6f52a0CcEC6d27756",
+        "bytes": "3136",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x87B8825C43e107Af580F1b11e3723E7158894D58",
+        "bytes": "3072",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x9ef3c75b68067c322b73F7265a0b072781869ADD",
+        "bytes": "3072",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xea16AAdd113f1752E23935e6Ee866D9902033b94",
+        "bytes": "2976",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xD490fB9eee2578444CFa56D74B4afaf215EfC269",
+        "bytes": "2880",
+        "dataSets": 2,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x6BF7d6b94282BD48ff458599aDafA268BcB009FF",
+        "bytes": "2816",
+        "dataSets": 2,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x4b98B1fB235C75dC47fd0582E50538cA053D33ca",
+        "bytes": "2720",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xE42953fa447a07d3bFD1A4d632588D3f618cE828",
+        "bytes": "2720",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xA879eB55AaD088A8a19E06610129d4CDb4f2c99b",
+        "bytes": "2688",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xaB25Aa2DF3D0e5682f47bE566E552F07B97683Be",
+        "bytes": "2464",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x7ee732262c2296F91c4512B50F266e02e58613Cc",
+        "bytes": "2464",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x81664094C5f41FAD216BB1a69dCC0791F6fe9362",
+        "bytes": "2464",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x8095EEBA8A542e1d147985B404b38819BAC2C76A",
+        "bytes": "2464",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x84A36DBE68F18D2A655a1aaf6f584AC9F7a641AB",
+        "bytes": "2464",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xd85991efBD5185d7d641DF45aB388BCc3676ec1b",
+        "bytes": "2464",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x40F8892852e767cb171680b8a4c1111E6E2eAC1c",
+        "bytes": "2336",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x7690Fc3976782786F2dBEec096cf62FC6A601267",
+        "bytes": "2304",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xED3b12f21d6C3994BA5eb270a5a217Bae6a6ed1c",
+        "bytes": "2240",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x48acb3F4233Ff2D470d6c410cEF3e21c97225f43",
+        "bytes": "2240",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xe3Ee2b7F25d3305684B53B554a9D58Df11568c6A",
+        "bytes": "2080",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x21C4e00f8754900cC3163Af66B2414dd7B0f2638",
+        "bytes": "1920",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x3BA3cEA9B152CCb559FEf2C547Bc0F76ba1c9302",
+        "bytes": "1920",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xb18109b3b6B8Ba5188cbDdBd2bb6046fa69F605C",
+        "bytes": "1920",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x816151E2468f39DDd22B1F31490879d9dcfEB3B8",
+        "bytes": "1792",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x5Da389033d9B09E53184C71beDfEc551A4b5125D",
+        "bytes": "1600",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x976EA74026E726554dB657fA54763abd0C3a0aa9",
+        "bytes": "1600",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xAc3B500FEB42d841F191c0D8c6fcA9b6076Ae0c1",
+        "bytes": "1536",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x377711a26B52F4AD8C548AAEF8297E0563b87Db4",
+        "bytes": "1536",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xC5B775557deFF1C6ec4ACC83047814bC0C5F403D",
+        "bytes": "1472",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xa8aa05f65949C6449EFeA9F613206E1AfBA25EB4",
+        "bytes": "1440",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x640f3EC72e5eF9D1caC2Ef74188B1d4a71a8Eeaf",
+        "bytes": "1408",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xE2bdE36E3DEbEdA087A945FA95a6e6E8376035f7",
+        "bytes": "1312",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xd82BF1024388c338681B1A4Acf393A889eAe0418",
+        "bytes": "1216",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x57D5843B57d69e24b9916Dbb62e4458866bEF2ab",
+        "bytes": "1216",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x3fe523F301f1f4d42d5747F0b84FB0794897a6Dd",
+        "bytes": "1120",
+        "dataSets": 2,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x1De0d1DA1531C741bB2bc8dFe6dfCbFaB530A20A",
+        "bytes": "1056",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x56ad983Fe3A49AD5D8Ffbec4296C2640c7972670",
+        "bytes": "1024",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x0E251f3E35f31a8E2E39249cCa2d4630e0733DF2",
+        "bytes": "960",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x5573d0fC64a69dB16D072097B2c16E540E238Dc1",
+        "bytes": "960",
+        "dataSets": 3,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x3E5FA882Ed094eee7efD184224Aa4B9A02F4a5cB",
+        "bytes": "960",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xbA8f9cDE627f46B73460Dea019eA82aB05Dde7B9",
+        "bytes": "896",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x3F2C7D8317e96f3349cBEa7b70D1C42bd7eddbE4",
+        "bytes": "896",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xfaE37cDD782f19FcD4F6b259874a819B5bf34Bd4",
+        "bytes": "864",
+        "dataSets": 3,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xaD9B9184dEF2D8929411A8c99E3dD9C119036d7E",
+        "bytes": "640",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x7d5a058c9c14a25DA7Ad91497e76cEdD45126B5A",
+        "bytes": "640",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xE543018E6129dd928F71958F301776e7C88eb6cA",
+        "bytes": "640",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x035A834A3D3f82c852735A8F0401925bB61BA810",
+        "bytes": "608",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x9856FB4a29617d51Fbdcc0D581993DFee397a8B2",
+        "bytes": "608",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x3eAb2E9133BA06252001E5820033F1A876C43664",
+        "bytes": "608",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xA71654e16EE44e8C99eCfAF470B888AA52981b72",
+        "bytes": "608",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x095f3EEEa334D8cCCfb28e22Cc4e1eFFD3Ed9eBd",
+        "bytes": "608",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x57d58BB89703902C6a5a098f27A96b8C3a1bDE81",
+        "bytes": "608",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xa824F5C0F14Ed5D2eD775B8B42684Abf2231D4e5",
+        "bytes": "608",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x855359d243308C10842D0a1a53c8621E42Ce0064",
+        "bytes": "608",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x473954D86a1e114dcb3895912181aA8C60c84D1b",
+        "bytes": "608",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xAfF4faC09Ee4f69a4FceE8d9fb28bfFF7b3CEdC8",
+        "bytes": "576",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x470884E8e4dd7C50Ea08626eE9995da63462E8Ee",
+        "bytes": "576",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x4aEE473776D42e62A3D731C38b0673063C86a784",
+        "bytes": "544",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x1216209f02586127981CEB4B489F11a6e417c9c7",
+        "bytes": "512",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x0DBA585a86bb828708b14d2F83784564Ae03a5d0",
+        "bytes": "512",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x3cA143a8Cf6F64cb204F9146171e3112b33157FB",
+        "bytes": "448",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0x78D801be20906dfB4413e11df0e7DdBD1ac9Bcb3",
+        "bytes": "448",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x67C5967429280Ae900C3D16DEAEFB68e21A49FE7",
+        "bytes": "448",
+        "dataSets": 2,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x5A836505f381d29fED1F25B7CE60afC33F492bBa",
+        "bytes": "416",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xE209f407D6Dd1E12204e1bfff9d429814c905B79",
+        "bytes": "416",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x71748452c48F9Ea963f0338F5C18E87719697CB3",
+        "bytes": "416",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x882996E2b5e099b0910ACc3c0aA2F83F7A45AaF5",
+        "bytes": "416",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xDc2eD2AbdB01d869aC996fE9068Ec7a33A1bA896",
+        "bytes": "416",
+        "dataSets": 19,
+        "providers": 4,
+        "share": 0
+      },
+      {
+        "uploader": "0xc781ccF4A6a7176a345a7d30498684cFd4d785a6",
+        "bytes": "384",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x691DFB5aa0473978eB49546F10D236981B751105",
+        "bytes": "384",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x28487394f54cF4f56818128F1F4230A1207c0f4E",
+        "bytes": "384",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xb82fa6481076d85d844c52bE945B56A0b59E2Cf0",
+        "bytes": "384",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xdDbe25B0b548cED502dF43E8b9681A73fD69519a",
+        "bytes": "384",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xf8e226B04B49119EecdD1bea5aC9A5cd0A06d596",
+        "bytes": "384",
+        "dataSets": 3,
+        "providers": 3,
+        "share": 0
+      },
+      {
+        "uploader": "0x93306D0259Bfb66FE8651A9FbFF640016AD7bEF1",
+        "bytes": "320",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x61d7d128dc03118b158c0c302452fc896d4dC247",
+        "bytes": "320",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x7ceE355A24239007B55e0992d74E3Ba94f815661",
+        "bytes": "320",
+        "dataSets": 2,
+        "providers": 2,
+        "share": 0
+      },
+      {
+        "uploader": "0xc1F5f89561A8b013d717dE4b0F2d3f3f4decd4b8",
+        "bytes": "288",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x207062eBf26b2b21816735685d48B258CD0DD790",
+        "bytes": "288",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x515Fd2fB3c71b8827DEA7795074bEDEB61133B69",
+        "bytes": "256",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x8476538ae2Fc0b6A90d9a2F60021b909799ECd8A",
+        "bytes": "224",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x425cE4d9cf91e9Ce54688BaeA56B6C61A7393f37",
+        "bytes": "224",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x3649F6375fc4BbCF863aeA169D23Db4bc385162A",
+        "bytes": "224",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xf85fc91825c4eCEE8c04C6188c4166f7834d837f",
+        "bytes": "192",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x77B6812714BF9eEF2579ec7FE11fee4B6aD98784",
+        "bytes": "192",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0x4Df61162A06f5C687Fe1494677BaF16d724db81b",
+        "bytes": "160",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xB580078D081D5631508858779C3A39757F787b57",
+        "bytes": "160",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      },
+      {
+        "uploader": "0xd99dD078F3F0E9ECe36b164C1B25a7d140CA2400",
+        "bytes": "128",
+        "dataSets": 1,
+        "providers": 1,
+        "share": 0
+      }
+    ],
+    "attributedBytes": "19023298490944",
+    "unattributedBytes": "4812686862752",
+    "unattributedDataSets": 73,
+    "usdfc": {
+      "address": "0xb3042734b608a1B16e9e86B374A3f3e389B4cDf0",
+      "payRails": "0x09a0fDc2723fAd1A7b8e3e00eE5DF73841df55a0",
+      "symbol": "USDFC",
+      "decimals": 18,
+      "supply": "336884115390835558707798",
+      "escrowed": "24347682003337926738904"
+    }
+  }
+}

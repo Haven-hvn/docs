@@ -1,0 +1,721 @@
+/* ════════════════════════════════════════════════════════════════════════════
+   THE ATLAS — HUD
+   The observatory's chrome. Panels float over the stage as instrument furniture:
+   glass, hairlined, squared. They never round their corners and they never grow a
+   drop shadow — in the void, elevation is emission.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.atlas {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background-color: var(--surface-deep);
+}
+
+.atlas-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.atlas-stage canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* The stage takes the pointer for orbit and zoom; the HUD sits above it. */
+  touch-action: none;
+  cursor: grab;
+}
+
+.atlas-stage canvas:active {
+  cursor: grabbing;
+}
+
+/* ── Tooltip ─────────────────────────────────────────────────────────────────
+   Follows the pointer, offset up and right so the cursor never covers it. */
+.atlas-tip {
+  position: fixed;
+  z-index: 40;
+  translate: 14px -100%;
+  pointer-events: none;
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.6rem 0.75rem;
+  background-color: color-mix(in oklab, var(--surface-sunk) 88%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--line-strong);
+  max-width: 20rem;
+}
+
+.atlas-tip-name {
+  font-size: var(--text-small);
+  font-weight: 500;
+  letter-spacing: -0.016em;
+  color: var(--fg);
+}
+
+.atlas-tip-measure {
+  font-family: var(--font-ledger);
+  font-size: var(--text-fine);
+  color: var(--seal);
+}
+
+.atlas-tip-constellation {
+  color: var(--fg-4);
+}
+
+/* ── Axis control (top left, under the masthead) ─────────────────────────── */
+.atlas-axis-control {
+  position: absolute;
+  z-index: 20;
+  top: calc(var(--chrome-h) + 1.25rem);
+  left: var(--spacing-gutter);
+  width: min(24rem, 34vw);
+  padding: 1rem 1.125rem 1.125rem;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.atlas-axis-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background-color: var(--line);
+  border: 1px solid var(--line);
+}
+
+.atlas-axis-tab {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.65rem 0.75rem;
+  background-color: color-mix(in oklab, var(--surface) 30%, transparent);
+  transition:
+    background-color 320ms var(--ease-out-expo),
+    color 320ms var(--ease-out-expo);
+}
+
+.atlas-axis-label {
+  font-family: var(--font-ledger);
+  font-size: var(--text-micro);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+
+.atlas-axis-tab:hover .atlas-axis-label {
+  color: var(--fg);
+}
+
+.atlas-axis-tab[aria-pressed='true'] {
+  background-color: var(--seal);
+}
+
+.atlas-axis-tab[aria-pressed='true'] .atlas-axis-label {
+  color: var(--surface-deep);
+}
+
+.atlas-axis-tab[aria-pressed='true'] .atlas-key {
+  border-color: color-mix(in oklab, var(--surface-deep) 40%, transparent);
+  color: var(--surface-deep);
+}
+
+.atlas-key {
+  font-family: var(--font-ledger);
+  font-size: var(--text-nano);
+  color: var(--fg-3);
+  border: 1px solid var(--line);
+  padding: 0.1rem 0.3rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.atlas-axis-measure {
+  font-size: var(--text-small);
+  line-height: 1.45;
+  color: var(--fg);
+  text-wrap: pretty;
+}
+
+.atlas-axis-note {
+  font-size: var(--text-fine);
+  line-height: 1.45;
+  color: var(--fg-3);
+  text-wrap: pretty;
+}
+
+/* ── Index (left, below the axis control) ────────────────────────────────── */
+.atlas-index {
+  position: absolute;
+  z-index: 20;
+  top: calc(var(--chrome-h) + 15.5rem);
+  left: var(--spacing-gutter);
+  width: min(24rem, 34vw);
+  max-height: calc(100dvh - var(--chrome-h) - 22rem);
+  display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr);
+  padding: 0.875rem 0 0;
+}
+
+.atlas-index-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0 1.125rem 0.7rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.atlas-index-count {
+  color: var(--fg-4);
+}
+
+.atlas-search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.125rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.atlas-search input {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--text-small);
+  color: var(--fg);
+  padding: 0.2rem 0;
+}
+
+.atlas-search input::placeholder {
+  color: var(--fg-4);
+}
+
+.atlas-search input:focus-visible {
+  outline: none;
+}
+
+.atlas-search:focus-within {
+  background-color: color-mix(in oklab, var(--seal) 6%, transparent);
+}
+
+.atlas-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  padding: 0.7rem 1.125rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.atlas-filter {
+  font-family: var(--font-ledger);
+  font-size: var(--text-nano);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+  border: 1px solid var(--line);
+  padding: 0.28rem 0.5rem;
+  transition:
+    border-color 260ms var(--ease-out-expo),
+    color 260ms var(--ease-out-expo),
+    background-color 260ms var(--ease-out-expo);
+}
+
+.atlas-filter:hover {
+  color: var(--fg);
+  border-color: var(--line-strong);
+}
+
+.atlas-filter[aria-pressed='true'] {
+  color: var(--seal);
+  border-color: var(--seal-edge);
+  background-color: var(--seal-wash);
+}
+
+.atlas-list {
+  list-style: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+.atlas-list-item {
+  display: grid;
+  grid-template-columns: 1.9rem minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.55rem 1.125rem;
+  text-align: left;
+  border-bottom: 1px solid var(--line-soft);
+  transition: background-color 220ms var(--ease-out-expo);
+}
+
+.atlas-list-item:hover {
+  background-color: color-mix(in oklab, var(--seal) 7%, transparent);
+}
+
+.atlas-list-item[aria-current='true'] {
+  background-color: color-mix(in oklab, var(--seal) 13%, transparent);
+}
+
+.atlas-list-rank {
+  font-family: var(--font-ledger);
+  font-size: var(--text-nano);
+  color: var(--fg-4);
+}
+
+.atlas-list-name {
+  font-size: var(--text-small);
+  color: var(--fg);
+  letter-spacing: -0.014em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.atlas-list-measure {
+  font-family: var(--font-ledger);
+  font-size: var(--text-fine);
+  color: var(--seal);
+  white-space: nowrap;
+}
+
+.atlas-list-empty {
+  padding: 1rem 1.125rem;
+  font-size: var(--text-fine);
+  color: var(--fg-3);
+}
+
+/* ── Inspector (right) ───────────────────────────────────────────────────── */
+.atlas-inspector {
+  position: absolute;
+  z-index: 25;
+  top: calc(var(--chrome-h) + 1.25rem);
+  right: var(--spacing-gutter);
+  width: min(27rem, 36vw);
+  max-height: calc(100dvh - var(--chrome-h) - 12rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1.125rem 1.25rem 1.25rem;
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+  animation: inspector-in 480ms var(--ease-out-expo) both;
+}
+
+@keyframes inspector-in {
+  from {
+    opacity: 0;
+    translate: 1.5rem 0;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+.atlas-inspector-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.atlas-inspector-title {
+  font-size: var(--text-title);
+  font-weight: 500;
+  letter-spacing: -0.024em;
+  line-height: 1.1;
+  color: var(--fg);
+  margin-top: 0.35rem;
+}
+
+.atlas-close {
+  font-size: 0.8rem;
+  color: var(--fg-3);
+  padding: 0.25rem 0.4rem;
+  border: 1px solid var(--line);
+  line-height: 1;
+  flex-shrink: 0;
+  transition:
+    color 240ms ease,
+    border-color 240ms ease;
+}
+
+.atlas-close:hover {
+  color: var(--seal);
+  border-color: var(--seal-edge);
+}
+
+.atlas-premise {
+  font-family: var(--font-editorial);
+  font-size: 1.0625rem;
+  line-height: 1.4;
+  letter-spacing: -0.016em;
+  color: var(--fg-2);
+  text-wrap: pretty;
+}
+
+.atlas-rows {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  border-top: 1px solid var(--line);
+}
+
+.atlas-row {
+  display: grid;
+  gap: 0.22rem;
+  padding-block: 0.7rem;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.atlas-row-value {
+  margin: 0;
+  font-size: var(--text-small);
+  color: var(--fg);
+  overflow-wrap: anywhere;
+}
+
+.atlas-row-value.addr {
+  font-size: var(--text-fine);
+}
+
+.atlas-row-note {
+  margin: 0;
+  font-size: var(--text-fine);
+  color: var(--fg-3);
+  line-height: 1.4;
+}
+
+/* Pending block: the honest hole in the record, set apart with the seal. */
+.atlas-pending {
+  border: 1px solid var(--seal-edge);
+  background-color: var(--seal-wash);
+  padding: 0.875rem 1rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.atlas-pending ul {
+  list-style: none;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.atlas-pending li {
+  font-size: var(--text-fine);
+  color: var(--fg-2);
+  padding-left: 0.9rem;
+  position: relative;
+}
+
+.atlas-pending li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 5px;
+  height: 1px;
+  background-color: var(--seal);
+}
+
+.atlas-pending-note {
+  font-size: var(--text-fine);
+  line-height: 1.45;
+  color: var(--fg-3);
+  padding-top: 0.35rem;
+  border-top: 1px solid var(--seal-edge);
+  text-wrap: pretty;
+}
+
+.atlas-verify {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-ledger);
+  font-size: var(--text-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--seal);
+  padding: 0.7rem 0;
+  border-top: 1px solid var(--line);
+  transition: gap 320ms var(--ease-out-expo);
+}
+
+.atlas-verify:hover {
+  gap: 0.8rem;
+}
+
+/* ── Telemetry strip (bottom) ────────────────────────────────────────────── */
+.atlas-telemetry {
+  position: absolute;
+  z-index: 20;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--spacing-gutter);
+  padding: 0.75rem var(--spacing-gutter);
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+}
+
+.atlas-telemetry-networks {
+  display: flex;
+  gap: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.atlas-telemetry-net {
+  display: grid;
+  gap: 0.12rem;
+  padding-inline: 0.9rem;
+  border-left: 1px solid var(--line);
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.atlas-telemetry-net:first-child {
+  padding-left: 0;
+  border-left: none;
+}
+
+.atlas-telemetry-name {
+  color: var(--fg-4);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.atlas-telemetry-value {
+  font-family: var(--font-ledger);
+  font-size: var(--text-fine);
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+}
+
+.atlas-telemetry-latency {
+  font-family: var(--font-ledger);
+  font-size: var(--text-nano);
+  color: var(--fg-4);
+}
+
+.atlas-telemetry-net[data-health='down'] .atlas-telemetry-value {
+  color: var(--seal);
+}
+
+.atlas-telemetry-net[data-health='pending'] {
+  opacity: 0.5;
+}
+
+.atlas-telemetry-storage {
+  display: grid;
+  gap: 0.12rem;
+  justify-items: end;
+  text-align: right;
+  padding-left: 1rem;
+  border-left: 1px solid var(--line);
+}
+
+.atlas-telemetry-figure {
+  font-family: var(--font-institution);
+  font-size: var(--text-subtitle);
+  font-weight: 500;
+  letter-spacing: -0.026em;
+  color: var(--fg);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.atlas-telemetry-note {
+  font-size: var(--text-nano);
+  color: var(--fg-3);
+}
+
+.atlas-telemetry-state {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-left: 1rem;
+  border-left: 1px solid var(--line);
+}
+
+/* ── The brief ───────────────────────────────────────────────────────────── */
+.atlas-brief-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: var(--spacing-gutter);
+  background-color: color-mix(in oklab, var(--surface-sunk) 72%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: brief-in 620ms var(--ease-out-expo) both;
+}
+
+@keyframes brief-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.atlas-brief {
+  width: min(46rem, 100%);
+  max-height: 100%;
+  overflow-y: auto;
+  display: grid;
+  gap: 1.25rem;
+  justify-items: start;
+  padding: clamp(1.5rem, 1rem + 2vw, 2.75rem);
+  background-color: var(--surface);
+  border: 1px solid var(--line-strong);
+  outline: 1px solid var(--line-soft);
+  outline-offset: 5px;
+}
+
+.atlas-brief-title {
+  font-family: var(--font-editorial);
+  font-size: var(--text-headline);
+  font-weight: 400;
+  letter-spacing: -0.026em;
+  line-height: 1.06;
+  color: var(--fg);
+  max-width: 24ch;
+  text-wrap: balance;
+}
+
+.atlas-brief-list {
+  display: grid;
+  gap: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.atlas-brief-list li {
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr);
+  gap: 1rem;
+  padding-block: 1rem;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.atlas-brief-list p {
+  font-size: var(--text-small);
+  line-height: 1.6;
+  color: var(--fg-2);
+  text-wrap: pretty;
+}
+
+.atlas-brief-list strong {
+  color: var(--fg);
+  font-weight: 500;
+}
+
+.atlas-brief-list em {
+  font-family: var(--font-editorial);
+  font-style: italic;
+  color: var(--fg);
+}
+
+/* ── Reductions ──────────────────────────────────────────────────────────── */
+@media (max-width: 1400px) {
+  .atlas-index {
+    max-height: calc(100dvh - var(--chrome-h) - 20rem);
+  }
+}
+
+@media (max-width: 1180px) {
+  .atlas-axis-control,
+  .atlas-index {
+    width: min(20rem, 42vw);
+  }
+  .atlas-inspector {
+    width: min(22rem, 42vw);
+  }
+  .atlas-telemetry {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .atlas-telemetry-state {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .atlas-index {
+    display: none;
+  }
+  .atlas-axis-control {
+    width: calc(100% - var(--spacing-gutter) * 2);
+  }
+  .atlas-inspector {
+    width: calc(100% - var(--spacing-gutter) * 2);
+    top: auto;
+    bottom: 5.5rem;
+    max-height: 48dvh;
+  }
+  .atlas-telemetry-storage {
+    display: none;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ONWARD
+   The inspector's exits. The Atlas is a map, and a map that cannot be acted on
+   is a poster — so a selected community offers the two next moves that exist:
+   check an address against its gate, or go and acquire the asset.
+   ══════════════════════════════════════════════════════════════════════════ */
+.atlas-onward {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 1.1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line-strong);
+}
+
+.atlas-enrol,
+.atlas-acquire {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-ui);
+  font-size: var(--step--2);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+/* The internal move is the primary one: it costs nothing and answers the
+   question the map just raised. */
+.atlas-enrol {
+  color: var(--seal-text);
+  border-bottom: 1px solid color-mix(in oklab, var(--seal) 45%, transparent);
+  padding-bottom: 2px;
+  justify-self: start;
+}
+
+.atlas-enrol:hover {
+  border-bottom-color: var(--seal);
+}
+
+.atlas-acquire {
+  color: var(--fg-2);
+  border-bottom: 1px solid var(--line-strong);
+  padding-bottom: 2px;
+  justify-self: start;
+}
+
+.atlas-acquire:hover {
+  color: var(--fg-0);
+}

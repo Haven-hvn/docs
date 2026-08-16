@@ -1,0 +1,86 @@
+---
+interface Props {
+  size?: number
+  class?: string
+  /** Animates the blades open once on mount. */
+  animate?: boolean
+}
+
+const { size = 22, class: className = '', animate = false } = Astro.props
+---
+
+<svg
+  class:list={['mark', className, { 'mark-animate': animate }]}
+  viewBox="0 0 32 32"
+  width={size}
+  height={size}
+  fill="currentColor"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path d="M5 5h15v4.6H5z" class="blade blade-1" />
+  <path d="M22.4 5H27v15h-4.6z" class="blade blade-2" />
+  <path d="M12 22.4h15V27H12z" class="blade blade-3" />
+  <path d="M5 12h4.6v15H5z" class="blade blade-4" />
+</svg>
+
+<style>
+  .mark {
+    display: block;
+    flex-shrink: 0;
+    overflow: visible;
+  }
+
+  .blade {
+    transition: translate 620ms var(--ease-out-expo);
+  }
+
+  /* Hovering the lockup opens the aperture by a hair. The blades move outward
+     along their own axis, so the void grows symmetrically. */
+  :global(.lockup:hover) .blade-1 {
+    translate: 0 -1.1px;
+  }
+  :global(.lockup:hover) .blade-2 {
+    translate: 1.1px 0;
+  }
+  :global(.lockup:hover) .blade-3 {
+    translate: 0 1.1px;
+  }
+  :global(.lockup:hover) .blade-4 {
+    translate: -1.1px 0;
+  }
+
+  .mark-animate .blade {
+    animation: blade-settle 1400ms var(--ease-out-expo) both;
+  }
+
+  .mark-animate .blade-1 {
+    animation-delay: 60ms;
+  }
+  .mark-animate .blade-2 {
+    animation-delay: 140ms;
+  }
+  .mark-animate .blade-3 {
+    animation-delay: 220ms;
+  }
+  .mark-animate .blade-4 {
+    animation-delay: 300ms;
+  }
+
+  @keyframes blade-settle {
+    from {
+      opacity: 0;
+      translate: 0 -6px;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mark-animate .blade {
+      animation: none;
+    }
+  }
+</style>

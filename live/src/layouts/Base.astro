@@ -1,0 +1,172 @@
+---
+import { Font } from 'astro:assets'
+import { ClientRouter } from 'astro:transitions'
+import '../styles/theme.css'
+import '../styles/base.css'
+import '../styles/material.css'
+import '../styles/palette.css'
+import CommandPalette from '../components/react/CommandPalette.tsx'
+import type { PaletteEntry } from '../components/react/CommandPalette.tsx'
+import { HAVEN } from '../lib/protocol.ts'
+import { CHAINS, ICP, ARKIV, STORAGE } from '../lib/chains.ts'
+
+interface Props {
+  title: string
+  description: string
+  /** 'record' is the paper world; 'observatory' inverts the whole document. */
+  world?: 'record' | 'observatory'
+  /** Suppresses the masthead for full-bleed surfaces that draw their own. */
+  bare?: boolean
+}
+
+const { title, description, world = 'record', bare = false } = Astro.props
+
+const pageTitle =
+  title === HAVEN.name ? `${HAVEN.name} — ${HAVEN.descriptor}` : `${title} · ${HAVEN.name}`
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://haven.network')
+const isObservatory = world === 'observatory'
+
+/**
+ * The index. Authored here rather than derived, because the ordering is an
+ * editorial decision: surfaces first, then the work, then the means of checking
+ * it, then display preferences.
+ */
+const paletteEntries: PaletteEntry[] = [
+  { group: 'Surfaces', label: 'The Record', hint: 'The argument, in eight parts', href: '/', keywords: 'home landing index' },
+  { group: 'Surfaces', label: 'The Atlas', hint: 'Live observatory of communities and storage', href: '/atlas', keywords: 'map 3d visualisation observatory' },
+  { group: 'Surfaces', label: 'The Codex', hint: 'Protocol documentation', href: '/codex', keywords: 'docs documentation reference' },
+  { group: 'Surfaces', label: 'The Threshold', hint: 'Three ways in — read, publish, found', href: '/threshold', keywords: 'onboarding join enrol enroll start begin get started' },
+  { group: 'The Threshold', label: 'Read an archive', hint: 'Path A · the reader', href: '/threshold/read', keywords: 'lurker watch join community nft buy acquire opensea eligibility check address' },
+  { group: 'The Threshold', label: 'Publish an archive', hint: 'Path B · the publisher', href: '/threshold/publish', keywords: 'upload publish fil gas usdfc storage cli encrypt pin' },
+  { group: 'The Threshold', label: 'Start an archive', hint: 'Path C · the founder', href: '/threshold/found', keywords: 'found create own token nft gate deploy contract threshold community' },
+
+  { group: 'The Codex', label: 'What Haven is', hint: 'Foundations · I.01', href: '/codex/what-haven-is' },
+  { group: 'The Codex', label: 'What Haven refuses to know', hint: 'Foundations · I.02', href: '/codex/threat-model', keywords: 'threat model privacy' },
+  { group: 'The Codex', label: 'Four networks, one rule set', hint: 'Foundations · I.03', href: '/codex/layers' },
+  { group: 'The Codex', label: 'The gate', hint: 'The Rule Set · II.01', href: '/codex/the-gate', keywords: 'balance authorisation holder' },
+  { group: 'The Codex', label: 'Key derivation and epochs', hint: 'The Rule Set · II.02', href: '/codex/key-derivation', keywords: 'vetkd epoch' },
+  { group: 'The Codex', label: 'The entity shape', hint: 'The Rule Set · II.03', href: '/codex/entity-shape', keywords: 'ident32 mime128 attributes' },
+  { group: 'The Codex', label: 'Attestation and holder identity', hint: 'The Rule Set · II.04', href: '/codex/attestation' },
+  { group: 'The Codex', label: 'arkiv-chain — the index', hint: 'Surfaces · III.01', href: '/codex/arkiv-chain' },
+  { group: 'The Codex', label: 'haven-aol — the gate', hint: 'Surfaces · III.02', href: '/codex/haven-aol' },
+  { group: 'The Codex', label: 'dapp, cli, mobile — the clients', hint: 'Surfaces · III.03', href: '/codex/clients' },
+  { group: 'The Codex', label: 'Candid and typed data', hint: 'Contracts · IV.01', href: '/codex/candid-and-typed-data' },
+  { group: 'The Codex', label: 'Verify it yourself', hint: 'Operations · V.01', href: '/codex/verify-it-yourself', keywords: 'curl rpc check' },
+
+  { group: 'Verify', label: 'Gate canister', hint: ICP.canister, href: ICP.dashboard },
+  { group: 'Verify', label: 'Pin service', hint: STORAGE.mainnet.warmStorage, href: CHAINS.filecoin.explorerAddress(STORAGE.mainnet.warmStorage) },
+  { group: 'Verify', label: 'Payment rails', hint: STORAGE.mainnet.filecoinPay, href: CHAINS.filecoin.explorerAddress(STORAGE.mainnet.filecoinPay) },
+  { group: 'Verify', label: 'USDFC', hint: STORAGE.mainnet.usdfc, href: CHAINS.filecoin.explorerAddress(STORAGE.mainnet.usdfc) },
+  { group: 'Verify', label: 'Ethereum', hint: CHAINS.ethereum.rpc, href: CHAINS.ethereum.explorer },
+  { group: 'Verify', label: 'Arkiv node', hint: ARKIV.statusShort, href: ARKIV.rpc },
+
+  { group: 'Display', label: 'Switch edition', hint: 'Paper or ink', action: 'edition', keywords: 'dark light theme invert' },
+]
+---
+
+<!doctype html>
+<html lang="en" data-world={isObservatory ? 'observatory' : undefined}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/mark.svg" type="image/svg+xml" />
+    <link rel="canonical" href={canonical.href} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#141519" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content={isObservatory ? 'dark' : 'light'} />
+
+    {/* Self-hosted, subset and metric-matched at build time by Astro's font
+        pipeline. The two faces that render above the fold are preloaded; the
+        ledger face is not, because it appears in small quantities. */}
+    <Font cssVariable="--font-editorial" preload />
+    <Font cssVariable="--font-institution" preload />
+    <Font cssVariable="--font-ledger" />
+
+    <ClientRouter />
+
+    <script is:inline>
+      // Entrance choreography hides elements until it can reveal them, which is
+      // only safe once we know scripting is available. This flag is set before
+      // first paint; without it every hidden state is inert and the document
+      // renders complete.
+      document.documentElement.dataset.js = 'true'
+
+      // Applied before first paint so a chosen edition never flashes.
+      try {
+        if (localStorage.getItem('haven:edition') === 'ink') {
+          document.documentElement.dataset.edition = 'ink'
+        }
+        // Same reasoning for the network: a reader who chose devnet should never
+        // see mainnet figures first and watch them change under them.
+        if (localStorage.getItem('haven:network') === 'devnet') {
+          document.documentElement.dataset.network = 'devnet'
+        }
+      } catch (error) {
+        void error
+      }
+      if (matchMedia('(pointer: fine)').matches) {
+        document.documentElement.dataset.pointer = 'fine'
+      }
+    </script>
+  </head>
+
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <div class="material-light" aria-hidden="true"></div>
+
+    {!bare && <slot name="masthead" />}
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <slot name="footer" />
+
+    <CommandPalette client:idle entries={paletteEntries} />
+
+    <div class="material-grain" aria-hidden="true"></div>
+
+    <script>
+      import { installChrome } from '../lib/chrome.ts'
+
+      installChrome()
+      // Re-run after every cross-document view transition.
+      document.addEventListener('astro:page-load', () => installChrome())
+    </script>
+
+    <style>
+      .skip-link {
+        position: fixed;
+        top: 0.75rem;
+        left: 0.75rem;
+        z-index: 10000;
+        padding: 0.7rem 1rem;
+        /* Ink on stock rather than ember on stock: the seal is a 2.9:1 pair
+           against paper, and a skip link is the one control that must be
+           unambiguous. */
+        background-color: var(--fg);
+        color: var(--surface);
+        font-family: var(--font-ledger);
+        font-size: var(--text-micro);
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        translate: 0 -180%;
+        transition: translate 260ms var(--ease-out-expo);
+      }
+
+      .skip-link:focus-visible {
+        translate: 0 0;
+      }
+    </style>
+  </body>
+</html>

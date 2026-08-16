@@ -1,0 +1,153 @@
+---
+title: Verify it yourself
+summary: Every claim the protocol makes is independently verifiable with a curl command and a public RPC. Here are the commands.
+part: Operations
+folio: 'V.01'
+order: 1
+status: settled
+sources:
+  - docs/architecture/WEB3_PARADIGM.md
+  - docs/architecture/05-arkiv-chain.md
+  - docs/architecture/01-haven-aol.md
+---
+
+import { ARKIV } from '../../lib/chains.ts'
+
+{/* Built here rather than inline: a template literal passed through set:html gets
+    escaped twice, which turned the line continuations into `\\` and broke the
+    command on paste. As JSX text it renders verbatim. */}
+export const arkivProbe = `curl -s -X POST ${ARKIV.rpc} \\
+  -H "Content-Type: application/json" \\
+  -d '{"jsonrpc":"2.0","method":"arkiv_getEntityCount","params":[],"id":1}'`
+
+## The principle
+
+Haven makes no claim that requires trusting Haven to verify. Every network the protocol uses exposes a public, CORS-open RPC endpoint that any reader can query directly from a browser or terminal. The examples below are copy-pasteable.
+
+## EVM chain liveness
+
+Verify that the gating chains are reachable and returning current block numbers:
+
+```bash
+# Ethereum mainnet
+curl -s -X POST https://ethereum-rpc.publicnode.com \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'
+
+# Base
+curl -s -X POST https://mainnet.base.org \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'
+
+# OP Mainnet
+curl -s -X POST https://optimism.publicnode.com \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'
+```
+
+Expected response shape:
+
+```json
+{"jsonrpc":"2.0","id":1,"result":"0x1a2b3c4"}
+```
+
+## Filecoin RPC
+
+Verify that the storage layer is answering on both mainnet and calibration:
+
+```bash
+# Filecoin mainnet
+curl -s -X POST https://api.node.glif.io/rpc/v1 \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"Filecoin.ChainHead","params":[],"id":1}'
+
+# Filecoin Calibration (testnet — where pin contracts are deployed)
+curl -s -X POST https://api.calibration.node.glif.io/rpc/v1 \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"Filecoin.ChainHead","params":[],"id":1}'
+```
+
+Expected response includes `Height` and `Cids` array representing the current tipset.
+
+## ICP gateway status
+
+Verify that the Internet Computer gateway is operational:
+
+```bash
+curl -s https://icp0.io/api/v2/status
+```
+
+Expected response is a CBOR-encoded status object. A 200 response confirms the gateway is reachable and the subnet hosting canister `dciac-uaaaa-aaaad-qlzuq-cai` is accessible.
+
+## Reading a gate token's identity (eth_call)
+
+Verify that a gating contract answers `name()` without any API key. This example reads the name of the Nouns contract on Ethereum:
+
+```bash
+curl -s -X POST https://ethereum-rpc.publicnode.com \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc":"2.0",
+    "method":"eth_call",
+    "params":[{
+      "to":"0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03",
+      "data":"0x06fdde03"
+    },"latest"],
+    "id":1
+  }'
+```
+
+Selector `0x06fdde03` is `name()`. The response `result` is an ABI-encoded string. Decode it to confirm the contract identifies itself.
+
+To read `totalSupply()` (selector `0x18160ddd`) or `balanceOf(address)` (selector `0x70a08231`), substitute the `data` field. For `balanceOf`, append the address zero-padded to 32 bytes:
+
+```bash
+# balanceOf on Base USDC (0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913)
+curl -s -X POST https://mainnet.base.org \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc":"2.0",
+    "method":"eth_call",
+    "params":[{
+      "to":"0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "data":"0x70a08231000000000000000000000000YOUR_ADDRESS_HERE"
+    },"latest"],
+    "id":1
+  }'
+```
+
+## Arkiv (no public network)
+
+The entity index endpoint is included for completeness. {ARKIV.codename} was retired on {ARKIV.retiredOn} and the next public testnet is expected {ARKIV.nextPublicTestnet}, so this does not currently answer.
+
+The command is generated from the configured host rather than written out, so it stays correct when the network is repointed — see `PUBLIC_ARKIV_HOST` in the README.
+
+<pre class="astro-code"><code>{arkivProbe}</code></pre>
+
+Expected today: HTTP 503. Once a public network answers, this returns the total entity count in the state trie.
+
+Every previous devnet has served RPC at `/rpc`, the faucet at `/faucet/` and the explorer at `/` from one host, so the next network is expected to follow the same convention under a new name.
+
+## Filecoin storage contracts
+
+Verify the FilecoinPay contract on calibration is deployed and answering:
+
+```bash
+curl -s -X POST https://api.calibration.node.glif.io/rpc/v1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc":"2.0",
+    "method":"eth_call",
+    "params":[{
+      "to":"0x09a0fDc2723fAd1A7b8e3e00eE5DF73841df55a0",
+      "data":"0x06fdde03"
+    },"latest"],
+    "id":1
+  }'
+```
+
+This queries the `name()` of the FilecoinPay contract on calibration chain (id 314159). A non-empty response confirms the contract is deployed and the RPC is answering.
+
+## What a 503 means
+
+When an endpoint returns 503 — as Arkiv does today — it means the network component is not serving. The protocol is designed so that each network's failure is contained: Arkiv offline means metadata is unresolvable, but gating, storage, and payment continue independently. The interface draws this honestly: unlit edges where a live query would go, rather than invented data.

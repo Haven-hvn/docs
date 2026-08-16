@@ -1,0 +1,59 @@
+---
+title: arkiv-chain — the index
+summary: A Rust execution node running a modified reth, with entity state held in a precompile-addressed trie and queried via a custom JSON-RPC namespace.
+part: Surfaces
+folio: 'III.01'
+order: 1
+status: settled
+epigraph: An index that lives in a state root cannot be edited without leaving a proof that it was.
+sources:
+  - docs/architecture/05-arkiv-chain.md
+  - docs/entities/ENTITY_SHAPE.md
+---
+
+import { ARKIV } from '../../lib/chains.ts'
+
+## Role in the protocol
+
+Arkiv is the metadata layer. It holds entity records — keys, attributes, content types, payloads — in an Ethereum-compatible state trie, indexed by roaring64 bitmaps and an adaptive radix tree. It does not hold encrypted media bytes (those are on Filecoin), decryption keys (those derive on ICP), or balance proofs (those live on EVM L1s). Its sole responsibility is making the catalogue queryable.
+
+The precompile address is `0x4400000000000000000000000000000000000044`. All writes pass through it; there is no deployed Solidity implementation behind the address. The precompile decodes calldata directly, validates constraints (charset, types, ownership, liveness), mutates the trie, and emits `EntityOperation` events.
+
+## Current operational status
+
+Arkiv has no public network. The former node at `{ARKIV.rpc}` returns 503: {ARKIV.codename} was retired on {ARKIV.retiredOn}, and the next public testnet is expected {ARKIV.nextPublicTestnet}. Because Arkiv holds metadata only, the consequence is narrow: entity records cannot presently be resolved. Storage, proofs, payment, and gating are all on separate networks and are unaffected.
+
+## Write path
+
+Writes are standard EVM transactions addressed to `0x44…0044`. The precompile decodes the calldata as `execute(Operation[])`, processes the batch atomically, and charges gas. Six operation types are supported:
+
+| Code | Operation | Effect |
+| --- | --- | --- |
+| 1 | CREATE | Allocates an entity key in the trie |
+| 2 | UPDATE | Replaces attributes or payload |
+| 3 | EXTEND | Increases the blocks-to-live |
+| 4 | TRANSFER | Moves ownership to a new address |
+| 5 | DELETE | Removes the entity from the trie |
+| 6 | EXPIRE | Marks an entity as lapsed (system-triggered) |
+
+Ownership and liveness are enforced at precompile execution time. An expired entity cannot be updated; a non-owner cannot transfer. Errors surface as Solidity-style reverts with typed selectors: `EntityNotFound`, `NotOwner`, `EntityExpired`, `Ident32InvalidByte`.
+
+## Read path
+
+Reads bypass `eth_call` entirely. The `arkiv_*` JSON-RPC namespace exposes direct trie access through the `arkiv-entitydb` crate:
+
+- `arkiv_query` — structured query against attributes (equality, range via ART index), returns matching entities.
+- `arkiv_getEntityCount` — global counter, useful for diagnostics.
+- `arkiv_getBlockTiming` — block production statistics.
+
+The SDK `@arkiv-network/sdk` version `0.7.0` wraps these as a `PublicArkivClient` — used by `haven-dapp` (`src/lib/arkiv.ts`) and `haven-cli` (`arkiv_sync.py`).
+
+## State storage
+
+The trie is the database. There is no external indexer, no Postgres shadow, and no event-sourcing layer. The `stateRoot` committed in each block header is the canonical digest of all entity state. This means any Arkiv full node can independently verify the catalogue's integrity by replaying the chain — there is no trust assumption beyond consensus.
+
+Per-caller nonces and a global entity counter live in a system account, lazily materialised (nonce bumped to 1 on first use) to avoid EIP-161 pruning.
+
+## How surfaces consume it
+
+`haven-dapp` and `haven-cli` are the two surfaces that speak directly to Arkiv. The mobile and canister surfaces do not — `haven-mobile` discovers content via the dapp's cache, and `haven-aol` has no Arkiv dependency at all. This means the canister can derive keys even while the index is offline, which is the current operating state.

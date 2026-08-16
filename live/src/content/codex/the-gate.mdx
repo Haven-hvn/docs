@@ -1,0 +1,76 @@
+---
+title: The gate
+summary: A canister on the Internet Computer derives a decryption key if and only if a public EVM balance meets a stated threshold. Nothing else participates.
+part: The Rule Set
+folio: 'II.01'
+order: 1
+status: settled
+epigraph: A gate that cannot be opened by its operator is a gate that cannot be closed by one either.
+sources:
+  - docs/architecture/01-haven-aol.md
+  - docs/api/contracts.md
+  - docs/decisions/ADR-001-decoupled-boundaries.md
+---
+
+## What the gate does
+
+The gate is canister `dciac-uaaaa-aaaad-qlzuq-cai`, deployed on the Internet Computer mainnet, written in Motoko. It accepts a signed request from a reader, verifies that the reader holds a sufficient balance on a public EVM chain, and — only then — derives a decryption key from the network's own threshold material via VetKD.
+
+There is no account, no password, and no session to steal. The entire authorisation model is a single `eth_call` to `balanceOf` (selector `0x70a08231`) or `ownerOf` on a public contract.
+
+## The request lifecycle
+
+1. The reader signs an EIP-712 typed struct — `GateRequestV3` in the current version:
+
+```
+GateRequestV3(address evmAddress, bytes transportPublicKey, uint256 epoch, uint256 nonce)
+```
+
+2. The canister recovers the signer via `secp256k1` `ecrecover` (implemented in pure Motoko — no precompile available on ICP).
+
+3. The canister calls the target EVM chain through the `ic/evm_rpc` canister, checking that the recovered address satisfies the gate threshold.
+
+4. If the balance is sufficient, VetKD derives key material under context `accessol_v3` with the preimage:
+
+```
+SHA-256("accessol_v3:" + chain + ":" + token + ":" + threshold + ":" + effectiveEpoch)
+```
+
+5. The derived ciphertext is returned to the caller's `transportPublicKey`. Only the reader's local client can unwrap it.
+
+## Epochs and caching
+
+The V3 derivation is scoped to an epoch of 2,592,000 seconds (30 days). Within one epoch, a single derivation unlocks an entire corpus published against the same (chain, token, threshold) tuple. This is the design's central efficiency gain over V1, where every CID required a separate derivation and a separate balance check.
+
+The canister maintains an approval cache keyed on `(chain, token, threshold, epoch, wallet)`. A reader who has already proven balance in the current epoch can derive additional keys without a second `eth_call`. The cache entry expires at epoch rollover — 30 days, or immediately via `evictExpiredApprovals` (controller-only).
+
+A zero threshold is a special case: it bypasses both the cache and the balance check, but still validates the epoch. This allows content to be gated by signature alone — useful for free-tier archives that want authentication without payment.
+
+## Why ICP
+
+The gate needs three properties that conventional smart-contract platforms do not provide together:
+
+1. **Threshold key derivation** — VetKD is native to ICP's subnet architecture. No Ethereum precompile offers this today.
+2. **Outbound HTTPS calls** — the canister must call EVM RPCs to check balances. ICP canisters can make HTTP outcalls; Ethereum contracts cannot.
+3. **Sub-second query latency** — a reader should not wait for block confirmation to learn whether they hold. ICP query calls return in ~200ms.
+
+The tradeoff is a trust assumption on ICP subnet honesty. A supermajority of replicas colluding could reconstruct derived keys. The protocol accepts this because the economic cost of such collusion exceeds the value of any individual gated archive.
+
+## The contract surface
+
+The canister exposes exactly ten Candid methods. No other IPC channel exists between surfaces.
+
+| Method | Kind | Purpose |
+| --- | --- | --- |
+| `requestDecryptionKey` | update | V1: per-CID derivation |
+| `batchRequestDecryptionKey` | update | V1: up to 20 CIDs, N derivations |
+| `requestDecryptionKeyV3` | update | V3: epoch-scoped derivation |
+| `batchRequestDecryptionKeyV3` | update | V3: up to 20 CIDs, one derivation replicated |
+| `getVetKDPublicKey` | query | Cached V1 public key |
+| `getVetKDPublicKeyV3` | query | Distinct V3 public key |
+| `warmupVetKDPublicKey` | update | Populate V1 cache |
+| `warmupVetKDPublicKeyV3` | update | Populate V3 cache |
+| `getCurrentEpoch` | query | `floor(unix / 2_592_000)` |
+| `evictExpiredApprovals` | update | Controller-only janitor |
+
+No frontend, no upload pipeline, no storage logic. The gate knows only how to derive — and only when the chain says it should.

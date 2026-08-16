@@ -1,0 +1,88 @@
+---
+title: What Haven is
+summary: An application-layer protocol that keeps encrypted media on public infrastructure and derives the key to it from what a reader holds.
+part: Foundations
+folio: 'I.01'
+order: 1
+status: settled
+epigraph: A haven is not a place that keeps people out. It is a place that cannot be taken away.
+sources:
+  - docs/README.md
+  - docs/architecture/00-platform-overview.md
+  - docs/architecture/WEB3_PARADIGM.md
+---
+
+Haven is not a chain, a company, or a platform. It is an **application-layer
+protocol** — a rule set that four public networks are enough to enforce, with
+nothing in between them and the reader.
+
+The rule set fits in a sentence. Content is a ciphertext addressed by a
+content identifier, pinned on Filecoin. Its metadata is an entity record on
+Arkiv. The key to it is derived by a canister on the Internet Computer, but only
+for an address that a public EVM chain confirms holds a stated balance. Identity
+is not a profile; it is the image the gating contract already publishes about
+itself.
+
+Nothing in that sentence requires a server that Haven operates.
+
+## What that buys
+
+The interesting property is not decentralisation for its own sake. It is that
+**every component of the system is one a reader can independently verify, and
+none of them is one Haven can withdraw.**
+
+- The bytes are encrypted before they leave the publisher's machine. No operator
+  in the path, Haven included, is in a position to read them.
+- Authorisation is a public balance. There is no account to suspend, no password
+  to reset, no session token to exfiltrate.
+- The index is a state trie, the gate is a canister, the vault is Filecoin. There
+  is no origin server to seize and no DNS record whose removal ends the archive.
+
+## The topology, stated plainly
+
+Five independent surfaces read and write the same rule set. They share no
+database, no queue, and no library.
+
+| Surface | Language | Responsible for |
+| --- | --- | --- |
+| `arkiv-chain` | Rust | The entity contract and the state trie behind the precompile |
+| `haven-aol` | Motoko | Key derivation, signature recovery, balance checks, approvals |
+| `haven-dapp` | TypeScript | Discovery, in-browser decryption, playback |
+| `haven-cli` | Python | Encryption, the media pipeline, pin submission |
+| `haven-mobile` | Kotlin | Offline-first viewing and local cache |
+
+A graph build over the workspace reports **five services and zero private
+datastores.** That figure is the whole architecture in two numbers: there is no
+shared backend for a surface to depend on, so each one ships, scales and fails
+alone.
+
+## Why an application layer
+
+It is tempting to describe a system like this as "a decentralised video
+platform". That framing is wrong in a way that matters, because it implies Haven
+supplies the infrastructure and merely distributes it.
+
+Haven supplies none of the infrastructure. Consensus, storage, settlement and
+threshold cryptography are all provided by networks that existed before Haven and
+will outlast it. What Haven contributes is the layer above them: a specification
+for *how* those four capabilities compose into a single coherent guarantee.
+
+That is what an application-layer protocol is. The lower layers see bytes, an
+`eth_call` and an `ecrecover`. They have no idea Haven exists — which is exactly
+why they cannot be leaned on to shut it down.
+
+## Current operating state
+
+One component is not yet online, and the interface says so everywhere it
+matters rather than papering over it.
+
+Arkiv — the **metadata index** — is not currently answering; its public node
+returns `503`. Because Arkiv holds metadata and nothing else, the consequence is
+narrow and specific: records cannot presently be resolved from a gate to the
+content published against it. Storage, proofs, payment and gating are unaffected,
+and all four are live and readable right now.
+
+The Atlas draws this honestly. Storage and market figures are read live from
+Filecoin and the EVM chains; the metadata edges that would bind a data set to a
+community are drawn unlit, because they are pending an index rather than merely
+absent.

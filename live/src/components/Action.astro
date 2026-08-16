@@ -1,0 +1,82 @@
+---
+interface Props {
+  href?: string
+  variant?: 'sealed' | 'keyline'
+  /** Trailing glyph. An arrow means navigation, a chevron means disclosure. */
+  glyph?: 'arrow' | 'none'
+  external?: boolean
+  class?: string
+  size?: 'default' | 'large'
+  'data-palette-open'?: boolean
+}
+
+const {
+  href,
+  variant = 'sealed',
+  glyph = 'arrow',
+  external = false,
+  class: className = '',
+  size = 'default',
+} = Astro.props
+
+const Tag = href ? 'a' : 'button'
+const rel = external ? 'noreferrer noopener' : undefined
+const target = external ? '_blank' : undefined
+---
+
+<Tag
+  href={href}
+  rel={rel}
+  target={target}
+  type={href ? undefined : 'button'}
+  class:list={[
+    'action',
+    variant === 'sealed' ? 'action-sealed' : 'action-keyline',
+    size === 'large' && 'action-large',
+    className,
+  ]}
+  data-magnetic="4"
+  {...Astro.props['data-palette-open'] ? { 'data-palette-open': true } : {}}
+>
+  <span class="action-text"><slot /></span>
+  {
+    glyph === 'arrow' && (
+      <svg class="action-glyph" viewBox="0 0 16 16" width="11" height="11" aria-hidden="true">
+        <path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" />
+      </svg>
+    )
+  }
+</Tag>
+
+<style>
+  .action {
+    position: relative;
+  }
+
+  .action-large {
+    padding: 1.2rem 2rem;
+    font-size: var(--text-small);
+    letter-spacing: 0.16em;
+  }
+
+  .action-text {
+    position: relative;
+  }
+
+  /* The glyph advances on hover — a small, cheap signal that the control leads
+     somewhere rather than toggling something. */
+  .action-glyph {
+    flex-shrink: 0;
+    transition: translate 460ms var(--ease-out-expo);
+  }
+
+  .action:hover .action-glyph {
+    translate: 4px 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .action:hover .action-glyph {
+      translate: none;
+    }
+  }
+</style>

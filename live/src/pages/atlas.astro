@@ -1,0 +1,110 @@
+---
+import Base from '../layouts/Base.astro'
+import Masthead from '../components/Masthead.astro'
+import Atlas from '../components/react/Atlas/Atlas.tsx'
+import ledger from '../data/storage-ledger.json'
+import collections from '../data/collection-quotes.json'
+import '../styles/atlas.css'
+import { CHAINS } from '../lib/chains.ts'
+import type { MarketQuote } from '../lib/market.ts'
+
+/**
+ * Both Filecoin deployments are handed to the island so the network toggle costs
+ * nothing at runtime — the calibration ledger is captured at build time exactly
+ * like the mainnet one, so switching re-reads a prop rather than a network.
+ *
+ * The demand side is addresses that paid to pin bytes. Providers stay in the
+ * ledger as supply-side context for the telemetry strip, but they are not the
+ * population on the map — they hold capacity, they do not publish archives.
+ */
+const shape = (network: (typeof ledger)['mainnet'] | undefined) => {
+  const d = network ?? ({} as NonNullable<typeof network>)
+  return {
+    uploaders: (d.uploaders ?? []).map((entry: (typeof d)['uploaders'][number]) => ({
+      uploader: entry.uploader,
+      bytes: entry.bytes,
+      dataSets: entry.dataSets,
+      providers: entry.providers,
+      share: entry.share,
+    })),
+    storage: {
+      totalBytes: d.totalBytes ?? '0',
+      liveDataSets: d.liveDataSets ?? 0,
+      providerCount: (d.providers ?? []).length,
+      blockNumber: d.blockNumber ?? '0',
+      capturedAt: d.capturedAt ?? new Date().toISOString(),
+      usdfcEscrowed: d.usdfc?.escrowed ?? '0',
+      usdfcDecimals: d.usdfc?.decimals ?? 18,
+      usdfcSymbol: d.usdfc?.symbol ?? 'USDFC',
+      attributedBytes: d.attributedBytes ?? '0',
+      unattributedBytes: d.unattributedBytes ?? '0',
+      unattributedDataSets: d.unattributedDataSets ?? 0,
+      uploaderCount: (d.uploaders ?? []).length,
+    },
+  }
+}
+
+const deployments = {
+  mainnet: { ...shape(ledger.mainnet), chainLabel: CHAINS.filecoin.name },
+  devnet: { ...shape(ledger.calibration), chainLabel: CHAINS.filecoinCalibration.name },
+}
+
+const collectionQuotes: MarketQuote[] = (collections.quotes ?? []).map((quote) => ({
+  slug: quote.slug,
+  priceUsd: quote.priceUsd ?? null,
+  marketCapUsd: quote.marketCapUsd ?? null,
+  floorUsd: quote.floorUsd ?? null,
+  change24h: quote.change24h ?? null,
+  image: quote.image ?? null,
+  source: 'coingecko-nft',
+  asOf: quote.asOf ?? collections.capturedAt,
+}))
+
+---
+
+<Base
+  title="The Atlas"
+  description="An observatory for the archive: real communities sized by the value of the asset that gates them, and the real addresses paying to pin bytes under proof on Filecoin."
+  world="observatory"
+>
+  <Masthead slot="masthead" current="atlas" tone="void" />
+
+  {/*
+    The observatory is a full-viewport instrument, so it takes over the document
+    rather than sitting inside the page flow. The masthead persists across the
+    view transition from the Record and morphs in place.
+
+    WebGL cannot be server-rendered, so this island is client:only — but the
+    stage reserves its space and holds a lit placeholder, so there is never a
+    flash of empty background while three.js arrives.
+  */}
+  {/* The Atlas's visible title is the map itself, so the document heading is
+      provided for assistive technology and search rather than drawn. */}
+  <h1 class="sr-only">The Atlas — a live observatory of communities and storage</h1>
+
+  <Atlas client:only="react" deployments={deployments} collectionQuotes={collectionQuotes} />
+
+  <noscript>
+    <div class="atlas-noscript">
+      <h1 class="editorial-headline">The Atlas needs a renderer.</h1>
+      <p class="prose-body">
+        This surface draws a live three-dimensional map from on-chain reads, which requires
+        JavaScript and WebGL. Every figure it shows is available without either — the protocol
+        documentation lists the exact endpoints and calls, so you can read the same numbers with
+        <code>curl</code>.
+      </p>
+      <a class="action action-sealed" href="/codex/verify-it-yourself">Read them with curl</a>
+    </div>
+  </noscript>
+</Base>
+
+<style>
+  .atlas-noscript {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+    max-width: 46rem;
+    margin: 0 auto;
+    padding: 6rem var(--spacing-gutter);
+  }
+</style>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>Haven</title>
+  <!--
+    The mark is an aperture: four blades, each one a public network, rotated in a
+    pinwheel so that they enclose a void without any of them touching. The void is
+    the archive — protected by the arrangement, owned by none of the parts.
+  -->
+  <rect width="32" height="32" fill="#141519" />
+  <g fill="#e8613a">
+    <path d="M5 5h15v4.6H5z" />
+    <path d="M22.4 5H27v15h-4.6z" />
+    <path d="M12 22.4h15V27H12z" />
+    <path d="M5 12h4.6v15H5z" />
+  </g>
+</svg>

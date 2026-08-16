@@ -1,0 +1,176 @@
+/* ════════════════════════════════════════════════════════════════════════════
+   THE INDEX — command palette
+   Positioned high rather than centred: a reader's eye is already at the top of
+   the page when they reach for ⌘K, and a dialog that appears where they are
+   looking feels instant even at the same animation duration.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.palette-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  align-items: start;
+  justify-items: center;
+  padding: clamp(3rem, 8vh, 8rem) var(--spacing-gutter) var(--spacing-gutter);
+  background-color: color-mix(in oklab, var(--surface-sunk) 55%, transparent);
+  backdrop-filter: blur(8px) saturate(1.2);
+  -webkit-backdrop-filter: blur(8px) saturate(1.2);
+  animation: palette-scrim-in 260ms var(--ease-out-expo) both;
+}
+
+@keyframes palette-scrim-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.palette {
+  width: min(42rem, 100%);
+  max-height: min(34rem, 76vh);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  background-color: var(--surface-raised);
+  border: 1px solid var(--line-strong);
+  outline: 1px solid var(--line-soft);
+  outline-offset: 4px;
+  box-shadow: var(--lift-3);
+  animation: palette-in 380ms var(--ease-out-expo) both;
+}
+
+@keyframes palette-in {
+  from {
+    opacity: 0;
+    translate: 0 -0.75rem;
+    scale: 0.985;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+}
+
+/* ── Field ────────────────────────────────────────────────────────────────── */
+.palette-field {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.9rem 1.125rem;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.palette-field input {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--text-subtitle);
+  letter-spacing: -0.018em;
+  color: var(--fg);
+  padding: 0.15rem 0;
+}
+
+.palette-field input::placeholder {
+  color: var(--fg-4);
+}
+
+.palette-field input:focus-visible {
+  outline: none;
+}
+
+.palette-kbd {
+  font-family: var(--font-ledger);
+  font-size: var(--text-nano);
+  letter-spacing: 0.06em;
+  color: var(--fg-4);
+  border: 1px solid var(--line);
+  padding: 0.16rem 0.34rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* ── Results ──────────────────────────────────────────────────────────────── */
+.palette-results {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  padding-bottom: 0.5rem;
+}
+
+.palette-group {
+  padding: 0.9rem 1.125rem 0.45rem;
+  color: var(--fg-4);
+  position: sticky;
+  top: 0;
+  background-color: color-mix(in oklab, var(--surface-raised) 94%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1;
+}
+
+.palette-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 0.875rem;
+  width: 100%;
+  text-align: left;
+  padding: 0.6rem 1.125rem;
+  border-left: 2px solid transparent;
+  transition:
+    background-color 160ms linear,
+    border-color 160ms linear;
+}
+
+.palette-item[data-active='true'] {
+  background-color: color-mix(in oklab, var(--seal) 9%, transparent);
+  border-left-color: var(--seal);
+}
+
+.palette-item-label {
+  font-size: var(--text-small);
+  font-weight: 500;
+  letter-spacing: -0.016em;
+  color: var(--fg);
+  white-space: nowrap;
+}
+
+.palette-item-hint {
+  font-size: var(--text-fine);
+  color: var(--fg-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.palette-item-arrow {
+  color: transparent;
+  transition:
+    color 200ms ease,
+    translate 320ms var(--ease-out-expo);
+}
+
+.palette-item[data-active='true'] .palette-item-arrow {
+  color: var(--seal);
+  translate: 3px 0;
+}
+
+.palette-empty {
+  padding: 1.5rem 1.125rem;
+  font-size: var(--text-small);
+  color: var(--fg-3);
+}
+
+/* ── Foot ─────────────────────────────────────────────────────────────────── */
+.palette-foot {
+  display: flex;
+  gap: 1.25rem;
+  padding: 0.7rem 1.125rem;
+  border-top: 1px solid var(--line);
+}
+
+.palette-foot .label {
+  color: var(--fg-4);
+}

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="168" height="168" viewBox="0 0 168 168">
+  <!--
+    Film grain. Three octaves of fractal noise, desaturated, tiled at 168px.
+
+    This is the single highest-yield material detail in the design: a large flat
+    surface without it reads as an RGB rectangle, and with it reads as stock. It
+    is composited once as a fixed overlay at ~5% opacity, so it costs one layer
+    and never repaints.
+  -->
+  <filter id="grain">
+    <feTurbulence type="fractalNoise" baseFrequency="0.82" numOctaves="3" stitchTiles="stitch" />
+    <feColorMatrix type="saturate" values="0" />
+  </filter>
+  <rect width="168" height="168" filter="url(#grain)" opacity="0.55" />
+</svg>

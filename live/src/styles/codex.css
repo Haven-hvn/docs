@@ -1,0 +1,543 @@
+/* ════════════════════════════════════════════════════════════════════════════
+   THE CODEX
+   A three-column reference work: standing index, text, marginalia. The text
+   column is the only one that scrolls with the reader's full attention, so it
+   gets the whole typographic budget.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.codex {
+  display: grid;
+  grid-template-columns: minmax(0, 17rem) minmax(0, 1fr) minmax(0, 15rem);
+  gap: clamp(1.5rem, 1rem + 2.5vw, 4.5rem);
+  max-width: var(--container-wide);
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+  padding-block: clamp(2rem, 1.5rem + 2vw, 4rem) clamp(4rem, 3rem + 4vw, 7rem);
+  align-items: start;
+}
+
+/* ── Standing index ───────────────────────────────────────────────────────── */
+.codex-index {
+  position: sticky;
+  top: calc(var(--chrome-h) + 1.5rem);
+  max-height: calc(100dvh - var(--chrome-h) - 3rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  border-right: 1px solid var(--line);
+  padding-right: clamp(0.75rem, 1.4vw, 1.5rem);
+}
+
+.codex-index-inner {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.codex-index-home {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.codex-index-count {
+  color: var(--fg-4);
+}
+
+.codex-nav {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.codex-nav-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  color: var(--fg-3);
+  padding-bottom: 0.55rem;
+}
+
+.codex-nav-numeral {
+  color: var(--seal-text);
+}
+
+.codex-nav-part ul {
+  list-style: none;
+  display: grid;
+  gap: 0.1rem;
+}
+
+.codex-nav-link {
+  display: grid;
+  grid-template-columns: 2.6rem minmax(0, 1fr);
+  gap: 0.5rem;
+  align-items: baseline;
+  padding: 0.42rem 0.5rem 0.42rem 0;
+  font-size: var(--text-fine);
+  line-height: 1.35;
+  color: var(--fg-3);
+  border-left: 2px solid transparent;
+  padding-left: 0.55rem;
+  transition:
+    color 260ms var(--ease-out-expo),
+    border-color 260ms var(--ease-out-expo),
+    background-color 260ms var(--ease-out-expo);
+}
+
+.codex-nav-folio {
+  font-family: var(--font-ledger);
+  font-size: var(--text-nano);
+  color: var(--fg-4);
+}
+
+.codex-nav-link:hover {
+  color: var(--fg);
+  background-color: color-mix(in oklab, var(--seal) 4%, transparent);
+}
+
+.codex-nav-link[aria-current='page'] {
+  color: var(--fg);
+  border-left-color: var(--seal);
+  background-color: color-mix(in oklab, var(--seal) 6%, transparent);
+}
+
+.codex-nav-link[aria-current='page'] .codex-nav-folio {
+  color: var(--seal-text);
+}
+
+/* ── Entry header ─────────────────────────────────────────────────────────── */
+.codex-entry-page {
+  min-width: 0;
+  max-width: 74ch;
+}
+
+.codex-entry-header {
+  display: grid;
+  gap: 1.25rem;
+  padding-bottom: clamp(1.75rem, 1.5rem + 1vw, 2.75rem);
+  border-bottom: 1px solid var(--line-strong);
+  margin-bottom: clamp(1.75rem, 1.5rem + 1vw, 2.75rem);
+}
+
+.codex-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-ledger);
+  font-size: var(--text-micro);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+  flex-wrap: wrap;
+}
+
+.codex-breadcrumb-sep {
+  color: var(--fg-4);
+}
+
+.codex-title {
+  max-width: 26ch;
+}
+
+.codex-summary {
+  max-width: 60ch;
+}
+
+/* An epigraph: indented, italic, in the editorial face, with a hanging rule. */
+.codex-epigraph {
+  border-left: 1px solid var(--seal);
+  padding: 0.2rem 0 0.2rem 1.25rem;
+  max-width: 52ch;
+}
+
+.codex-epigraph p {
+  font-size: var(--text-subtitle);
+  line-height: 1.35;
+  color: var(--fg-2);
+}
+
+.codex-entry-meta {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding-top: 0.5rem;
+}
+
+.codex-sources {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.codex-sources ul {
+  list-style: none;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.codex-sources code {
+  font-size: 0.6875rem;
+  color: var(--fg-4);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   PROSE
+   Typography for the MDX body. Long-form reading is the entire job of this
+   column, so measure, leading and vertical rhythm are set deliberately rather
+   than inherited.
+   ════════════════════════════════════════════════════════════════════════════ */
+.prose {
+  font-size: var(--text-body);
+  line-height: 1.72;
+  color: var(--fg-2);
+}
+
+.prose > * + * {
+  margin-top: 1.15em;
+}
+
+/* The opening paragraph gets a raised initial and slightly larger type — the
+   convention that tells a reader the text has begun. */
+.prose > p:first-of-type {
+  font-size: var(--text-lede);
+  line-height: 1.56;
+  color: var(--fg);
+}
+
+.prose > p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--font-editorial);
+  font-size: 3.4em;
+  line-height: 0.82;
+  padding-right: 0.08em;
+  padding-top: 0.06em;
+  color: var(--seal);
+}
+
+.prose h2 {
+  font-family: var(--font-institution);
+  font-size: var(--text-title);
+  font-weight: 500;
+  letter-spacing: -0.024em;
+  line-height: 1.16;
+  color: var(--fg);
+  margin-top: 2.6em;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--line);
+  scroll-margin-top: calc(var(--chrome-h) + 2rem);
+}
+
+/* The entry header already closes with a rule. A second one directly beneath it
+   reads as a mistake and opens a dead band above the first section. */
+.prose > h2:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.prose h3 {
+  font-size: var(--text-subtitle);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  margin-top: 2em;
+  scroll-margin-top: calc(var(--chrome-h) + 2rem);
+}
+
+.prose strong {
+  color: var(--fg);
+  font-weight: 500;
+}
+
+.prose em {
+  font-family: var(--font-editorial);
+  font-style: italic;
+  font-size: 1.06em;
+  letter-spacing: -0.01em;
+}
+
+.prose a {
+  color: var(--fg);
+  background-image: linear-gradient(var(--seal), var(--seal));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 1px;
+  padding-bottom: 1px;
+  transition:
+    color 260ms ease,
+    background-size 320ms var(--ease-out-expo);
+}
+
+.prose a:hover {
+  color: var(--seal);
+  background-size: 100% 2px;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.6em;
+}
+
+.prose li {
+  padding-left: 1.4rem;
+  position: relative;
+  text-wrap: pretty;
+}
+
+.prose ul > li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.82em;
+  width: 8px;
+  height: 1px;
+  background-color: var(--seal);
+}
+
+.prose ol {
+  counter-reset: prose-item;
+}
+
+.prose ol > li {
+  counter-increment: prose-item;
+  padding-left: 2rem;
+}
+
+.prose ol > li::before {
+  content: counter(prose-item, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0.08em;
+  font-family: var(--font-ledger);
+  font-size: var(--text-micro);
+  letter-spacing: 0.08em;
+  color: var(--seal-text);
+}
+
+/* Inline code: a keyline box, never a filled pill. */
+.prose :not(pre) > code {
+  font-family: var(--font-ledger);
+  font-size: 0.84em;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  border: 1px solid var(--line);
+  background-color: color-mix(in oklab, var(--surface-sunk) 45%, transparent);
+  padding: 0.1em 0.32em;
+  overflow-wrap: anywhere;
+}
+
+.prose pre {
+  font-family: var(--font-ledger);
+  font-size: 0.78rem;
+  line-height: 1.7;
+  /* A dark plate, always — even in the paper edition. Printed documents set
+     code as a distinct object rather than a tinted paragraph, and a grey panel
+     on warm stock leaves grey-on-grey text. */
+  color: #eae6dd;
+  background-color: #22242c;
+  border: 1px solid #22242c;
+  border-left: 2px solid var(--seal);
+  padding: 1.15rem 1.35rem;
+  overflow-x: auto;
+  tab-size: 2;
+  margin-top: 1.6em;
+  box-shadow: var(--lift-1);
+}
+
+/* Comments in the shell examples are the only coloured token; everything else
+   stays monochrome so the plate reads as evidence, not as a syntax demo. */
+.prose pre code {
+  color: inherit;
+}
+
+.prose pre code {
+  font-size: inherit;
+  color: inherit;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+/* Tables in the specimen register: hairlines, mono figures, no zebra. */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-small);
+  margin-top: 1.75em;
+}
+
+.prose thead th {
+  font-family: var(--font-ledger);
+  font-size: var(--text-nano);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+  text-align: left;
+  padding: 0 0.9rem 0.55rem 0;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.prose tbody td {
+  padding: 0.65rem 0.9rem 0.65rem 0;
+  border-bottom: 1px solid var(--line-soft);
+  vertical-align: baseline;
+}
+
+.prose tbody tr:last-child td {
+  border-bottom: 1px solid var(--line);
+}
+
+.prose td:first-child,
+.prose th:first-child {
+  padding-left: 0;
+}
+
+.prose blockquote {
+  border-left: 1px solid var(--seal);
+  padding-left: 1.25rem;
+  color: var(--fg-2);
+  font-family: var(--font-editorial);
+  font-size: var(--text-subtitle);
+  line-height: 1.4;
+}
+
+.prose hr {
+  margin-block: 2.5em;
+  border-top: 1px solid var(--line);
+}
+
+/* ── Pager ────────────────────────────────────────────────────────────────── */
+.codex-pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background-color: var(--line);
+  border: 1px solid var(--line);
+  margin-top: clamp(3rem, 2rem + 3vw, 5rem);
+}
+
+.codex-pager-link {
+  display: grid;
+  gap: 0.4rem;
+  padding: 1.1rem 1.25rem;
+  background-color: var(--surface);
+  transition: background-color 320ms var(--ease-out-expo);
+}
+
+.codex-pager-next {
+  text-align: right;
+  justify-items: end;
+}
+
+.codex-pager-link:hover {
+  background-color: color-mix(in oklab, var(--seal) 4%, transparent);
+}
+
+.codex-pager-title {
+  font-size: var(--text-subtitle);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  line-height: 1.2;
+}
+
+/* ── Marginalia ───────────────────────────────────────────────────────────── */
+.codex-margin {
+  position: sticky;
+  top: calc(var(--chrome-h) + 1.5rem);
+  max-height: calc(100dvh - var(--chrome-h) - 3rem);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.codex-margin-inner {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.codex-toc-heading {
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--line);
+  display: block;
+}
+
+.codex-toc ul {
+  list-style: none;
+  display: grid;
+  gap: 0.05rem;
+  margin-top: 0.75rem;
+}
+
+.codex-toc li[data-depth='3'] {
+  padding-left: 0.9rem;
+}
+
+.codex-toc-link {
+  display: block;
+  font-size: var(--text-fine);
+  line-height: 1.4;
+  color: var(--fg-3);
+  padding: 0.35rem 0 0.35rem 0.6rem;
+  border-left: 2px solid transparent;
+  transition:
+    color 240ms ease,
+    border-color 240ms ease;
+}
+
+.codex-toc-link:hover {
+  color: var(--fg);
+}
+
+.codex-toc-link[data-active='true'] {
+  color: var(--seal);
+  border-left-color: var(--seal);
+}
+
+.codex-margin-note a {
+  color: var(--fg-2);
+}
+
+.codex-margin-imprint {
+  color: var(--fg-4);
+}
+
+/* ── Reductions ──────────────────────────────────────────────────────────── */
+@media (max-width: 1400px) {
+  .codex {
+    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+  }
+  .codex-margin {
+    display: none;
+  }
+}
+
+@media (max-width: 1000px) {
+  .codex {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .codex-index {
+    position: static;
+    max-height: none;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    padding-right: 0;
+    padding-bottom: 1.5rem;
+  }
+  .codex-nav {
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  }
+  .codex-pager {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .codex-pager-next {
+    text-align: left;
+    justify-items: start;
+  }
+}

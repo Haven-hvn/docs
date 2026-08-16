@@ -1,0 +1,77 @@
+---
+title: Candid and typed data
+summary: The only IPC between surfaces is Candid update/query calls and EIP-712 typed structs. There is no second channel.
+part: Contracts
+folio: 'IV.01'
+order: 1
+status: settled
+epigraph: A contract that exists only in documentation will eventually be contradicted by code. A contract that is the code cannot be.
+sources:
+  - docs/api/contracts.md
+  - docs/architecture/01-haven-aol.md
+  - docs/decisions/ADR-001-decoupled-boundaries.md
+---
+
+## The contract surface
+
+Haven's inter-surface communication is bounded by two mechanisms: Candid (the Interface Description Language native to the Internet Computer) and EIP-712 typed data (the Ethereum signing standard). There is no REST API, no GraphQL endpoint, no message queue, and no shared library between surfaces. If a client needs something from the gate, it calls a Candid method. If the gate needs to verify a reader, it recovers an EIP-712 signature.
+
+## Candid interface
+
+The canister at `dciac-uaaaa-aaaad-qlzuq-cai` exposes the following:
+
+```candid
+service : {
+  requestDecryptionKey       : (GateRequest)   -> (variant { Ok: text; Err });
+  batchRequestDecryptionKey  : (vec CID)       -> (vec variant);
+  requestDecryptionKeyV3     : (GateRequestV3) -> (variant { Ok: text; Err });
+  batchRequestDecryptionKeyV3: (vec CID)       -> (vec variant);
+  getVetKDPublicKey          : () -> (blob) query;
+  getVetKDPublicKeyV3        : () -> (blob) query;
+  warmupVetKDPublicKey       : () -> ();
+  warmupVetKDPublicKeyV3     : () -> ();
+  getCurrentEpoch            : () -> (nat) query;
+  evictExpiredApprovals      : () -> ();
+}
+```
+
+Update calls (`requestDecryptionKey*`, `batch*`, `warmup*`, `evict*`) go through consensus — they mutate canister state and incur cycle costs. Query calls (`getVetKDPublicKey*`, `getCurrentEpoch`) are read-only and return in ~200ms without consensus.
+
+The batch methods accept up to 20 CIDs per call. In V1, each CID triggers a separate VetKD derivation. In V3, a single derivation is replicated across all CIDs — the epoch key is the same, so one round of threshold cryptography suffices.
+
+## EIP-712 typed data
+
+Two typed structs define the request formats:
+
+```
+// V1 — per-CID scope
+GateRequest(
+  address evmAddress,
+  bytes   transportPublicKey,
+  uint256 nonce
+)
+
+// V3 — epoch scope (current protocol version)
+GateRequestV3(
+  address evmAddress,
+  bytes   transportPublicKey,
+  uint256 epoch,
+  uint256 nonce
+)
+```
+
+The reader signs the struct with their EVM private key. The canister recovers the address via `secp256k1` ecrecover (pure Motoko implementation — no EVM precompile is available on ICP). The nonce prevents replay; the epoch in V3 binds the request to a specific 30-day window.
+
+The `transportPublicKey` is ephemeral — generated fresh for each session. The canister encrypts the derived VetKD output against it, ensuring the key material is readable only by the requesting client.
+
+## Why Candid over REST
+
+The Internet Computer does not expose HTTP endpoints for canister methods. Calls are routed through the IC agent protocol, which handles authentication (caller principal), request certification, and consensus routing. Candid provides type safety across the boundary — a malformed argument is rejected at the protocol layer before it reaches canister code.
+
+For Haven, this means the contract surface is verified at two levels: Candid type checking at call time, and Motoko type checking at compile time. A client that passes an `epoch` value where a `nonce` is expected will never reach the derivation logic.
+
+## Why EIP-712 over raw signatures
+
+EIP-712 structures what the user signs. A raw `personal_sign` over an opaque hash gives the signer no visibility into what they are authorising. EIP-712 presents a named struct with typed fields — the wallet displays "GateRequestV3: evmAddress, epoch, nonce" — so the reader can verify they are authorising a decryption request and not, for example, a token transfer.
+
+This is also why the V3 struct includes `epoch` explicitly: the signer sees and consents to the time window for which they are granting access.

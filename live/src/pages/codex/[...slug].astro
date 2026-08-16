@@ -1,0 +1,214 @@
+---
+import { getCollection, render } from 'astro:content'
+import Base from '../../layouts/Base.astro'
+import Masthead from '../../components/Masthead.astro'
+import Footer from '../../components/Footer.astro'
+import { HAVEN } from '../../lib/protocol.ts'
+import '../../styles/codex.css'
+
+export async function getStaticPaths() {
+  const entries = await getCollection('codex')
+  const PART_ORDER = ['Foundations', 'The Rule Set', 'Surfaces', 'Contracts', 'Operations']
+
+  const ordered = [...entries].sort((a, b) => {
+    const partDelta = PART_ORDER.indexOf(a.data.part) - PART_ORDER.indexOf(b.data.part)
+    return partDelta !== 0 ? partDelta : a.data.order - b.data.order
+  })
+
+  return ordered.map((entry, index) => ({
+    params: { slug: entry.id },
+    props: {
+      entry,
+      ordered,
+      previous: index > 0 ? ordered[index - 1] : null,
+      next: index < ordered.length - 1 ? ordered[index + 1] : null,
+    },
+  }))
+}
+
+const { entry, ordered, previous, next } = Astro.props
+const { Content, headings } = await render(entry)
+
+const PART_ORDER = ['Foundations', 'The Rule Set', 'Surfaces', 'Contracts', 'Operations'] as const
+
+const groups = PART_ORDER.map((part) => ({
+  part,
+  numeral: ['I', 'II', 'III', 'IV', 'V'][PART_ORDER.indexOf(part)] ?? '',
+  entries: ordered.filter((item) => item.data.part === part),
+})).filter((group) => group.entries.length > 0)
+
+const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3)
+---
+
+<Base title={entry.data.title} description={entry.data.summary}>
+  <Masthead slot="masthead" current="codex" />
+  <Footer slot="footer" />
+
+  <div class="codex">
+    {/* ── Index ──────────────────────────────────────────────────────────────
+        A standing index of the whole work, not a menu of the current section.
+        A reference work should always show you where you are in the whole. */}
+    <aside class="codex-index" aria-label="Codex contents">
+      <div class="codex-index-inner">
+        <a href="/codex" class="codex-index-home">
+          <span class="label label-seal">The Codex</span>
+          <span class="codex-index-count label">{ordered.length} entries</span>
+        </a>
+
+        <nav class="codex-nav">
+          {
+            groups.map((group) => (
+              <section class="codex-nav-part">
+                <p class="label codex-nav-heading">
+                  <span class="codex-nav-numeral">{group.numeral}</span>
+                  {group.part}
+                </p>
+                <ul>
+                  {group.entries.map((item) => (
+                    <li>
+                      <a
+                        href={`/codex/${item.id}`}
+                        class="codex-nav-link"
+                        aria-current={item.id === entry.id ? 'page' : undefined}
+                      >
+                        <span class="codex-nav-folio">{item.data.folio}</span>
+                        <span>{item.data.title}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))
+          }
+        </nav>
+      </div>
+    </aside>
+
+    {/* ── The entry ───────────────────────────────────────────────────────── */}
+    <article class="codex-entry-page">
+      <header class="codex-entry-header">
+        <p class="codex-breadcrumb">
+          <a href="/codex" class="link-rule">Codex</a>
+          <span class="codex-breadcrumb-sep" aria-hidden="true">/</span>
+          <span>{entry.data.part}</span>
+          <span class="codex-breadcrumb-sep" aria-hidden="true">/</span>
+          <span class="folio">{entry.data.folio}</span>
+        </p>
+
+        <h1 class="editorial-display codex-title">{entry.data.title}</h1>
+        <p class="lede codex-summary">{entry.data.summary}</p>
+
+        {
+          entry.data.epigraph && (
+            <blockquote class="codex-epigraph">
+              <p class="editorial voice-italic">{entry.data.epigraph}</p>
+            </blockquote>
+          )
+        }
+
+        <div class="codex-entry-meta">
+          {entry.data.status !== 'settled' && <span class="seal-mark">{entry.data.status}</span>}
+          {
+            entry.data.sources.length > 0 && (
+              <div class="codex-sources">
+                <span class="label">Transcribed from</span>
+                <ul>
+                  {entry.data.sources.map((source) => (
+                    <li><code class="addr">{source}</code></li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
+        </div>
+      </header>
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      <nav class="codex-pager" aria-label="Adjacent entries">
+        {
+          previous ? (
+            <a class="codex-pager-link" href={`/codex/${previous.id}`} rel="prev">
+              <span class="label">Previous</span>
+              <span class="codex-pager-title">{previous.data.title}</span>
+              <span class="folio">{previous.data.folio}</span>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+        {
+          next && (
+            <a class="codex-pager-link codex-pager-next" href={`/codex/${next.id}`} rel="next">
+              <span class="label">Next</span>
+              <span class="codex-pager-title">{next.data.title}</span>
+              <span class="folio">{next.data.folio}</span>
+            </a>
+          )
+        }
+      </nav>
+    </article>
+
+    {/* ── Marginalia: the section index for this entry ───────────────────── */}
+    <aside class="codex-margin" aria-label="On this page">
+      <div class="codex-margin-inner">
+        {
+          toc.length > 0 && (
+            <nav class="codex-toc">
+              <p class="label label-ink codex-toc-heading">On this page</p>
+              <ul>
+                {toc.map((heading) => (
+                  <li data-depth={heading.depth}>
+                    <a href={`#${heading.slug}`} class="codex-toc-link" data-toc-link={heading.slug}>
+                      {heading.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )
+        }
+
+        <div class="marginalia codex-margin-note">
+          <strong>Every claim here is checkable.</strong> The endpoints, selectors and preimages in this
+          work are the same ones the interface reads at runtime. See
+          <a href="/codex/verify-it-yourself" class="link-rule">Verify it yourself</a>.
+        </div>
+
+        <p class="label codex-margin-imprint">{HAVEN.name} {HAVEN.version}</p>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    // Scroll-spy for the section index. One observer, no scroll handler.
+    const links = document.querySelectorAll<HTMLElement>('[data-toc-link]')
+    if (links.length > 0) {
+      const byId = new Map<string, HTMLElement>()
+      for (const link of links) byId.set(link.dataset.tocLink ?? '', link)
+
+      const targets = [...byId.keys()]
+        .map((id) => document.getElementById(id))
+        .filter((el): el is HTMLElement => el !== null)
+
+      let active: HTMLElement | null = null
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue
+            const link = byId.get(entry.target.id)
+            if (!link || link === active) continue
+            active?.removeAttribute('data-active')
+            link.dataset.active = 'true'
+            active = link
+          }
+        },
+        { rootMargin: '-18% 0px -70% 0px', threshold: 0 },
+      )
+
+      for (const target of targets) observer.observe(target)
+    }
+  </script>
+</Base>

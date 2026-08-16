@@ -1,0 +1,435 @@
+---
+import Base from '../../layouts/Base.astro'
+import Masthead from '../../components/Masthead.astro'
+import Footer from '../../components/Footer.astro'
+import SectionHead from '../../components/SectionHead.astro'
+import Action from '../../components/Action.astro'
+import Explain from '../../components/Explain.astro'
+import EligibilityCheck from '../../components/react/threshold/EligibilityCheck.tsx'
+import { GATES, CHAINS, ARKIV } from '../../lib/chains.ts'
+import { acquireLink } from '../../lib/threshold.ts'
+import collections from '../../data/collection-quotes.json'
+import '../../styles/threshold.css'
+
+/**
+ * PATH A — THE READER
+ *
+ * The shortest path, and the one that has to assume the least. A reader may have
+ * never held an NFT, so every term that could stop them is explained in place
+ * rather than in a glossary they would have to go and find.
+ */
+
+const quotes = new Map((collections.quotes ?? []).map((q) => [q.slug, q]))
+
+const CONSTELLATIONS = ['Lore', 'Art', 'Culture', 'Governance'] as const
+
+const grouped = CONSTELLATIONS.map((constellation) => ({
+  constellation,
+  gates: GATES.filter((gate) => gate.constellation === constellation).map((gate) => ({
+    gate,
+    quote: quotes.get(gate.slug) ?? null,
+    link: acquireLink(gate),
+    chain: CHAINS[gate.chain],
+  })),
+}))
+
+const identities = GATES.map((gate) => {
+  const quote = quotes.get(gate.slug)
+  return {
+    slug: gate.slug,
+    image: quote?.image ?? null,
+    owners: quote?.owners ?? null,
+    supply: quote?.totalSupply ?? null,
+  }
+})
+
+const SLUGS = GATES.map((gate) => gate.slug)
+---
+
+<Base
+  title="Read an archive — The Threshold"
+  description="Join a community's archive: pick a community, acquire what it gates on, and check any address against all sixteen gates live on-chain."
+>
+  <Masthead slot="masthead" current="threshold" />
+
+  <main id="main">
+    {/* ── Orientation ─────────────────────────────────────────────────────── */}
+    <section class="act act-opening" data-tone="void" aria-labelledby="read-title">
+      <div class="act-body frame">
+        <SectionHead folio="04 · A" running="Read an archive" annotation="The reader" />
+
+        <p class="path-back" data-reveal>
+          <a href="/threshold">← All three paths</a>
+        </p>
+
+        <h1 class="statement-colossus optical-hang" id="read-title">
+          <span class="mask-line" data-reveal><span>Hold the asset.</span></span>
+          <span class="mask-line" data-reveal style="--delay: 90ms"><span>That is the <em>whole</em> door.</span></span>
+        </h1>
+
+        <p class="lede" data-reveal style="--delay: 160ms">
+          Only the first step costs anything, and it is a one-off. You acquire whatever a community
+          gates on, find the archive in the index, prove the asset is yours with a signature, and open
+          it in a reader app. Reading the index is free, signing costs no gas, and there is no account
+          to make or cancel.
+        </p>
+
+        <a class="threshold-scroll" href="#pick-title" data-reveal style="--delay: 300ms">
+          <span class="threshold-scroll-arrow" aria-hidden="true">↓</span>
+          <span>Start with step one</span>
+        </a>
+
+        <div data-reveal style="--delay: 220ms">
+          <Explain term="Wait — what is an NFT doing in this?">
+            <p>
+              Nothing decorative. Haven needs a way to check whether you belong to a community
+              without keeping a list of members, and an asset already does that: it lives in your
+              wallet, anyone can verify you hold it, and no company controls the record.
+            </p>
+            <p>
+              So the NFT or token is not the point — it is just the membership card that nobody can
+              revoke. If you sell it, you stop being a member, automatically.
+            </p>
+          </Explain>
+
+          <Explain term="And what is a wallet?">
+            <p>
+              An app that holds a key and signs messages with it. That is all it needs to do here:
+              Haven never asks a wallet to spend anything, and this page never asks one to connect.
+            </p>
+            <p>
+              If you already have one, you are ready. If not, you will need one before the second
+              step — any mainstream wallet works, because Haven only relies on standard signing.
+            </p>
+          </Explain>
+        </div>
+      </div>
+    </section>
+
+    {/* ── Step 1 · pick a community ───────────────────────────────────────── */}
+    <section class="act act-pad-tall" data-tone="stock" aria-labelledby="pick-title">
+      <div class="act-body frame">
+        <SectionHead folio="01" running="Pick a community" annotation={`${GATES.length} candidates`} />
+
+        <h2 class="statement-headline optical-hang" id="pick-title">
+          <span class="mask-line" data-reveal><span>Start with work you</span></span>
+          <span class="mask-line" data-reveal style="--delay: 90ms"><span>actually care about.</span></span>
+        </h2>
+
+        <p class="lede" data-reveal style="--delay: 100ms">
+          These are real contracts, verified on-chain and measured in the Atlas. Each gates on
+          something you can acquire today. Haven is not a party to the purchase and takes nothing
+          from it — you are buying from the open market, not from us.
+        </p>
+
+        <span id="roster" class="anchor-offset" aria-hidden="true"></span>
+
+        {/* Shown only when devnet is selected. These sixteen contracts exist on
+            Ethereum mainnet; there is no testnet Nouns and no calibration
+            Autoglyphs, so rather than fabricate a devnet roster the page states
+            the limit. */}
+        <p class="threshold-arrival threshold-mainnet-only" data-reveal>
+          <span class="label label-seal">Mainnet only</span>
+          <span>
+            You have devnet selected. These sixteen communities exist on Ethereum mainnet and have no
+            test-network equivalent, so the roster and the gate check below are mainnet either way.
+            Devnet changes storage and publishing, not who exists.
+          </span>
+        </p>
+
+        {
+          grouped.map((group, groupIndex) => (
+            <div class="gate-group" data-reveal style={`--delay: ${140 + groupIndex * 50}ms`}>
+              <h3 class="gate-group-head">
+                <span class="label label-seal">{group.constellation}</span>
+                <span class="rule" aria-hidden="true"></span>
+                <span class="label">{group.gates.length}</span>
+              </h3>
+
+              <ul class="gate-grid">
+                {group.gates.map(({ gate, quote, link, chain }) => (
+                  <li class="gate-card" id={gate.slug}>
+                    <div class="gate-card-head">
+                      {quote?.image && (
+                        <img
+                          class="gate-mark"
+                          src={quote.image}
+                          alt=""
+                          width="34"
+                          height="34"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      )}
+                      <div>
+                        <h4 class="gate-name">{gate.slug}</h4>
+                        <p class="gate-requirement label">
+                          Hold {gate.threshold.toLocaleString('en-US')}{' '}
+                          {gate.kind === 'collection' ? 'from the collection' : 'tokens'}
+                        </p>
+                      </div>
+                    </div>
+
+                    <p class="gate-premise">{gate.premise}</p>
+
+                    <dl class="gate-facts">
+                      <div>
+                        <dt class="label">Contract</dt>
+                        <dd class="addr">{gate.address}</dd>
+                      </div>
+                      {quote?.floorUsd && (
+                        <div>
+                          <dt class="label">Cheapest listed</dt>
+                          <dd class="tnum">
+                            ${quote.floorUsd.toLocaleString('en-US', { maximumFractionDigits: 2 })}
+                          </dd>
+                        </div>
+                      )}
+                    </dl>
+
+                    <div class="gate-actions">
+                      <a class="gate-acquire" href={link.href} target="_blank" rel="noreferrer noopener">
+                        Acquire on {link.venue}
+                        <span aria-hidden="true"> ↗</span>
+                      </a>
+                      <a
+                        class="gate-verify"
+                        href={chain.explorerAddress(gate.address)}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                      >
+                        Verify
+                      </a>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+
+        <div data-reveal>
+          <Explain term="Why does the price differ so much between these?">
+            <p>
+              Because they are ordinary market prices, set by whoever is selling. Haven does not set
+              them, cannot discount them, and gains nothing when you buy — the figures above are read
+              from public market data so you can see the real cost of entry before you commit.
+            </p>
+            <p>
+              A cheap gate is not a worse archive. It usually just means a larger community.
+            </p>
+          </Explain>
+        </div>
+      </div>
+    </section>
+
+    {/* ── Step 2 · check ──────────────────────────────────────────────────── */}
+    <section class="act act-pad-tall" data-tone="void" aria-labelledby="check-title">
+      <div class="act-body frame">
+        <SectionHead folio="02" running="Check the gate" annotation="Live on-chain" />
+
+        <h2 class="statement-headline optical-hang" id="check-title">
+          <span class="mask-line" data-reveal><span>Ask the gates directly.</span></span>
+        </h2>
+
+        <p class="lede" data-reveal style="--delay: 100ms">
+          Paste an address — yours, or one you are curious about. This reads <code>balanceOf</code> at
+          all {GATES.length} gate contracts and compares each result to what that gate requires. It is
+          the same question <code>haven-aol</code> asks before it derives a key.
+        </p>
+
+        <p class="threshold-arrival" id="arrival" hidden>
+          <span class="label label-seal">Arrived from the Atlas</span>
+          <span>
+            Checking against <strong data-arrival-name></strong>. Its gate and contract are in the
+            roster above.
+          </span>
+          <a href="#roster" data-arrival-jump>Jump to it</a>
+        </p>
+
+        <div data-reveal style="--delay: 180ms">
+          <EligibilityCheck client:visible identities={identities} />
+        </div>
+
+        <div data-reveal>
+          <Explain term="Is it safe to paste my address here?">
+            <p>
+              Yes, and you do not have to take our word for it — there is nothing to trust. An address
+              is public information, like an account number on a bank transfer: it identifies where
+              something lives without granting any power over it.
+            </p>
+            <p>
+              This page never asks you to connect a wallet, never asks for a signature, and stores
+              nothing. The request goes from your browser straight to a public node. If you would
+              rather not, paste any address you like — the check works the same on all of them.
+            </p>
+          </Explain>
+        </div>
+      </div>
+    </section>
+
+    {/* ── Step 3 · open ───────────────────────────────────────────────────── */}
+    <section class="act act-pad-tall" data-tone="stock" aria-labelledby="open-title">
+      <div class="act-body frame">
+        <SectionHead folio="03" running="Open it" annotation="Four steps, one waiting on us" />
+
+        <h2 class="statement-headline optical-hang" id="open-title">
+          <span class="mask-line" data-reveal><span>One signature.</span></span>
+          <span class="mask-line" data-reveal style="--delay: 90ms"><span>No transaction.</span></span>
+        </h2>
+
+        <p class="lede" data-reveal style="--delay: 100ms">
+          Reading happens in a client on your own device, because that is the only place decryption
+          can safely happen. The client finds the archive in the index, asks you to sign a message
+          proving you control the address, then <code>haven-aol</code> derives your key and the media
+          decrypts locally. Four networks, and none of them is a server of ours.
+        </p>
+
+        <ol class="path-steps" data-reveal style="--delay: 160ms">
+          <li class="path-step">
+            <span class="folio">01</span>
+            <div>
+              <h3 class="path-step-title">
+                Install a reader
+                <span class="label">Either one</span>
+              </h3>
+              <p class="path-step-body">
+                <code>haven-dapp</code> runs in a browser — TypeScript on Next.js, shipped as a static
+                export to IPFS. <code>haven-mobile</code> runs on Android — Kotlin with Compose,
+                Media3 and Room, distributed as an APK or through the Play Store, and built to keep an
+                archive playable on a device that is offline.
+              </p>
+              <p class="path-step-detail">
+                Neither holds a key of its own, and neither depends on the other. You can move between
+                them freely; your access lives in your wallet, not in either app.
+              </p>
+              <div class="path-links">
+                <a href="/codex/clients">How the clients work →</a>
+              </div>
+            </div>
+          </li>
+
+          <li class="path-step">
+            <span class="folio">02</span>
+            <div>
+              <h3 class="path-step-title">
+                Find the archive
+                <span class="label path-blocked-mark">{ARKIV.statusShort}</span>
+              </h3>
+              <p class="path-step-body">
+                Before a reader can open anything it has to know the archive exists. That is the
+                index: <code>arkiv-chain</code>, an L3 where every archive is registered as an entity
+                carrying its gate, its community and the piece CIDs of its media. Your client queries
+                the index, not us — there is no catalogue on a Haven server, because there is no Haven
+                server.
+              </p>
+              <p class="path-step-detail">
+                Querying the index costs you nothing — it is a read, and reads are free. You need no
+                third token and no account on Arkiv; only publishing writes to it, and only writing
+                costs gas. There is no public Arkiv network at the moment — {ARKIV.codename} was
+                retired on {ARKIV.retiredOn} and the next public testnet is expected{' '}
+                {ARKIV.nextPublicTestnet} — so browsing by community does not work yet. Everything downstream of it does: given a reference to an
+                archive, the gate check, the key derivation and the decryption all run today.
+              </p>
+              <Explain term="So what is the index actually for?">
+                <p>
+                  Discovery and attribution. Filecoin knows it is holding encrypted bytes and can prove
+                  it, but it has no idea which community those bytes belong to — an address paying to
+                  store something looks identical whoever it publishes for.
+                </p>
+                <p>
+                  Arkiv is the layer that records the connection: this archive belongs to this
+                  community, is gated by this contract, and consists of these pieces. It is metadata
+                  only — it never holds media and never holds keys — but without it nothing can be
+                  browsed, and the Atlas cannot attribute a single byte to anyone.
+                </p>
+              </Explain>
+            </div>
+          </li>
+
+          <li class="path-step">
+            <span class="folio">03</span>
+            <div>
+              <h3 class="path-step-title">Sign once to prove the address is yours</h3>
+              <p class="path-step-body">
+                The reader shows you an EIP-712 message and asks your wallet to sign it. A signature
+                is not a transaction: it costs no gas, moves nothing, and grants no permission to
+                spend. It only proves the address is yours.
+              </p>
+              <Explain term="How is signing different from approving a transaction?">
+                <p>
+                  A transaction changes the blockchain and costs a fee. A signature just proves you
+                  hold a key — like signing your name rather than writing a cheque.
+                </p>
+                <p>
+                  Haven never needs the second kind from a reader. If a reader app ever asks you to
+                  approve spending in order to watch something, that is not this protocol.
+                </p>
+              </Explain>
+            </div>
+          </li>
+
+          <li class="path-step">
+            <span class="folio">04</span>
+            <div>
+              <h3 class="path-step-title">Watch it</h3>
+              <p class="path-step-body">
+                Ciphertext arrives from Filecoin, the key arrives from the canister, and the two meet
+                only on your device. Access is re-checked against your balance rather than cached
+                forever — so it follows ownership for as long as you hold the asset, and stops when
+                you do not.
+              </p>
+            </div>
+          </li>
+        </ol>
+
+        <div class="threshold-actions" data-reveal style="--delay: 240ms">
+          <Action href="/atlas" variant="sealed" size="large">See the communities in the Atlas</Action>
+          <Action href="/threshold/found" variant="keyline" glyph="none">Start your own instead</Action>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Base>
+
+<script is:inline define:vars={{ SLUGS }}>
+  /**
+   * Resolve a deep link from the Atlas.
+   *
+   * This has to run in the browser: the page is statically prerendered, so the
+   * query string does not exist at build time and reading it server-side would
+   * silently do nothing for every real visitor.
+   */
+  const applyGateFocus = () => {
+    const arrival = document.getElementById('arrival')
+    if (!arrival) return
+
+    const params = new URLSearchParams(location.search)
+    const candidate = params.get('gate') ?? location.hash.replace(/^#/, '')
+
+    for (const card of document.querySelectorAll('.gate-card[data-focus]')) {
+      card.removeAttribute('data-focus')
+    }
+
+    // Only a slug already in the roster is honoured, so the parameter cannot
+    // introduce a community the page does not know about.
+    if (!candidate || !SLUGS.includes(candidate)) {
+      arrival.hidden = true
+      return
+    }
+
+    const name = arrival.querySelector('[data-arrival-name]')
+    const jump = arrival.querySelector('[data-arrival-jump]')
+    if (name) name.textContent = candidate
+    if (jump) jump.setAttribute('href', '#' + candidate)
+    arrival.hidden = false
+
+    const card = document.getElementById(candidate)
+    if (card) card.setAttribute('data-focus', 'true')
+  }
+
+  applyGateFocus()
+  document.addEventListener('astro:page-load', applyGateFocus)
+</script>

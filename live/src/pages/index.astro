@@ -1,0 +1,1473 @@
+---
+import Base from '../layouts/Base.astro'
+import Masthead from '../components/Masthead.astro'
+import Footer from '../components/Footer.astro'
+import SectionHead from '../components/SectionHead.astro'
+import Action from '../components/Action.astro'
+import HeroAperture from '../components/react/HeroAperture.tsx'
+import LiveInstrument from '../components/react/LiveInstrument.tsx'
+import ledger from '../data/storage-ledger.json'
+import {
+  CLAIMS,
+  HAVEN,
+  HORIZON,
+  LAYERS,
+  MOVEMENTS,
+  NETWORKS,
+  SURFACES,
+  TOPOLOGY,
+} from '../lib/protocol.ts'
+import { bytesInline, folio, integer } from '../lib/format.ts'
+
+const mainnet = ledger.mainnet
+const calibration = ledger.calibration
+
+const storage = {
+  totalBytes: mainnet?.totalBytes ?? '0',
+  liveDataSets: mainnet?.liveDataSets ?? 0,
+  activeProviders: mainnet?.activeProviders ?? null,
+  providerCount: mainnet?.providers.length ?? 0,
+  usdfcEscrowed: mainnet?.usdfc.escrowed ?? '0',
+  usdfcSupply: mainnet?.usdfc.supply ?? '0',
+  usdfcDecimals: mainnet?.usdfc.decimals ?? 18,
+  usdfcSymbol: mainnet?.usdfc.symbol ?? 'USDFC',
+  blockNumber: mainnet?.blockNumber ?? '0',
+  capturedAt: mainnet?.capturedAt ?? new Date().toISOString(),
+}
+
+const totalPinned = bytesInline(Number(mainnet?.totalBytes ?? 0) + Number(calibration?.totalBytes ?? 0))
+const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0)
+---
+
+<Base
+  title={HAVEN.name}
+  description="Haven is a sovereign media protocol. Encrypted media on public infrastructure, with the key derived from what you hold — no accounts, no servers, no platform."
+>
+  <Masthead slot="masthead" current="record" />
+  <Footer slot="footer" />
+
+  {/* ═══════════════════════════════════════════════════════════════════════
+      ACT 00 — THE APERTURE
+      Void. One statement, one instrument, two ways in. Everything else on the
+      page exists to substantiate the sentence in this act.
+      ═══════════════════════════════════════════════════════════════════════ */}
+  <section class="act hero" data-tone="void" aria-labelledby="hero-statement">
+    <div class="stage hero-stage">
+      <HeroAperture client:load label="Four public networks enclosing a protected void" />
+    </div>
+
+    <div class="act-body frame hero-body">
+      <p class="label hero-eyebrow" data-reveal>
+        <span class="label-seal">Encrypted at the source</span>
+        <span class="hero-eyebrow-rule" aria-hidden="true"></span>
+        <span>Gated by ownership</span>
+        <span class="hero-eyebrow-rule" aria-hidden="true"></span>
+        <span>Stored on public infrastructure</span>
+      </p>
+
+      <h1 class="statement-colossus hero-statement optical-hang" id="hero-statement">
+        <span class="mask-line" data-reveal style="--delay: 60ms"><span>Ownership is the</span></span>
+        <span class="mask-line" data-reveal style="--delay: 160ms"
+          ><span>only <span class="voice-editorial">password</span>.</span></span
+        >
+      </h1>
+
+      <div class="hero-columns">
+        <p class="lede hero-lede" data-reveal style="--delay: 300ms">
+          Haven keeps media encrypted on public infrastructure and derives the key to it from what a
+          reader already holds. There is no account to open, no server to trust, and no platform
+          standing between a community and its own archive.
+        </p>
+
+        <div class="hero-actions" data-reveal style="--delay: 400ms">
+          <Action href="/atlas" variant="sealed" size="large">Enter the Atlas</Action>
+          <Action href="/codex" variant="keyline" size="large" glyph="none">Read the Codex</Action>
+        </div>
+      </div>
+    </div>
+
+    {/* Standing at the foot of the hero: the four networks, with the one that is
+        not operational stated plainly rather than omitted. */}
+    <div class="hero-foot frame" data-reveal style="--delay: 560ms">
+      <dl class="hero-networks">
+        {
+          NETWORKS.map((network) => (
+            <div class="hero-network" data-pending={network.id === 'arkiv' ? 'true' : undefined}>
+              <dt class="hero-network-head">
+                <span class:list={['net-dot', `net-${network.id}`]} aria-hidden="true" />
+                <span class="hero-network-name">{network.name}</span>
+              </dt>
+              <dd class="hero-network-role">{network.role}</dd>
+              <dd class="addr hero-network-id">{network.identifier}</dd>
+              {network.id === 'arkiv' && <dd class="label hero-network-state">Index pending</dd>}
+            </div>
+          ))
+        }
+      </dl>
+      <p class="label hero-scroll">
+        <span>Scroll</span>
+        <span class="hero-scroll-rule" aria-hidden="true"></span>
+      </p>
+    </div>
+  </section>
+
+  <div class="act-seam"></div>
+
+  {/* ═══════════════════════════════════════════════════════════════════════
+      ACT 01 — THE PREMISE
+      Stock. The argument, then five claims the rest of the document has to earn.
+      ═══════════════════════════════════════════════════════════════════════ */}
+  <section class="act act-pad-tall columns-visible" data-tone="stock" aria-labelledby="premise-title">
+    <div class="act-body frame">
+      <SectionHead folio="01" running="The premise" annotation="Why a protocol and not a product" />
+
+      <div class="premise">
+        <h2 class="editorial-display premise-title" id="premise-title">
+          <span class="mask-line" data-reveal><span>Every platform you have</span></span>
+          <span class="mask-line" data-reveal style="--delay: 90ms"
+            ><span>ever loved was a <em>landlord</em>.</span></span
+          >
+        </h2>
+
+        <div class="premise-argument">
+          <p class="prose-body" data-reveal style="--delay: 160ms">
+            It held your work on its hardware, under its terms, for as long as its business model
+            agreed with your existence. When the terms changed, the archive changed with them. Nothing
+            about that arrangement was malicious. It was structural.
+          </p>
+          <p class="prose-body" data-reveal style="--delay: 220ms">
+            Haven removes the structure rather than improving the landlord. Content is sealed before it
+            is published, its index is a public state trie, its key is derived by a network rather than
+            issued by a company, and the bill for keeping it is settled on-chain. What remains is a
+            rule set — and a rule set has no offices to close.
+          </p>
+          <aside class="marginalia" data-reveal style="--delay: 280ms">
+            <strong>{TOPOLOGY.services} services, {TOPOLOGY.privateDatastores} private datastores.</strong>{' '}
+            Verified by a graph build over the workspace. There is no shared backend for any surface to
+            depend on, which is why each one ships and fails alone.
+          </aside>
+        </div>
+      </div>
+
+      <ol class="claims">
+        {
+          CLAIMS.map((claim, index) => (
+            <li class="claim" data-reveal style={`--delay: ${index * 70}ms`}>
+              <span class="folio claim-figure">{claim.figure}</span>
+              <h3 class="statement-title claim-label">{claim.label}</h3>
+              <p class="claim-body">{claim.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  {/* ═══════════════════════════════════════════════════════════════════════
+      ACT 02 — THE MECHANISM
+      Stock, dense. The layer table: what each network provides, and the single
+      thing Haven adds on top of it.
+      ═══════════════════════════════════════════════════════════════════════ */}
+  <section class="act act-pad" data-tone="stock" aria-labelledby="mechanism-title">
+    <div class="act-body frame">
+      <SectionHead
+        folio="02"
+        running="The mechanism"
+        annotation={`${TOPOLOGY.publicNetworks} public networks · 1 rule set`}
+      />
+
+      <div class="mechanism-intro">
+        <h2 class="statement-display" id="mechanism-title" data-reveal>
+          Haven is not a chain. It is the layer above four of them.
+        </h2>
+        <p class="prose-body" data-reveal style="--delay: 120ms">
+          Consensus, storage, settlement and threshold cryptography already exist, operated by networks
+          that predate Haven and will outlast it. Haven specifies only how those four capabilities
+          compose into one guarantee. The layers beneath see bytes, an <code>eth_call</code> and an
+          <code>ecrecover</code> — they have no idea Haven exists, which is precisely why they cannot be
+          leaned on to end it.
+        </p>
+      </div>
+
+      <div class="layers" data-reveal>
+        {
+          LAYERS.map((layer) => (
+            <article class="layer">
+              <header class="layer-head">
+                <span class="folio">{layer.tier}</span>
+                <h3 class="statement-title layer-title">{layer.title}</h3>
+                <ul class="layer-nets" aria-label="Networks at this layer">
+                  {layer.networks.map((id) => (
+                    <li class:list={['net-dot', `net-${id}`]} title={id} />
+                  ))}
+                </ul>
+              </header>
+              <div class="layer-body">
+                <div class="layer-cell">
+                  <span class="label">Provided by</span>
+                  <p class="layer-text">{layer.provider}</p>
+                </div>
+                <div class="layer-cell layer-cell-defines">
+                  <span class="label label-seal">Haven defines</span>
+                  <p class="layer-text">{layer.havenDefines}</p>
+                </div>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+
+      <table class="specimen networks-table" data-reveal>
+        <caption class="label networks-caption">
+          Table 02.1 — The four networks, their responsibilities, and where to verify them
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Network</th>
+            <th scope="col">Role</th>
+            <th scope="col">Authoritative for</th>
+            <th scope="col">Identifier</th>
+            <th scope="col">Verify</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            NETWORKS.map((network) => (
+              <tr data-pending={network.id === 'arkiv' ? 'true' : undefined}>
+                <th scope="row" class="networks-name">
+                  <span class:list={['net-dot', `net-${network.id}`]} aria-hidden="true" />
+                  {network.name}
+                </th>
+                <td>{network.role}</td>
+                <td class="networks-owns">{network.owns}</td>
+                <td>
+                  <span class="label networks-id-label">{network.identifierLabel}</span>
+                  <span class="addr">{network.identifier}</span>
+                </td>
+                <td>
+                  <a class="link-rule networks-link" href={network.explorer} rel="noreferrer noopener" target="_blank">
+                    {network.id === 'arkiv' ? 'Node (503)' : 'Explorer'}
+                  </a>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="act-seam"></div>
+
+  {/* ═══════════════════════════════════════════════════════════════════════
+      ACT 03 — THE MOVEMENTS
+      Void, pinned. Four beats, scrubbed by scroll: Seal, Register, Gate, Open.
+      The stage stays put while the argument advances through it.
+      ═══════════════════════════════════════════════════════════════════════ */}
+  <section
+    class="act sequence movements"
+    data-tone="void"
+    data-sequence
+    aria-labelledby="movements-title"
+  >
+    <div class="sequence-stage movements-stage" data-stage>
+      <div class="act-body frame movements-inner">
+        <div class="movements-side">
+          <SectionHead folio="03" running="The movements" annotation="Seal · Register · Gate · Open" />
+          <h2 class="statement-headline movements-title" id="movements-title">
+            One piece of content, from the publisher's disk to the reader's screen.
+          </h2>
+
+          <ol class="movements-index" aria-label="The four movements">
+            {
+              MOVEMENTS.map((movement) => (
+                <li class="movements-index-item" data-index={movement.index - 1}>
+                  <span class="folio">{folio(movement.index)}</span>
+                  <span class="movements-index-title">{movement.title}</span>
+                  <span class="label movements-index-actor">{movement.actor}</span>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+
+        <div class="movements-beats">
+          {
+            MOVEMENTS.map((movement) => (
+              <article class="beat movement" data-beat data-active={movement.index === 1 ? 'true' : 'false'}>
+                <header class="movement-head">
+                  <span class:list={['net-dot', `net-${movement.network}`]} aria-hidden="true" />
+                  <span class="label movement-primitive">{movement.primitive}</span>
+                </header>
+
+                <h3 class="editorial-headline movement-claim">{movement.claim}</h3>
+                <p class="movement-detail">{movement.detail}</p>
+
+                <figure class="movement-evidence">
+                  <pre class="code-plate"><code>{movement.code}</code></pre>
+                  <figcaption class="plate-caption">
+                    <span class="plate-number">Fig. 03.{movement.index}</span>
+                    <span>
+                      Executed by <code>{movement.actor}</code>. Nothing in this step requires a service
+                      Haven operates.
+                    </span>
+                  </figcaption>
+                </figure>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ═══════════════════════════════════════════════════════════════════════
+      ACT 04 — THE EVIDENCE
+      Void. Claims are cheap; this act measures. Every figure is read live in the
+      reader's browser, and the one network that is down says so.
+      ═══════════════════════════════════════════════════════════════════════ */}
+  <section class="act act-pad evidence-act" data-tone="void" aria-labelledby="evidence-title">
+    <div class="act-body frame">
+      <SectionHead folio="04" running="The evidence" annotation="Measured, not asserted" />
+
+      <div class="evidence-head">
+        <h2 class="statement-display" id="evidence-title" data-reveal>
+          Read from the networks themselves, in your browser, right now.
+        </h2>
+        <p class="prose-body" data-reveal style="--delay: 120ms">
+          A page that animates invented activity is easy to build and worth nothing. Every figure below
+          is a real round-trip to a public endpoint with no key and no proxy — including the one that
+          fails. Storage is aggregated from the Filecoin pin contracts on FEVM; across both deployments
+          that is <strong>{totalPinned}</strong> under proof in {integer(totalSets)} live data sets.
+        </p>
+      </div>
+
+      <div class="evidence-panel panel-sunk" data-reveal style="--delay: 200ms">
+        <LiveInstrument client:visible storage={storage} />
+      </div>
+    </div>
+  </section>
+
+  <div class="act-seam"></div>
+
+  {/* ═══════════════════════════════════════════════════════════════════════
+      ACT 05 — THE SURFACES
+      Stock. Five independent clients, five languages, no shared code.
+      ═══════════════════════════════════════════════════════════════════════ */}
+  <section class="act act-pad" data-tone="stock" aria-labelledby="surfaces-title">
+    <div class="act-body frame">
+      <SectionHead
+        folio="05"
+        running="The surfaces"
+        annotation={`${TOPOLOGY.services} clients · ${TOPOLOGY.languages.length} languages · ${TOPOLOGY.sharedTypes} shared libraries`}
+      />
+
+      <div class="surfaces-head">
+        <h2 class="statement-display" id="surfaces-title" data-reveal>
+          Five clients that have never met.
+        </h2>
+        <p class="prose-body" data-reveal style="--delay: 120ms">
+          Each surface is written in a different language, ships on its own schedule, and shares no
+          database, queue or library with the others. They agree because they obey the same rule set —
+          not because they import the same code. That is the difference between a protocol and a
+          monolith with several front ends.
+        </p>
+      </div>
+
+      <div class="surfaces" data-reveal>
+        {
+          SURFACES.map((surface, index) => (
+            <article class="surface specular">
+              <header class="surface-head">
+                <span class="folio">{folio(index + 1)}</span>
+                <h3 class="surface-name">{surface.name}</h3>
+                <span class="label surface-language">{surface.language}</span>
+              </header>
+
+              <p class="surface-role">{surface.role}</p>
+
+              <dl class="surface-facts">
+                <div>
+                  <dt class="label">Owns</dt>
+                  <dd>{surface.owns}</dd>
+                </div>
+                <div>
+                  <dt class="label">Does not own</dt>
+                  <dd class="surface-not">{surface.doesNotOwn}</dd>
+                </div>
+              </dl>
+
+              <footer class="surface-foot">
+                <code class="addr">{surface.artifact}</code>
+                <ul class="surface-nets" aria-label="Networks this surface talks to">
+                  {surface.talksTo.map((id) => (
+                    <li class:list={['net-dot', `net-${id}`]} title={id} />
+                  ))}
+                </ul>
+              </footer>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <div class="act-seam"></div>
+
+  {/* ═══════════════════════════════════════════════════════════════════════
+      ACT 06 — THE ATLAS
+      Void. The invitation. Two axes, stated honestly, then the door.
+      ═══════════════════════════════════════════════════════════════════════ */}
+  <section class="act act-pad-tall atlas-invite" data-tone="void" aria-labelledby="atlas-title">
+    <div class="act-body frame">
+      <SectionHead folio="06" running="The Atlas" annotation="An observatory for the archive" />
+
+      <div class="atlas-invite-grid">
+        <div class="atlas-invite-copy">
+          <h2 class="editorial-colossus" id="atlas-title" data-reveal>
+            Every community is a <em>world</em>. Watch them from above.
+          </h2>
+          <p class="lede" data-reveal style="--delay: 140ms">
+            The Atlas draws the archive as a system of bodies in motion: real communities, real
+            balances, real storage under proof. Two measures, kept deliberately apart — how much a
+            world keeps, and what a world is worth.
+          </p>
+
+          <dl class="atlas-axes" data-reveal style="--delay: 220ms">
+            <div class="atlas-axis">
+              <dt class="label label-seal">Axis I · Storage</dt>
+              <dd>
+                What a community has pinned under proof, summed over the addresses that paid for it —
+                leaf counts, live data sets, and the {storage.usdfcSymbol} escrowed to keep them, read
+                from the Filecoin pin contracts on FEVM. Not what a provider holds: providers supply
+                the capacity, they do not publish the archive.
+              </dd>
+            </div>
+            <div class="atlas-axis">
+              <dt class="label label-seal">Axis II · Capitalisation</dt>
+              <dd>
+                What the gating asset is worth. Supply comes from the contract; price comes from the
+                market, because price is not an on-chain fact.
+              </dd>
+            </div>
+            <div class="atlas-axis atlas-axis-pending">
+              <dt class="label">Pending · Attribution</dt>
+              <dd>
+                Every byte above is a real on-chain sum. Which community each uploading address
+                publishes for is not on Filecoin at all — it is metadata, and metadata is Arkiv's job.
+                Until its index answers, that one hop is a documented placeholder and the edges that
+                depend on it are drawn unlit rather than guessed.
+              </dd>
+            </div>
+          </dl>
+
+          <div class="atlas-invite-action" data-reveal style="--delay: 300ms">
+            <Action href="/atlas" variant="sealed" size="large">Open the Atlas</Action>
+            <Action href="/threshold" variant="keyline" glyph="none">Check an address</Action>
+          </div>
+        </div>
+
+        <figure class="atlas-invite-plate plate crop-marks" data-reveal style="--delay: 200ms">
+          <div class="atlas-invite-visual" aria-hidden="true">
+            <div class="orbit orbit-1"></div>
+            <div class="orbit orbit-2"></div>
+            <div class="orbit orbit-3"></div>
+            <div class="orbit-core"></div>
+          </div>
+          <figcaption class="plate-caption">
+            <span class="plate-number">Plate 06</span>
+            <span>
+              The observatory inverts the document: in the Atlas the network is the only light source.
+            </span>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <div class="act-seam"></div>
+
+  {/* ═══════════════════════════════════════════════════════════════════════
+      ACT 07 — THE HORIZON
+      Stock, editorial. The argument for the future, set in the serif.
+      ═══════════════════════════════════════════════════════════════════════ */}
+  <section class="act act-pad-tall" data-tone="stock" aria-labelledby="horizon-title">
+    <div class="act-body frame">
+      <SectionHead folio="07" running="The horizon" annotation="Phases, not dates" />
+
+      <blockquote class="manifesto" data-reveal>
+        <p class="editorial-headline manifesto-text" id="horizon-title">
+          The question is not whether a community can publish. It is whether, in thirty years, anyone
+          still <em>can</em> — and whether the answer depends on a company being in a good mood.
+        </p>
+      </blockquote>
+
+      <ol class="horizon">
+        {
+          HORIZON.map((phase, index) => (
+            <li class="phase" data-state={phase.state} data-reveal style={`--delay: ${index * 80}ms`}>
+              <div class="phase-mark">
+                <span class="folio phase-numeral">{phase.mark}</span>
+                <span class="phase-line" aria-hidden="true"></span>
+              </div>
+              <div class="phase-body">
+                <header class="phase-head">
+                  <h3 class="statement-title phase-title">{phase.title}</h3>
+                  <span class="label phase-state">
+                    {phase.state === 'live'
+                      ? 'Standing'
+                      : phase.state === 'active'
+                        ? 'Underway'
+                        : phase.state === 'next'
+                          ? 'Next'
+                          : 'Horizon'}
+                  </span>
+                </header>
+                <p class="phase-text">{phase.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  {/* ═══════════════════════════════════════════════════════════════════════
+      ACT 08 — THE CLOSE
+      Void. One sentence, monumental, and the door.
+      ═══════════════════════════════════════════════════════════════════════ */}
+  <section class="act close" data-tone="void" aria-labelledby="close-title">
+    <div class="act-body frame close-body">
+      <p class="label close-eyebrow" data-reveal>{HAVEN.descriptor} · {HAVEN.version}</p>
+      <h2 class="statement-monument close-title optical-hang" id="close-title">
+        <span class="mask-line" data-reveal><span>Nothing to</span></span>
+        <span class="mask-line" data-reveal style="--delay: 90ms"><span>shut down.</span></span>
+      </h2>
+      <div class="close-actions" data-reveal style="--delay: 220ms">
+        <Action href="/threshold" variant="sealed" size="large">Check if you already qualify</Action>
+        <Action href="/atlas" variant="keyline" size="large" glyph="none">Enter the Atlas</Action>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ══════════════════════════════════════════════════════════════════════════
+     ACT 00 — HERO
+     ══════════════════════════════════════════════════════════════════════════ */
+  .hero {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    min-height: calc(100dvh - var(--chrome-h));
+    padding-top: clamp(3rem, 2rem + 5vw, 8rem);
+    overflow: clip;
+  }
+
+  .hero-stage {
+    /* The instrument is centred on the void, biased right so the type has the
+       left two-thirds of the sheet to itself. */
+    inset-inline-start: auto;
+    inset-inline-end: -8%;
+    width: min(78vw, 62rem);
+    aspect-ratio: 1;
+    top: 50%;
+    translate: 0 -55%;
+    opacity: 0.95;
+  }
+
+  .hero-body {
+    align-self: center;
+    display: grid;
+    gap: clamp(1.5rem, 1rem + 1.6vw, 2.75rem);
+    max-width: min(100%, 92rem);
+  }
+
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    color: var(--fg-3);
+  }
+
+  .hero-eyebrow-rule {
+    width: 3.5rem;
+    height: 1px;
+    background-color: var(--line-strong);
+  }
+
+  /* `ch` here is relative to the colossus size, which is the intent: about
+     fourteen characters per line at any viewport. */
+  .hero-statement {
+    max-width: 14ch;
+  }
+
+  .hero-columns {
+    display: grid;
+    grid-template-columns: minmax(0, 34rem) auto;
+    align-items: end;
+    gap: clamp(2rem, 1rem + 3vw, 5rem);
+  }
+
+  .hero-lede {
+    max-width: 46ch;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  /* ── Standing foot: the four networks ─────────────────────────────────── */
+  .hero-foot {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 2rem;
+    padding-block: clamp(1.5rem, 1rem + 1.5vw, 2.5rem);
+    border-top: 1px solid var(--line);
+  }
+
+  .hero-networks {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    margin: 0;
+  }
+
+  .hero-network {
+    display: grid;
+    gap: 0.35rem;
+    padding-inline: clamp(0.75rem, 1.4vw, 1.75rem);
+    border-left: 1px solid var(--line);
+  }
+
+  .hero-network:first-child {
+    padding-left: 0;
+    border-left: none;
+  }
+
+  .hero-network-head {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  .hero-network-name {
+    font-size: var(--text-small);
+    font-weight: 500;
+    color: var(--fg);
+    letter-spacing: -0.014em;
+  }
+
+  .hero-network-role,
+  .hero-network-id,
+  .hero-network-state {
+    margin: 0;
+  }
+
+  .hero-network-role {
+    font-size: var(--text-fine);
+    color: var(--fg-3);
+  }
+
+  .hero-network-id {
+    font-size: 0.6875rem;
+    color: var(--fg-4);
+    overflow-wrap: anywhere;
+  }
+
+  .hero-network-state {
+    color: var(--seal-text);
+  }
+
+  /* The pending network is dimmed but never removed. */
+  .hero-network[data-pending] .hero-network-name {
+    color: var(--fg-3);
+  }
+
+  .hero-scroll {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--fg-4);
+  }
+
+  .hero-scroll-rule {
+    width: 3rem;
+    height: 1px;
+    background-color: var(--line-strong);
+    transform-origin: left center;
+    animation: scroll-hint 2.8s var(--ease-in-out-quint) infinite;
+  }
+
+  @keyframes scroll-hint {
+    0%,
+    100% {
+      scale: 0.3 1;
+      opacity: 0.4;
+    }
+    50% {
+      scale: 1 1;
+      opacity: 1;
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     ACT 01 — PREMISE
+     ══════════════════════════════════════════════════════════════════════════ */
+  .premise {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: clamp(2rem, 1rem + 4vw, 7rem);
+    padding-block: clamp(3rem, 2rem + 4vw, 6rem);
+  }
+
+  .premise-title {
+    max-width: 20ch;
+  }
+
+  .premise-argument {
+    display: grid;
+    gap: 1.5rem;
+    align-content: start;
+    padding-top: 0.5rem;
+  }
+
+  .claims {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 0;
+    list-style: none;
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .claim {
+    display: grid;
+    gap: 0.65rem;
+    align-content: start;
+    padding: 1.75rem clamp(1rem, 1.4vw, 1.75rem) 0;
+    border-left: 1px solid var(--line);
+    min-height: 12rem;
+  }
+
+  .claim:first-child {
+    padding-left: 0;
+    border-left: none;
+  }
+
+  .claim-figure {
+    color: var(--fg-4);
+  }
+
+  .claim-label {
+    max-width: 16ch;
+  }
+
+  .claim-body {
+    font-size: var(--text-small);
+    line-height: 1.55;
+    color: var(--fg-3);
+    text-wrap: pretty;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     ACT 02 — MECHANISM
+     ══════════════════════════════════════════════════════════════════════════ */
+  .mechanism-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 1rem + 4vw, 6rem);
+    padding-block: clamp(2.5rem, 2rem + 3vw, 5rem);
+    align-items: start;
+  }
+
+  .mechanism-intro h2 {
+    max-width: 24ch;
+  }
+
+  .layers {
+    display: grid;
+    gap: 0;
+    border-top: 1px solid var(--line-strong);
+    margin-bottom: clamp(3rem, 2rem + 3vw, 5rem);
+  }
+
+  .layer {
+    display: grid;
+    grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+    gap: clamp(1.5rem, 1rem + 2vw, 4rem);
+    padding-block: clamp(1.5rem, 1rem + 1.4vw, 2.5rem);
+    border-bottom: 1px solid var(--line);
+    transition: background-color 400ms var(--ease-out-expo);
+  }
+
+  .layer:hover {
+    background-color: color-mix(in oklab, var(--seal) 2.5%, transparent);
+  }
+
+  .layer-head {
+    display: grid;
+    gap: 0.6rem;
+    align-content: start;
+  }
+
+  .layer-title {
+    max-width: 18ch;
+  }
+
+  .layer-nets {
+    display: flex;
+    gap: 0.4rem;
+    list-style: none;
+  }
+
+  .layer-body {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: clamp(1.25rem, 1rem + 1.5vw, 3rem);
+  }
+
+  .layer-cell {
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+  }
+
+  .layer-text {
+    font-size: var(--text-small);
+    line-height: 1.6;
+    color: var(--fg-2);
+    text-wrap: pretty;
+  }
+
+  .layer-cell-defines .layer-text {
+    color: var(--fg);
+  }
+
+  .networks-caption {
+    text-align: left;
+    color: var(--fg-4);
+    padding-bottom: 0.875rem;
+  }
+
+  .networks-name {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    white-space: nowrap;
+    font-weight: 500;
+    color: var(--fg);
+  }
+
+  .networks-owns {
+    max-width: 24ch;
+  }
+
+  .networks-id-label {
+    display: block;
+    color: var(--fg-4);
+    margin-bottom: 0.2rem;
+  }
+
+  .networks-link {
+    font-size: var(--text-fine);
+    white-space: nowrap;
+  }
+
+  .networks-table tbody tr[data-pending] th,
+  .networks-table tbody tr[data-pending] td {
+    color: var(--fg-3);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     ACT 03 — MOVEMENTS (pinned)
+     The section is four viewports tall; the stage inside is one. That ratio is
+     what gives each beat a full screen of scroll to hold the reader.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .movements {
+    height: 420vh;
+  }
+
+  .movements-stage {
+    align-items: center;
+  }
+
+  .movements-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 26rem) minmax(0, 1fr);
+    gap: clamp(2rem, 1rem + 4vw, 6rem);
+    width: 100%;
+    align-items: center;
+  }
+
+  .movements-side {
+    display: grid;
+    gap: 2rem;
+    align-content: center;
+  }
+
+  .movements-title {
+    max-width: 22ch;
+  }
+
+  .movements-index {
+    display: grid;
+    gap: 0;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .movements-index-item {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 1rem;
+    padding-block: 0.85rem;
+    border-bottom: 1px solid var(--line-soft);
+    opacity: 0.4;
+    transition:
+      opacity 500ms var(--ease-out-expo),
+      padding-left 500ms var(--ease-out-expo);
+  }
+
+  .movements-index-title {
+    font-size: var(--text-subtitle);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .movements-index-actor {
+    color: var(--fg-4);
+  }
+
+  /* The index tracks the active beat. Using :has on the parent means no JS is
+     needed to keep the two in sync beyond the beat index attribute. */
+  .movements[data-beat-index='0'] .movements-index-item[data-index='0'],
+  .movements[data-beat-index='1'] .movements-index-item[data-index='1'],
+  .movements[data-beat-index='2'] .movements-index-item[data-index='2'],
+  .movements[data-beat-index='3'] .movements-index-item[data-index='3'] {
+    opacity: 1;
+    padding-left: 0.5rem;
+  }
+
+  .movements-beats {
+    position: relative;
+    min-height: 30rem;
+    display: grid;
+  }
+
+  .movement {
+    grid-area: 1 / 1;
+    display: grid;
+    gap: 1.25rem;
+    align-content: center;
+  }
+
+  .movement-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .movement-primitive {
+    color: var(--seal-text);
+  }
+
+  .movement-claim {
+    max-width: 26ch;
+  }
+
+  .movement-detail {
+    font-size: var(--text-body);
+    line-height: 1.65;
+    color: var(--fg-2);
+    max-width: 54ch;
+    text-wrap: pretty;
+  }
+
+  .movement-evidence {
+    margin-top: 0.5rem;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     ACT 04 — EVIDENCE
+     ══════════════════════════════════════════════════════════════════════════ */
+  .evidence-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 1rem + 4vw, 6rem);
+    padding-block: clamp(2.5rem, 2rem + 3vw, 4.5rem);
+    align-items: start;
+  }
+
+  .evidence-head h2 {
+    max-width: 22ch;
+  }
+
+  .evidence-head strong {
+    color: var(--fg);
+    font-weight: 500;
+  }
+
+  .evidence-panel {
+    padding: clamp(1.5rem, 1rem + 1.6vw, 2.5rem);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     ACT 05 — SURFACES
+     ══════════════════════════════════════════════════════════════════════════ */
+  .surfaces-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 1rem + 4vw, 6rem);
+    padding-block: clamp(2.5rem, 2rem + 3vw, 4.5rem);
+    align-items: start;
+  }
+
+  .surfaces-head h2 {
+    max-width: 16ch;
+  }
+
+  .surfaces {
+    margin-bottom: calc(clamp(2.5rem, 2rem + 3vw, 4.5rem) * -0.35);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1px;
+    background-color: var(--line);
+    border: 1px solid var(--line);
+  }
+
+  .surface {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    padding: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
+    background-color: var(--surface);
+    transition: background-color 400ms var(--ease-out-expo);
+  }
+
+  .surface:hover {
+    background-color: var(--surface-raised);
+  }
+
+  .surface-head {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .surface-name {
+    font-family: var(--font-ledger);
+    font-size: var(--text-subtitle);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    color: var(--fg);
+  }
+
+  .surface-language {
+    color: var(--seal-text);
+  }
+
+  .surface-role {
+    font-size: var(--text-small);
+    font-weight: 500;
+    color: var(--fg);
+    letter-spacing: -0.014em;
+  }
+
+  .surface-facts {
+    display: grid;
+    gap: 0.875rem;
+    margin: 0;
+    padding-top: 0.875rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .surface-facts dd {
+    margin: 0;
+    font-size: var(--text-fine);
+    line-height: 1.5;
+    color: var(--fg-2);
+    padding-top: 0.25rem;
+    text-wrap: pretty;
+  }
+
+  .surface-not {
+    color: var(--fg-4);
+  }
+
+  .surface-foot {
+    display: grid;
+    gap: 0.7rem;
+    padding-top: 0.875rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .surface-foot .addr {
+    font-size: 0.6875rem;
+    color: var(--fg-4);
+  }
+
+  .surface-nets {
+    display: flex;
+    gap: 0.4rem;
+    list-style: none;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     ACT 06 — ATLAS INVITATION
+     ══════════════════════════════════════════════════════════════════════════ */
+  .atlas-invite-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+    gap: clamp(2rem, 1rem + 4vw, 6rem);
+    padding-top: clamp(2.5rem, 2rem + 3vw, 4.5rem);
+    align-items: center;
+  }
+
+  .atlas-invite-copy {
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  .atlas-invite-copy h2 {
+    max-width: 18ch;
+  }
+
+  .atlas-axes {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .atlas-axis {
+    display: grid;
+    gap: 0.4rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .atlas-axis dd {
+    margin: 0;
+    font-size: var(--text-small);
+    line-height: 1.55;
+    color: var(--fg-2);
+    max-width: 52ch;
+    text-wrap: pretty;
+  }
+
+  .atlas-axis-pending dd {
+    color: var(--fg-3);
+  }
+
+  .atlas-invite-action {
+    padding-top: 0.5rem;
+  }
+
+  /* A quiet orrery: three rings and a core. Enough to promise the Atlas without
+     shipping the renderer to the landing page. */
+  .atlas-invite-plate {
+    padding: clamp(1.25rem, 1rem + 1vw, 2rem);
+    background-color: color-mix(in oklab, var(--surface-sunk) 60%, transparent);
+  }
+
+  .atlas-invite-visual {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    display: grid;
+    place-items: center;
+  }
+
+  .orbit {
+    position: absolute;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    animation: orbit-spin linear infinite;
+  }
+
+  .orbit::after {
+    content: '';
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    top: -4px;
+    left: 50%;
+  }
+
+  .orbit-1 {
+    width: 34%;
+    aspect-ratio: 1;
+    animation-duration: 18s;
+  }
+  .orbit-1::after {
+    background-color: var(--color-icp);
+    box-shadow: 0 0 16px 2px var(--color-icp);
+  }
+
+  .orbit-2 {
+    width: 60%;
+    aspect-ratio: 1;
+    animation-duration: 31s;
+    animation-direction: reverse;
+  }
+  .orbit-2::after {
+    background-color: var(--color-evm);
+    box-shadow: 0 0 16px 2px var(--color-evm);
+  }
+
+  .orbit-3 {
+    width: 86%;
+    aspect-ratio: 1;
+    animation-duration: 47s;
+  }
+  .orbit-3::after {
+    background-color: var(--color-filecoin);
+    box-shadow: 0 0 16px 2px var(--color-filecoin);
+  }
+
+  .orbit-core {
+    width: 12%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background-color: var(--seal);
+    box-shadow:
+      0 0 24px 4px color-mix(in oklab, var(--seal) 60%, transparent),
+      0 0 80px 12px color-mix(in oklab, var(--seal) 30%, transparent);
+  }
+
+  @keyframes orbit-spin {
+    to {
+      rotate: 360deg;
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     ACT 07 — HORIZON
+     ══════════════════════════════════════════════════════════════════════════ */
+  .manifesto {
+    padding-block: clamp(3rem, 2rem + 4vw, 7rem);
+  }
+
+  /* The measure belongs on the element that carries the large type: `ch` is
+     relative to the element's own font size, so putting it on the blockquote
+     resolves against inherited body size and collapses the quote into a column. */
+  .manifesto-text {
+    max-width: 26ch;
+    text-wrap: balance;
+  }
+
+  .horizon {
+    display: grid;
+    gap: 0;
+    list-style: none;
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .phase {
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr);
+    gap: clamp(1.5rem, 1rem + 2vw, 3rem);
+    padding-block: clamp(1.5rem, 1rem + 1.4vw, 2.25rem);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .phase-mark {
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+  }
+
+  .phase-numeral {
+    font-size: var(--text-subtitle);
+    letter-spacing: 0.1em;
+  }
+
+  .phase-line {
+    height: 1px;
+    background-color: var(--line-strong);
+  }
+
+  .phase-body {
+    display: grid;
+    gap: 0.6rem;
+    grid-template-columns: minmax(0, 24rem) minmax(0, 1fr);
+    align-items: baseline;
+    column-gap: clamp(1.5rem, 1rem + 2vw, 4rem);
+  }
+
+  .phase-head {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .phase-title {
+    max-width: 18ch;
+  }
+
+  .phase-state {
+    color: var(--fg-4);
+  }
+
+  .phase[data-state='live'] .phase-state,
+  .phase[data-state='active'] .phase-state {
+    color: var(--seal-text);
+  }
+
+  .phase[data-state='live'] .phase-numeral,
+  .phase[data-state='active'] .phase-numeral {
+    color: var(--seal-text);
+  }
+
+  .phase[data-state='horizon'] .phase-numeral,
+  .phase[data-state='next'] .phase-numeral {
+    color: var(--fg-4);
+  }
+
+  .phase-text {
+    font-size: var(--text-small);
+    line-height: 1.65;
+    color: var(--fg-2);
+    max-width: 56ch;
+    text-wrap: pretty;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     ACT 08 — CLOSE
+     ══════════════════════════════════════════════════════════════════════════ */
+  .close {
+    min-height: 82vh;
+    display: grid;
+    align-items: center;
+    padding-block: clamp(5rem, 3rem + 8vw, 11rem);
+  }
+
+  .close-body {
+    display: grid;
+    gap: clamp(1.5rem, 1rem + 2vw, 3rem);
+    justify-items: start;
+  }
+
+  .close-eyebrow {
+    color: var(--fg-3);
+  }
+
+  .close-title {
+    max-width: 11ch;
+  }
+
+  .close-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     EVIDENCE BLOCKS (shared)
+     ══════════════════════════════════════════════════════════════════════════ */
+  /* Named `code-plate`, not `evidence`: the section is also called evidence, and
+     a single shared class name silently applied this plate's background, mono
+     font and `white-space: pre` to the whole act. */
+  .code-plate {
+    font-family: var(--font-ledger);
+    font-size: 0.75rem;
+    line-height: 1.7;
+    color: #eae6dd;
+    background-color: #22242c;
+    border: 1px solid #22242c;
+    border-left: 2px solid var(--seal);
+    padding: 1.15rem 1.35rem;
+    overflow-x: auto;
+    tab-size: 2;
+    white-space: pre;
+  }
+
+  code {
+    font-family: var(--font-ledger);
+    font-size: 0.92em;
+    letter-spacing: -0.01em;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     RESPONSIVE
+     Desktop-first: these are graceful reductions, not a separate design.
+     ══════════════════════════════════════════════════════════════════════════ */
+  @media (max-width: 1280px) {
+    .hero-stage {
+      opacity: 0.5;
+      inset-inline-end: -22%;
+    }
+    .movements-inner {
+      grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 1080px) {
+    .hero-columns,
+    .premise,
+    .mechanism-intro,
+    .evidence-head,
+    .surfaces-head,
+    .atlas-invite-grid,
+    .layer,
+    .phase-body {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .hero-networks {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.25rem 0;
+    }
+    .hero-network:nth-child(3) {
+      padding-left: 0;
+      border-left: none;
+    }
+    .movements {
+      height: auto;
+    }
+    .movements-stage {
+      position: static;
+      height: auto;
+      padding-block: 4rem;
+    }
+    .movements-inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .movements-beats {
+      display: grid;
+      gap: 4rem;
+      min-height: 0;
+    }
+    .movement {
+      grid-area: auto;
+      opacity: 1;
+      translate: none;
+      filter: none;
+      pointer-events: auto;
+    }
+    .claim {
+      padding-left: 0;
+      border-left: none;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 1.5rem;
+      min-height: 0;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .hero-networks {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .hero-network {
+      padding-left: 0;
+      border-left: none;
+    }
+    .hero-foot {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .phase {
+      grid-template-columns: 3rem minmax(0, 1fr);
+    }
+  }
+</style>

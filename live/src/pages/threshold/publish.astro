@@ -1,0 +1,318 @@
+---
+import Base from '../../layouts/Base.astro'
+import Masthead from '../../components/Masthead.astro'
+import Footer from '../../components/Footer.astro'
+import SectionHead from '../../components/SectionHead.astro'
+import Action from '../../components/Action.astro'
+import Explain from '../../components/Explain.astro'
+import PublisherCheck from '../../components/react/threshold/PublisherCheck.tsx'
+import { STORAGE, ARKIV, ARKIV_GAS, CHAINS } from '../../lib/chains.ts'
+import ledger from '../../data/storage-ledger.json'
+import { bytesInline, integer } from '../../lib/format.ts'
+import '../../styles/threshold.css'
+
+/**
+ * PATH B — THE PUBLISHER
+ *
+ * The heaviest path, and the one that meets the index directly. Arkiv is a
+ * required layer of the protocol rather than an optional extra: it carries the
+ * entity that makes an archive findable. Its devnet is offline while the chain is
+ * being built, so the final step is drawn as pending rather than omitted — the
+ * requirement is real either way, and hiding it would misrepresent the protocol.
+ */
+
+const mainnet = ledger.mainnet
+---
+
+<Base
+  title="Publish an archive — The Threshold"
+  description="What it costs to put media into a community's archive: FIL for gas, USDFC for storage, and the command-line publisher that encrypts before anything leaves your machine."
+>
+  <Masthead slot="masthead" current="threshold" />
+
+  <main id="main">
+    <section class="act act-opening" data-tone="void" aria-labelledby="publish-title">
+      <div class="act-body frame">
+        <SectionHead folio="04 · B" running="Publish an archive" annotation="The publisher" />
+
+        <p class="path-back" data-reveal>
+          <a href="/threshold">← All three paths</a>
+        </p>
+
+        <h1 class="statement-colossus optical-hang" id="publish-title">
+          <span class="mask-line" data-reveal><span>Encrypt first.</span></span>
+          <span class="mask-line" data-reveal style="--delay: 90ms"><span>Publish <em>second</em>.</span></span>
+        </h1>
+
+        <p class="lede" data-reveal style="--delay: 160ms">
+          Publishing is the one path that spends real money, because you are paying a network to hold
+          bytes and keep proving it still has them. Nothing leaves your machine in the clear: the
+          publisher encrypts locally, and what reaches Filecoin is ciphertext.
+        </p>
+
+        <a class="threshold-scroll" href="#ready-title" data-reveal style="--delay: 300ms">
+          <span class="threshold-scroll-arrow" aria-hidden="true">↓</span>
+          <span>See what it costs</span>
+        </a>
+      </div>
+    </section>
+
+    {/* ── Readiness ───────────────────────────────────────────────────────── */}
+    <section class="act act-pad-tall" data-tone="stock" aria-labelledby="ready-title">
+      <div class="act-body frame">
+        <SectionHead folio="01" running="Check what you hold" annotation="Live on Filecoin" />
+
+        <h2 class="statement-headline optical-hang" id="ready-title">
+          <span class="mask-line" data-reveal><span>Three balances</span></span>
+          <span class="mask-line" data-reveal style="--delay: 90ms"><span>and one index.</span></span>
+        </h2>
+
+        <p class="lede" data-reveal style="--delay: 100ms">
+          Publishing spends on three chains: native FIL for Filecoin transactions, USDFC for the
+          storage itself, and GLM for gas on Arkiv, because registering an archive in the index is a
+          transaction too. All three are ordinary balances and all three are read live below. The
+          fourth requirement — the index entry — is equally required, and is the one thing here that
+          is ours to finish rather than yours.
+        </p>
+
+        <div data-reveal style="--delay: 180ms">
+          <PublisherCheck client:visible />
+        </div>
+
+        <div data-reveal>
+          <Explain term="What is gas, and why does storage cost separately?">
+            <p>
+              Gas is the fee a blockchain charges to process a transaction — paid in that chain's own
+              currency, which on Filecoin is FIL. It covers the act of recording something.
+            </p>
+            <p>
+              Storage is a different bill entirely: you are renting durable space and paying the
+              provider to keep proving it still holds your bytes. Haven settles that in USDFC, held in
+              escrow for the life of the deal rather than paid upfront to anyone.
+            </p>
+          </Explain>
+
+          <Explain term="What is USDFC?">
+            <p>
+              A stablecoin on Filecoin, backed by FIL and worth about one US dollar. Storage is priced
+              in it so a deal does not get more or less expensive as FIL moves.
+            </p>
+            <p>
+              You mint it against FIL collateral rather than buying it from Haven — we never take
+              custody of it, and never receive it.
+            </p>
+          </Explain>
+        </div>
+      </div>
+    </section>
+
+    {/* ── The steps ───────────────────────────────────────────────────────── */}
+    <section class="act act-pad-tall" data-tone="void" aria-labelledby="steps-title">
+      <div class="act-body frame">
+        <SectionHead folio="02" running="The sequence" annotation="Six steps, one waiting on us" />
+
+        <h2 class="statement-headline optical-hang" id="steps-title">
+          <span class="mask-line" data-reveal><span>Five steps you can take</span></span>
+          <span class="mask-line" data-reveal style="--delay: 90ms"><span>now, and one we owe you.</span></span>
+        </h2>
+
+        <ol class="path-steps path-steps-publish" data-reveal style="--delay: 160ms">
+          <li class="path-step">
+            <span class="folio">01</span>
+            <div>
+              <h3 class="path-step-title">Get FIL for gas</h3>
+              <p class="path-step-body">
+                Filecoin transactions are paid in native FIL. On the test network the faucet gives it
+                away; on mainnet you acquire it like any other asset.
+              </p>
+              <div class="path-links">
+                <a href="https://faucet.calibnet.chainsafe-fil.io/" target="_blank" rel="noreferrer noopener">
+                  Calibration faucet<span aria-hidden="true"> ↗</span>
+                </a>
+              </div>
+              <p class="path-step-detail">
+                Practise on calibration first. It is the same contracts and the same commands, with
+                worthless money — there is no reason to learn this on mainnet.
+              </p>
+            </div>
+          </li>
+
+          <li class="path-step">
+            <span class="folio">02</span>
+            <div>
+              <h3 class="path-step-title">Mint USDFC for storage</h3>
+              <p class="path-step-body">
+                Storage is settled in USDFC and escrowed to the payment rails for the life of the
+                deal. The check above reads your balance of it directly from the contract.
+              </p>
+              <dl class="path-facts">
+                <div>
+                  <dt class="label">USDFC</dt>
+                  <dd class="addr">{STORAGE.mainnet.usdfc}</dd>
+                </div>
+                <div>
+                  <dt class="label">Escrow</dt>
+                  <dd class="addr">{STORAGE.mainnet.filecoinPay}</dd>
+                </div>
+              </dl>
+              <div class="path-links">
+                <a href="https://usdfc.secured.finance/" target="_blank" rel="noreferrer noopener">
+                  Mint USDFC<span aria-hidden="true"> ↗</span>
+                </a>
+                <a
+                  href="https://docs.secured.finance/usdfc-stablecoin/getting-started"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                >
+                  How it works<span aria-hidden="true"> ↗</span>
+                </a>
+              </div>
+            </div>
+          </li>
+
+          <li class="path-step">
+            <span class="folio">03</span>
+            <div>
+              <h3 class="path-step-title">Hold {ARKIV_GAS.symbol} for index gas</h3>
+              <p class="path-step-body">
+                Registering your archive in the index is a transaction on an L3, and that chain's gas
+                is {ARKIV_GAS.symbol} — Arkiv is Golem's chain, so it is paid for in Golem's token.
+                Readers never need any of this: querying the index is a read, and reads are free.
+              </p>
+              <dl class="path-facts">
+                <div>
+                  <dt class="label">{ARKIV_GAS.name}</dt>
+                  <dd class="addr">{ARKIV_GAS.address}</dd>
+                </div>
+                <div>
+                  <dt class="label">Held on</dt>
+                  <dd>{CHAINS[ARKIV_GAS.chain].name}</dd>
+                </div>
+              </dl>
+              <p class="path-step-detail">
+                The check above reads your mainnet balance, which is what you acquire and bridge. The
+                balance on the L3 itself cannot be read while its devnet is offline — so that figure
+                is reported for what it is, not dressed up as an L3 reading.
+              </p>
+              <Explain term="Why does this need a third token?">
+                <p>
+                  Because three different networks are doing three different jobs, and each charges in
+                  its own currency. Filecoin stores the bytes and charges FIL for transactions plus
+                  USDFC for the storage. Arkiv indexes the archive and charges GLM.
+                </p>
+                <p>
+                  Haven issues none of them and receives none of them. That is the cost of not having
+                  a company in the middle: you pay the networks directly, and nobody marks it up.
+                </p>
+              </Explain>
+            </div>
+          </li>
+
+          <li class="path-step">
+            <span class="folio">04</span>
+            <div>
+              <h3 class="path-step-title">Install the publisher</h3>
+              <p class="path-step-body">
+                <code>haven-cli</code> is the only surface in the protocol that encrypts. It runs on
+                your own machine, seals media under the gate parameters, and submits ciphertext. It
+                has no decryption path at all — that belongs to readers.
+              </p>
+              <pre class="code-plate"><code>pip install haven-cli</code></pre>
+              <p class="path-step-detail">
+                Python 3.11 or newer, or the published container. Local SQLite only: no hosted queue,
+                no shared database, no account with us.
+              </p>
+              <Explain term="Why a command-line tool and not a website?">
+                <p>
+                  Because encryption has to happen where the plaintext already is. A website that
+                  encrypted your masters would first have to receive them — at which point the
+                  promise is broken, regardless of what the site does next.
+                </p>
+                <p>
+                  Running it locally is the only arrangement in which we genuinely never see your
+                  media. The inconvenience is the guarantee.
+                </p>
+              </Explain>
+            </div>
+          </li>
+
+          <li class="path-step">
+            <span class="folio">05</span>
+            <div>
+              <h3 class="path-step-title">Encrypt and pin</h3>
+              <p class="path-step-body">
+                The publisher encrypts, then submits the ciphertext to the Filecoin pin contracts.
+                From that moment the network proves possession on a cycle, and the bytes become
+                measurable — leaf count times thirty-two, the same arithmetic the contract itself uses.
+              </p>
+              <dl class="path-facts">
+                <div>
+                  <dt class="label">Under proof now</dt>
+                  <dd class="tnum">{bytesInline(Number(mainnet?.totalBytes ?? 0))}</dd>
+                </div>
+                <div>
+                  <dt class="label">Live data sets</dt>
+                  <dd class="tnum">{integer(mainnet?.liveDataSets ?? 0)}</dd>
+                </div>
+                <div>
+                  <dt class="label">PDPVerifier</dt>
+                  <dd class="addr">{STORAGE.mainnet.pdpVerifier}</dd>
+                </div>
+              </dl>
+              <p class="path-step-detail">
+                Those figures are the whole network, captured from {CHAINS.filecoin.name} — your
+                archive joins them and can be counted the same way.
+              </p>
+            </div>
+          </li>
+
+          {/* The step that cannot be completed. Drawn, not hidden. */}
+          <li class="path-step path-step-blocked">
+            <span class="folio">06</span>
+            <div>
+              <h3 class="path-step-title">
+                Register the entity
+                <span class="label path-blocked-mark">{ARKIV.statusShort}</span>
+              </h3>
+              <p class="path-step-body">
+                The final step writes an entity to Arkiv — the L3 index that binds an archive to its
+                community and records its piece CIDs. This is a required part of the protocol, not an
+                enhancement: the entity is what lets a reader's client discover the archive at all,
+                and what lets the Atlas attribute its bytes to a community.
+              </p>
+              <p class="path-step-detail">
+                There is no public Arkiv network to write to: {ARKIV.codename} was retired on{' '}
+                {ARKIV.retiredOn}, taking its faucet, explorer and RPC with it, and the next public
+                testnet is expected {ARKIV.nextPublicTestnet}. Everything before this step works —
+                media encrypts, bytes pin, proofs run, payment settles and keys derive. An archive
+                stored today holds and opens; it is simply not yet discoverable, and becomes so once a
+                public index exists.
+              </p>
+              <dl class="path-facts">
+                <div>
+                  <dt class="label">Retired endpoint</dt>
+                  <dd class="addr">{ARKIV.rpc}</dd>
+                </div>
+                <div>
+                  <dt class="label">Faucet, by convention</dt>
+                  <dd class="addr">{ARKIV.faucet}</dd>
+                </div>
+                <div>
+                  <dt class="label">Next public testnet</dt>
+                  <dd>{ARKIV.nextPublicTestnet}</dd>
+                </div>
+              </dl>
+            </div>
+          </li>
+        </ol>
+
+        <div class="threshold-actions" data-reveal style="--delay: 240ms">
+          <Action href="/threshold/found" variant="sealed" size="large">Start your own archive</Action>
+          <Action href="/codex/clients" variant="keyline" glyph="none">Read the client spec</Action>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Base>

@@ -1,0 +1,64 @@
+---
+title: haven-aol — the gate
+summary: A Motoko canister on the Internet Computer that owns VetKD derivation, EIP-712 recovery, and the approval cache. It has no UI, no uploads, and no storage.
+part: Surfaces
+folio: 'III.02'
+order: 2
+status: settled
+sources:
+  - docs/architecture/01-haven-aol.md
+  - docs/api/contracts.md
+  - docs/decisions/ADR-001-decoupled-boundaries.md
+---
+
+## Boundary
+
+`haven-aol` is canister `dciac-uaaaa-aaaad-qlzuq-cai` on ICP mainnet. It is written in Motoko and exposes a Candid interface — ten methods, no more. Its boundary is unusually narrow:
+
+**Owns:** VetKD key derivation (contexts `accessol_v1` and `accessol_v3`), EIP-712 signature verification via pure-Motoko `secp256k1` ecrecover, EVM balance checking via the `ic/evm_rpc` canister, and an approval cache with 30-day TTL.
+
+**Does not own:** Any user interface, any upload pipeline, any storage, any wallet connection logic, any media processing.
+
+This is the strictest interpretation of ADR-001's decoupling mandate. The canister has no frontend and no dependency on any other Haven surface. It can be upgraded, restarted, or migrated without any client being aware — the Candid interface is the entire contract.
+
+## EVM RPC integration
+
+When `requestDecryptionKeyV3` is called, the canister must verify a balance on a remote EVM chain. It does this via the `ic/evm_rpc` canister, which provides consensus-verified HTTPS outcalls to public EVM RPCs.
+
+The `validChains` set defines which chains the canister will query:
+
+- `EthMainnet`
+- `EthSepolia`
+- `BaseMainnet`
+- `ArbitrumOne`
+- `OptimismMainnet`
+
+A request specifying a chain outside this set is rejected before any outcall is made. The RPC call itself is a standard `eth_call` to `balanceOf` (selector `0x70a08231`) with the recovered address as the argument.
+
+## Approval cache
+
+The cache is the performance mechanism that makes V3 practical. After a reader passes a balance check in epoch `E`, the canister stores an approval keyed on `(chain, token, threshold, epoch, wallet)`. Subsequent requests in the same epoch skip the EVM outcall entirely and proceed directly to derivation.
+
+Cache entries expire automatically at epoch rollover. The `evictExpiredApprovals` method is a controller-only janitor that clears stale entries explicitly — useful for memory management but not required for correctness, since the derivation logic checks epoch validity before consulting the cache.
+
+## SDKs
+
+The canister's Candid interface is consumed via three thin SDKs:
+
+| SDK | Language | Package | Used by |
+| --- | --- | --- | --- |
+| TypeScript | TypeScript | `haven-aol` (npm) | `haven-dapp` |
+| Python | Python | `haven-aol` (PyPI) | `haven-cli` |
+| `ic-kotlin` | Kotlin | — | `haven-mobile` |
+
+Each SDK is a transport wrapper. It serialises Candid arguments, handles the IC agent protocol, and deserialises responses. It does not contain gate logic, caching strategy, or cryptographic operations — those belong to the canister alone.
+
+## Cryptographic stack
+
+The canister implements three cryptographic primitives without external dependencies:
+
+1. **`secp256k1` ecrecover** — pure Motoko, no precompile. Recovers the EVM address from an EIP-712 signature.
+2. **VetKD derivation** — uses the ICP subnet's threshold key infrastructure. The canister holds a share; the subnet assembles the derived output without any single node ever holding the full key.
+3. **SHA-256 preimage construction** — deterministic composition of the derivation context from chain, token, threshold, and epoch.
+
+There is no AES, no key storage, and no decryption. The canister derives and hands off; the client decrypts locally.

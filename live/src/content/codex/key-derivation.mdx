@@ -1,0 +1,66 @@
+---
+title: Key derivation and epochs
+summary: The VetKD preimage binds chain, token, threshold and epoch into a single derivation — one key per corpus per month, not one per file.
+part: The Rule Set
+folio: 'II.02'
+order: 2
+status: settled
+sources:
+  - docs/architecture/01-haven-aol.md
+  - docs/api/contracts.md
+---
+
+## Two generations
+
+Haven has shipped two derivation schemes. V1 remains operational for backwards compatibility; V3 is the current protocol version and the one new publishers should target.
+
+| Property | V1 (`accessol_v1`) | V3 (`accessol_v3`) |
+| --- | --- | --- |
+| Preimage | `SHA-256("accessol:" + chain + ":" + token + ":" + threshold + ":" + cid)` | `SHA-256("accessol_v3:" + chain + ":" + token + ":" + threshold + ":" + effectiveEpoch)` |
+| Scope | One key per CID | One key per (chain, token, threshold, epoch) |
+| Balance check | Once per request | Once per epoch, then cached |
+| Batch | N derivations per batch (up to 20) | One derivation, replicated across N CIDs |
+| Cache key | (chain, token, threshold, cid, wallet) | (chain, token, threshold, epoch, wallet) |
+
+The shift from V1 to V3 is motivated by a concrete cost problem. A collection of 500 items under V1 requires 500 separate VetKD derivations and — in the worst case — 500 separate `eth_call` balance checks. Under V3, the same collection requires one derivation and one balance check per epoch. The entire corpus unlocks with a single round trip.
+
+## The epoch
+
+An epoch is `floor(unix_timestamp / 2_592_000)` — exactly 30 days. The canister exposes the current epoch via `getCurrentEpoch` (a query call).
+
+When the epoch rolls, all cached approvals expire. A reader who held balance in the previous epoch but has since transferred their tokens cannot derive in the new epoch. This is the revocation mechanism: it is not instantaneous, but it is automatic and requires no action from the publisher.
+
+A future epoch in a request is rejected with `#InvalidEpoch` before any effects are applied. This prevents a reader from pre-fetching keys for a period in which their balance may change.
+
+## The zero-threshold case
+
+If a gate is configured with threshold zero, the `effectiveEpoch` collapses to `0` regardless of the actual time. This means:
+
+- The derivation is time-invariant — the same key is derived forever.
+- No balance check is performed (there is nothing to check).
+- The request must still carry a valid EIP-712 signature and a valid epoch.
+
+This mode is useful for archives that want signature-based authentication without token gating — public collections that still want to know *who* is reading, even if anyone may read.
+
+## Transport encryption
+
+The derived key never travels in the clear. The caller includes a `transportPublicKey` in the EIP-712 request. The canister encrypts the VetKD output against that key before returning it. Only the holder of the corresponding transport secret — which lives solely in the client's memory — can unwrap the derived material.
+
+The unwrap produces an AES key. The client uses this to decrypt ciphertext fetched from Filecoin/IPFS. At no point does the canister, the EVM chain, or the storage layer see the plaintext key or the plaintext content.
+
+## Preimage anatomy
+
+The V3 preimage deserves close reading:
+
+```
+SHA-256("accessol_v3:" + chain + ":" + token + ":" + threshold + ":" + effectiveEpoch)
+```
+
+Each segment binds a specific dimension:
+
+- `chain` — prevents a balance on Base from unlocking content gated on Ethereum.
+- `token` — prevents a balance of token A from unlocking content gated by token B.
+- `threshold` — prevents a reader holding 1 token from deriving a key meant for holders of 1000.
+- `effectiveEpoch` — rotates the key monthly, enabling passive revocation.
+
+If any dimension changes, the preimage changes, the derivation changes, and a different key emerges. There is no administrative override.

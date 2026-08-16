@@ -1,0 +1,57 @@
+---
+title: Attestation and holder identity
+summary: A holder's identity is not a profile they create. It is the image the gating contract already publishes about itself.
+part: The Rule Set
+folio: 'II.04'
+order: 4
+status: settled
+sources:
+  - docs/architecture/01-haven-aol.md
+  - docs/architecture/02-haven-dapp.md
+  - docs/entities/MEDIA_CONTENT_SPEC.md
+---
+
+## Identity without a directory
+
+Haven has no user profiles. A reader's identity in the system is the intersection of two public facts: the EVM address recovered from their EIP-712 signature, and the collection contract whose balance they satisfy. The collection's name, symbol, and image are read from the contract itself — via `contractURI` (selector `0xe8a3d485`) or `tokenURI` (selector `0xc87b56dd`) — and resolved through the IPFS gateway at `https://ipfs.io/ipfs/`.
+
+This means a community's visual identity needs no directory, no upload form, and no moderation queue. It is whatever the contract already publishes. If the contract changes its metadata, the identity changes everywhere Haven surfaces it, immediately and without intervention.
+
+## Attestation preimages
+
+An attestation is an Ed25519 signature over a structured preimage that binds a reader's address to a specific piece of content at a specific moment. Haven defines two attestation formats:
+
+**Single-CID attestation:**
+
+```
+HAVEN_ATTEST_V1:{chain}:{token}:{threshold}:{evmAddress}:{cidHash}:{timestamp}:{balance}
+```
+
+**Batch attestation (Merkle root over multiple CIDs):**
+
+```
+HAVEN_BATCH_ATTEST_V1:{…}:{merkleRoot}:{cidCount}
+```
+
+The attestation proves that at timestamp `t`, address `a` held at least `threshold` of token `token` on chain `chain`, and accessed content identified by `cidHash`. It does not prove continuous holding — only point-in-time holding. This is a deliberate limitation: continuous proofs would require a watcher, and the protocol has no watchers.
+
+## What attestation enables
+
+Attestations serve as verified badges in the client interfaces. When `haven-dapp` displays a library item, it can show that the current viewer has previously proven holding — a visual cue that the content is accessible without re-deriving. The mobile client uses the same Ed25519 verification via `core-attestation`.
+
+Attestations are also the mechanism by which a publisher can prove that their content was accessed by a genuine holder, without revealing which holder. The `cidHash` in the preimage is the hash of the content identifier, not the identifier itself — so an attestation does not disclose what was watched, only that *something* gated by a specific token was accessed by a qualified reader.
+
+## The contractURI resolution path
+
+When a surface needs to display a community's identity — its name, image, banner — it follows this path:
+
+1. Call `contractURI()` (selector `0xe8a3d485`) on the gate token's contract.
+2. If the response begins with `ipfs://`, rewrite it to `https://ipfs.io/ipfs/` and fetch the JSON metadata.
+3. Extract `name`, `image`, `description` from the returned JSON.
+4. If `contractURI` is not implemented, fall back to `name()` (selector `0x06fdde03`) and `symbol()` (selector `0x95d89b41`) for text, with no image.
+
+This resolution requires no API key and no Haven-operated proxy. Any reader can perform it independently against any public EVM RPC.
+
+## Why not ENS or a profile contract
+
+A dedicated identity layer would require governance (who can register?), moderation (who can remove?), and a registry contract that Haven operates. All three contradict the protocol's core property: nothing Haven operates, nothing Haven can withdraw. The collection contract already exists, already has an owner, and already publishes metadata. Using it as the identity source requires no new infrastructure and introduces no new trust assumption.

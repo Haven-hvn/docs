@@ -1,0 +1,1409 @@
+/**
+ * THE THRESHOLD — surface 04
+ *
+ * Enrolment. Uses the same apparatus as the other story surfaces (folios, rules,
+ * specimen tables, plates) and adds three things of its own: the address field,
+ * the gate roster, and the step sequence with a blocked terminal step.
+ *
+ * Every colour here resolves through the tone tokens, so each act inverts with
+ * `data-tone` exactly like the Record. Nothing is hardcoded to a light or dark
+ * value, which is why the same markup reads correctly in both.
+ */
+
+@layer components {
+  /* ══════════════════════════════════════════════════════════════════════════
+     ARRIVAL
+     A reader sent here from an Atlas inspector needs to know the deep link was
+     understood, otherwise the parameter silently does nothing.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .threshold-arrival {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 0.75rem;
+    margin-top: 1.75rem;
+    padding: 0.85rem 1.1rem;
+    border: 1px solid var(--line);
+    border-left: 2px solid var(--seal);
+    background-color: var(--surface-sunk);
+    font-size: var(--step--1);
+    color: var(--fg-2);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     THE FIELD
+     ══════════════════════════════════════════════════════════════════════════ */
+  .threshold {
+    margin-top: 2rem;
+  }
+
+  .threshold-field {
+    display: grid;
+    gap: 0.6rem;
+    max-width: 46rem;
+  }
+
+  .threshold-input {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .threshold-input input {
+    flex: 1 1 22rem;
+    min-width: 0;
+    padding: 0.8rem 0.95rem;
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: 0.01em;
+    color: var(--fg-0);
+    background-color: var(--surface-sunk);
+    border: 1px solid var(--line-strong);
+    border-radius: 0;
+    transition: border-color 180ms var(--ease-out-quart);
+  }
+
+  .threshold-input input::placeholder {
+    color: var(--fg-4);
+  }
+
+  .threshold-input input:focus-visible {
+    outline: none;
+    border-color: var(--seal);
+    box-shadow: inset 0 0 0 1px var(--seal);
+  }
+
+  .threshold-input input[aria-invalid='true'] {
+    border-color: var(--fg-3);
+  }
+
+  .threshold-input .action:disabled {
+    opacity: 0.42;
+    cursor: not-allowed;
+  }
+
+  .threshold-invalid {
+    font-size: var(--step--1);
+    color: var(--fg-2);
+  }
+
+  /* The privacy statement is load-bearing copy, not fine print: it is the reason
+     the field is a field instead of a wallet button. Sized accordingly. */
+  .threshold-privacy {
+    font-size: var(--step--1);
+    line-height: 1.55;
+    color: var(--fg-3);
+    max-width: 54ch;
+    border-top: 1px solid var(--line);
+    padding-top: 0.7rem;
+    margin-top: 0.2rem;
+  }
+
+  .threshold-error {
+    margin-top: 1.25rem;
+    padding: 0.9rem 1.1rem;
+    border: 1px solid var(--line-strong);
+    border-left: 2px solid var(--seal);
+    background-color: var(--surface-sunk);
+    font-size: var(--step--1);
+    color: var(--fg-1);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     THE VERDICT
+     ══════════════════════════════════════════════════════════════════════════ */
+  .threshold-result {
+    margin-top: 2.5rem;
+    border-top: 1px solid var(--line-strong);
+    padding-top: 1.75rem;
+  }
+
+  .threshold-verdict {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1.25rem 2rem;
+  }
+
+  .threshold-verdict-line {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    line-height: 1.2;
+    margin-top: 0.4rem;
+    color: var(--fg-0);
+  }
+
+  .threshold-verdict-line strong {
+    color: var(--seal-text);
+    font-weight: 600;
+  }
+
+  .threshold-verdict-note {
+    margin-top: 0.6rem;
+    font-size: var(--step--1);
+    line-height: 1.6;
+    color: var(--fg-2);
+    max-width: 56ch;
+  }
+
+  .threshold-verdict-actions {
+    display: grid;
+    gap: 0.6rem;
+    justify-items: start;
+  }
+
+  .threshold-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-ui);
+    font-size: var(--step--2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--fg-2);
+    cursor: pointer;
+  }
+
+  .threshold-toggle input {
+    accent-color: var(--seal);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     THE FORK
+     ══════════════════════════════════════════════════════════════════════════ */
+  .threshold-paths {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 0.75rem;
+    margin: 1.75rem 0;
+  }
+
+  .threshold-path {
+    display: grid;
+    gap: 0.3rem;
+    padding: 1rem 1.1rem;
+    text-align: left;
+    background-color: transparent;
+    border: 1px solid var(--line);
+    color: var(--fg-2);
+    cursor: pointer;
+    transition:
+      border-color 200ms var(--ease-out-quart),
+      background-color 200ms var(--ease-out-quart);
+  }
+
+  .threshold-path:hover {
+    border-color: var(--line-strong);
+  }
+
+  .threshold-path[aria-pressed='true'] {
+    border-color: var(--seal);
+    background-color: color-mix(in oklab, var(--seal) 8%, transparent);
+    color: var(--fg-0);
+  }
+
+  .threshold-path .folio {
+    color: var(--seal-text);
+  }
+
+  .threshold-path-name {
+    font-family: var(--font-display);
+    font-size: var(--step-0);
+    color: var(--fg-0);
+  }
+
+  .threshold-path-note {
+    font-size: var(--step--1);
+    color: var(--fg-3);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     THE RESULT
+     Structured as an answer about access, not a scorecard. What the address can
+     open comes first and is given the weight of a finding; what it could join
+     next is a quiet list of options; what could not be read is separated from
+     both so it is never mistaken for a verdict.
+
+     Nothing is marked as failed. A community you have not joined is a choice you
+     have not made, and drawing it as a red cross would be both wrong and rude.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .threshold-caption {
+    font-size: var(--step--1);
+    line-height: 1.55;
+    color: var(--fg-3);
+    max-width: 62ch;
+    padding-bottom: 0.9rem;
+  }
+
+  .threshold-granted,
+  .threshold-none {
+    margin-top: 2rem;
+  }
+
+  .threshold-granted-head,
+  .threshold-available-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1rem;
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.3;
+    color: var(--fg-0);
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .threshold-available-head {
+    font-size: var(--step-0);
+    color: var(--fg-2);
+    border-bottom-color: var(--line);
+  }
+
+  .threshold-available-count {
+    margin-left: auto;
+    color: var(--fg-4);
+  }
+
+  /* Real gaps and a border per card, rather than 1px gaps over a filled parent.
+     The filled-parent trick draws hairlines for free but only works when the
+     items exactly fill the grid — five cards in a four-column layout left three
+     empty cells showing the parent's line colour as a grey slab. */
+  .threshold-granted-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    list-style: none;
+  }
+
+  /* An open archive is the one genuinely good piece of news this page can
+     deliver, so it carries the seal — a tinted ground and an ember edge. */
+  .threshold-grant {
+    display: grid;
+    align-content: start;
+    gap: 0.6rem;
+    padding: 1.15rem 1.25rem 1.3rem;
+    background-color: color-mix(in oklab, var(--seal) 7%, var(--surface));
+    border: 1px solid var(--seal-edge);
+    box-shadow: inset 2px 0 0 var(--seal);
+  }
+
+  .threshold-grant[data-focus='true'] {
+    background-color: color-mix(in oklab, var(--seal) 13%, var(--surface));
+  }
+
+  .threshold-grant-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+  }
+
+  .threshold-grant-name {
+    font-family: var(--font-mono);
+    font-size: var(--step-0);
+    color: var(--fg-0);
+    word-break: break-word;
+  }
+
+  .threshold-grant-constellation {
+    color: var(--fg-3);
+  }
+
+  .threshold-grant-holding {
+    font-size: var(--step--1);
+    color: var(--fg-1);
+  }
+
+  .threshold-grant-holding strong {
+    color: var(--seal-text);
+    font-weight: 600;
+  }
+
+  .threshold-grant-note {
+    font-size: var(--step--1);
+    line-height: 1.55;
+    color: var(--fg-2);
+  }
+
+  .threshold-granted-next {
+    margin-top: 1.1rem;
+    font-size: var(--step--1);
+    line-height: 1.6;
+    color: var(--fg-2);
+    max-width: 64ch;
+  }
+
+  .threshold-available,
+  .threshold-unresolved {
+    margin-top: 2.5rem;
+  }
+
+  .threshold-available-list {
+    list-style: none;
+  }
+
+  .threshold-option {
+    display: grid;
+    grid-template-columns: minmax(8rem, 14rem) minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 0.4rem 1.5rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .threshold-option[data-focus='true'] {
+    box-shadow: inset 2px 0 0 var(--seal);
+    padding-left: 0.7rem;
+  }
+
+  .threshold-option-name {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    color: var(--fg-1);
+    word-break: break-word;
+  }
+
+  .threshold-option-need {
+    font-size: var(--step--1);
+    color: var(--fg-3);
+  }
+
+  .threshold-option-link {
+    font-family: var(--font-ui);
+    font-size: var(--step--2);
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--fg-2);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line-strong);
+    white-space: nowrap;
+    padding-bottom: 1px;
+  }
+
+  .threshold-option-link:hover {
+    color: var(--seal-text);
+    border-bottom-color: var(--seal);
+  }
+
+  /* Unreadable, not unmet. Dashed, consistent with how Arkiv is drawn. */
+  .threshold-unresolved .threshold-option-need {
+    font-style: italic;
+    border-bottom: 1px dashed var(--fg-4);
+  }
+
+  @media (max-width: 46rem) {
+    .threshold-option {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     PUBLISHER READINESS
+     ══════════════════════════════════════════════════════════════════════════ */
+  /* Single column with a fixed three items, so the filled-parent hairline is
+     safe here: there can never be an empty cell. */
+  .threshold-checks {
+    display: grid;
+    gap: 1px;
+    background-color: var(--line);
+    border: 1px solid var(--line);
+  }
+
+  .threshold-check {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.35rem 1.5rem;
+    padding: 1rem 1.15rem;
+    background-color: var(--surface);
+  }
+
+  .threshold-check dt {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.6rem;
+    font-family: var(--font-display);
+    font-size: var(--step-0);
+    color: var(--fg-0);
+  }
+
+  .threshold-check-value {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    color: var(--fg-1);
+    text-align: right;
+  }
+
+  .threshold-check-note {
+    grid-column: 1 / -1;
+    font-size: var(--step--1);
+    line-height: 1.55;
+    color: var(--fg-2);
+    max-width: 64ch;
+  }
+
+  .threshold-mark[data-state='met'] {
+    color: var(--seal-text);
+  }
+
+  .threshold-mark[data-state='unmet'] {
+    color: var(--fg-2);
+  }
+
+  /* An unavailable check is drawn as unavailable — dashed, never as a failure the
+     reader could act on. This is the Arkiv treatment, consistent with the Atlas. */
+  .threshold-mark[data-state='unknown'] {
+    color: var(--fg-3);
+    border-bottom: 1px dashed var(--fg-4);
+  }
+
+  .threshold-check[data-state='unknown'] {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 7px,
+      color-mix(in oklab, var(--fg-5) 30%, transparent) 7px,
+      color-mix(in oklab, var(--fg-5) 30%, transparent) 8px
+    );
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     THE GATE ROSTER
+     ══════════════════════════════════════════════════════════════════════════ */
+  .gate-group {
+    margin-top: 2.75rem;
+  }
+
+  .gate-group-head {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .gate-group-head .rule {
+    flex: 1;
+    height: 1px;
+    background-color: var(--line);
+  }
+
+  .gate-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+    gap: 0.75rem;
+    list-style: none;
+  }
+
+  .gate-card {
+    display: grid;
+    align-content: start;
+    gap: 0.8rem;
+    padding: 1.15rem 1.25rem 1.25rem;
+    background-color: var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  .gate-card[data-focus='true'] {
+    background-color: color-mix(in oklab, var(--seal) 7%, var(--surface));
+    box-shadow: inset 2px 0 0 var(--seal);
+  }
+
+  .gate-card-head {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+  }
+
+  .gate-mark {
+    width: 34px;
+    height: 34px;
+    object-fit: cover;
+    border: 1px solid var(--line-strong);
+    background-color: var(--surface-sunk);
+    flex: none;
+  }
+
+  .gate-name {
+    font-family: var(--font-mono);
+    font-size: var(--step-0);
+    color: var(--fg-0);
+    word-break: break-word;
+  }
+
+  .gate-requirement {
+    color: var(--seal-text);
+    margin-top: 0.2rem;
+  }
+
+  .gate-premise {
+    font-size: var(--step--1);
+    line-height: 1.6;
+    color: var(--fg-2);
+  }
+
+  .gate-facts {
+    display: grid;
+    gap: 0.5rem;
+    border-top: 1px solid var(--line);
+    padding-top: 0.75rem;
+  }
+
+  .gate-facts > div {
+    display: grid;
+    gap: 0.1rem;
+  }
+
+  .gate-facts dd {
+    font-size: var(--step--1);
+    color: var(--fg-1);
+    word-break: break-all;
+  }
+
+  .gate-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+    border-top: 1px solid var(--line);
+    padding-top: 0.85rem;
+  }
+
+  .gate-acquire {
+    font-family: var(--font-ui);
+    font-size: var(--step--2);
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--seal-text);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in oklab, var(--seal) 45%, transparent);
+    padding-bottom: 1px;
+  }
+
+  .gate-acquire:hover {
+    border-bottom-color: var(--seal);
+  }
+
+  .gate-verify {
+    font-family: var(--font-ui);
+    font-size: var(--step--2);
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--fg-3);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line-strong);
+    padding-bottom: 1px;
+  }
+
+  .gate-verify:hover {
+    color: var(--fg-1);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     STEP SEQUENCES
+     ══════════════════════════════════════════════════════════════════════════ */
+  .path-steps {
+    display: grid;
+    gap: 1px;
+    background-color: var(--line);
+    border: 1px solid var(--line);
+    margin-top: 1.75rem;
+    list-style: none;
+    counter-reset: none;
+  }
+
+  .path-step {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 1.25rem;
+    padding: 1.5rem 1.5rem 1.6rem;
+    background-color: var(--surface);
+  }
+
+  .path-step .folio {
+    color: var(--seal-text);
+    padding-top: 0.35rem;
+  }
+
+  .path-step-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.75rem;
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.25;
+    color: var(--fg-0);
+  }
+
+  .path-step-body {
+    margin-top: 0.6rem;
+    font-size: var(--step-0);
+    line-height: 1.65;
+    color: var(--fg-1);
+    max-width: 68ch;
+  }
+
+  .path-step-detail {
+    margin-top: 0.6rem;
+    font-size: var(--step--1);
+    line-height: 1.6;
+    color: var(--fg-3);
+    max-width: 66ch;
+  }
+
+  .path-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem 2rem;
+    margin-top: 0.9rem;
+  }
+
+  .path-facts > div {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .path-facts dd {
+    font-size: var(--step--1);
+    color: var(--fg-2);
+    word-break: break-all;
+  }
+
+  .path-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    margin-top: 0.9rem;
+  }
+
+  .path-links a {
+    font-family: var(--font-ui);
+    font-size: var(--step--2);
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--seal-text);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in oklab, var(--seal) 45%, transparent);
+    padding-bottom: 1px;
+  }
+
+  .path-links a:hover {
+    border-bottom-color: var(--seal);
+  }
+
+  .path-step .code-plate {
+    margin-top: 0.9rem;
+  }
+
+  /* The blocked step. Hatched and dimmed, matching how Arkiv is drawn on every
+     other surface: present, located, and visibly not available. */
+  .path-step-blocked {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 9px,
+      color-mix(in oklab, var(--fg-5) 26%, transparent) 9px,
+      color-mix(in oklab, var(--fg-5) 26%, transparent) 10px
+    );
+  }
+
+  .path-step-blocked .folio,
+  .path-step-blocked .path-step-title {
+    color: var(--fg-2);
+  }
+
+  .path-blocked-mark {
+    color: var(--fg-3);
+    border: 1px dashed var(--fg-4);
+    padding: 0.15rem 0.45rem;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     THE ABSENCE
+     ══════════════════════════════════════════════════════════════════════════ */
+  .absence-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 0.1rem 2.5rem;
+    margin-top: 1.75rem;
+    list-style: none;
+  }
+
+  .absence-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.85rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    color: var(--fg-1);
+  }
+
+  .absence-mark {
+    color: var(--seal-text);
+    font-family: var(--font-mono);
+  }
+
+  @media (max-width: 40rem) {
+    .path-step {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+
+    .threshold-check {
+      grid-template-columns: 1fr;
+    }
+
+    .threshold-check-value {
+      text-align: left;
+    }
+  }
+}
+
+@layer components {
+  /* The masthead is sticky, so an in-page anchor must land below it rather than
+     under it. A zero-height marker with scroll-margin is the least intrusive way
+     to do that without adding padding to the section itself. */
+  .anchor-offset {
+    display: block;
+    height: 0;
+    scroll-margin-top: 7rem;
+  }
+
+  .gate-card {
+    scroll-margin-top: 7rem;
+  }
+
+  .threshold-arrival a {
+    color: var(--seal-text);
+    font-family: var(--font-ui);
+    font-size: var(--step--2);
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in oklab, var(--seal) 45%, transparent);
+    padding-bottom: 1px;
+  }
+
+  .threshold-arrival a:hover {
+    border-bottom-color: var(--seal);
+  }
+}
+
+@layer components {
+  .threshold-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem 1rem;
+    margin-top: 2.25rem;
+  }
+}
+
+@layer components {
+  /* The display registers carry no trailing margin of their own — the Record
+     supplies spacing through its own act wrappers. This surface uses the plain
+     registers, so the rhythm below a statement is set here instead. */
+  .statement-colossus + .lede,
+  .statement-headline + .lede {
+    margin-top: clamp(1.5rem, 0.9rem + 1.4vw, 2.5rem);
+  }
+
+  .lede + .threshold,
+  .lede + .threshold-arrival {
+    margin-top: clamp(2rem, 1.2rem + 1.8vw, 3.25rem);
+  }
+
+  .statement-headline + .path-steps,
+  .statement-headline + .absence-list {
+    margin-top: clamp(1.75rem, 1rem + 1.6vw, 2.75rem);
+  }
+}
+
+@layer components {
+  /* ══════════════════════════════════════════════════════════════════════════
+     GRANT IDENTITY
+     A community is not a slug. When an archive is open to the reader, the card
+     leads with the community's own artwork and its on-chain name, because that
+     is what makes the result feel like an invitation rather than a receipt.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .threshold-grant-head {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+  }
+
+  .threshold-grant-mark {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border: 1px solid var(--seal-edge);
+    background-color: var(--surface-sunk);
+    flex: none;
+  }
+
+  .threshold-grant-ident {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  .threshold-grant-name {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.2;
+    color: var(--fg-0);
+    text-wrap: balance;
+  }
+
+  .threshold-grant-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 0.9rem;
+  }
+
+  .threshold-grant-owners {
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    color: var(--fg-3);
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     OPEN IT IN A READER
+     The step this surface cannot perform. Naming the two clients is the whole
+     point — an eligibility result that stops at "you qualify" leaves the reader
+     with nowhere to go.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .threshold-open {
+    margin-top: 2rem;
+    border: 1px solid var(--line-strong);
+    border-left: 2px solid var(--seal);
+    padding: 1.35rem 1.5rem 1.5rem;
+    background-color: var(--surface-sunk);
+  }
+
+  .threshold-open-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.6rem 0.9rem;
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    color: var(--fg-0);
+  }
+
+  .threshold-open-lede {
+    margin-top: 0.7rem;
+    font-size: var(--step--1);
+    line-height: 1.65;
+    color: var(--fg-2);
+    max-width: 70ch;
+  }
+
+  .threshold-clients {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: 1.25rem 2rem;
+    margin-top: 1.35rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+    list-style: none;
+  }
+
+  .threshold-client-name {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.6rem;
+    font-size: var(--step-0);
+    color: var(--fg-0);
+  }
+
+  .threshold-client-name code {
+    font-family: var(--font-mono);
+    color: var(--seal-text);
+  }
+
+  .threshold-client-name .label {
+    color: var(--fg-4);
+  }
+
+  .threshold-client p {
+    margin-top: 0.4rem;
+    font-size: var(--step--1);
+    line-height: 1.6;
+    color: var(--fg-2);
+  }
+
+  .threshold-open-link {
+    display: inline-block;
+    margin-top: 1.25rem;
+    font-family: var(--font-ui);
+    font-size: var(--step--2);
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--seal-text);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in oklab, var(--seal) 45%, transparent);
+    padding-bottom: 1px;
+  }
+
+  .threshold-open-link:hover {
+    border-bottom-color: var(--seal);
+  }
+}
+
+@layer components {
+  /* ══════════════════════════════════════════════════════════════════════════
+     THE OPENING ACT
+     A statement at colossus scale fills the viewport, and a viewport with nothing
+     but a sentence in it reads as the entire page — a reader can be forgiven for
+     concluding there is nothing below. Two corrections:
+
+     1. The opening act is capped below full height, so the top of the next
+        section is always visible and the page is self-evidently longer.
+     2. An explicit scroll cue, matching the Record's.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .act-opening {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Deliberately less than 100svh: whatever follows must peek. */
+    min-height: min(80svh, 46rem);
+    padding-block: clamp(4rem, 2.5rem + 6vw, 8rem);
+  }
+
+  /* The cue was a 10px uppercase label in --fg-4, the dimmest colour on the ramp,
+     set beneath a statement at colossus scale. It lost that contest completely.
+     It is now a real anchor: body-sized type, a bordered target, and a moving
+     arrow — and it scrolls rather than merely hinting, so following it is a click
+     instead of a guess. */
+  .threshold-scroll {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-top: clamp(2rem, 1.2rem + 2vw, 3.25rem);
+    padding: 0.75rem 1.15rem;
+    border: 1px solid var(--line-strong);
+    color: var(--fg-1);
+    text-decoration: none;
+    font-family: var(--font-ui);
+    font-size: var(--step--1);
+    letter-spacing: 0.04em;
+    transition:
+      border-color 220ms var(--ease-out-quart),
+      color 220ms var(--ease-out-quart),
+      background-color 220ms var(--ease-out-quart);
+  }
+
+  .threshold-scroll:hover {
+    border-color: var(--seal);
+    background-color: color-mix(in oklab, var(--seal) 8%, transparent);
+    color: var(--fg-0);
+  }
+
+  .threshold-scroll:focus-visible {
+    outline: 2px solid var(--seal);
+    outline-offset: 3px;
+  }
+
+  .threshold-scroll-arrow {
+    display: grid;
+    place-items: center;
+    width: 1.4rem;
+    height: 1.4rem;
+    border-radius: 50%;
+    border: 1px solid var(--seal);
+    color: var(--seal-text);
+    font-size: var(--step--1);
+    line-height: 1;
+    animation: cue-fall 2.4s var(--ease-in-out-quint) infinite;
+  }
+
+  @keyframes cue-fall {
+    0%,
+    100% {
+      translate: 0 0;
+    }
+    50% {
+      translate: 0 3px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .threshold-scroll-arrow {
+      animation: none;
+    }
+  }
+
+  .threshold-lede-second {
+    margin-top: 1.1rem;
+    color: var(--fg-2);
+  }
+
+  .path-back {
+    margin-bottom: 1.5rem;
+    font-family: var(--font-ui);
+    font-size: var(--step--2);
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .path-back a {
+    color: var(--fg-3);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line-strong);
+    padding-bottom: 1px;
+  }
+
+  .path-back a:hover {
+    color: var(--fg-0);
+    border-bottom-color: var(--seal);
+  }
+}
+
+@layer components {
+  /* ══════════════════════════════════════════════════════════════════════════
+     THE THREE DOORS
+     The path is chosen before anything else, because a reader, a publisher and a
+     founder are three different people rather than three stages of one. Each door
+     states who it is for, what it takes and roughly how long — enough for someone
+     to rule two of them out without reading further.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .door-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: 0.85rem;
+    margin-top: 2rem;
+    list-style: none;
+  }
+
+  .door-link {
+    display: grid;
+    grid-template-rows: auto auto 1fr auto auto;
+    gap: 0.7rem;
+    height: 100%;
+    padding: 1.35rem 1.4rem 1.4rem;
+    border: 1px solid var(--line-strong);
+    background-color: var(--surface);
+    text-decoration: none;
+    transition:
+      border-color 220ms var(--ease-out-quart),
+      background-color 220ms var(--ease-out-quart),
+      translate 220ms var(--ease-out-quart);
+  }
+
+  .door-link:hover {
+    border-color: var(--seal);
+    background-color: color-mix(in oklab, var(--seal) 5%, var(--surface));
+    translate: 0 -2px;
+  }
+
+  .door-link:focus-visible {
+    outline: 2px solid var(--seal);
+    outline-offset: 3px;
+  }
+
+  .door-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+  }
+
+  .door-head .folio {
+    color: var(--seal-text);
+  }
+
+  .door-who {
+    color: var(--fg-4);
+  }
+
+  .door-name {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    line-height: 1.15;
+    color: var(--fg-0);
+    text-wrap: balance;
+  }
+
+  .door-body {
+    font-size: var(--step--1);
+    line-height: 1.65;
+    color: var(--fg-2);
+  }
+
+  .door-needs {
+    border-top: 1px solid var(--line);
+    padding-top: 0.8rem;
+  }
+
+  .door-needs ul {
+    margin-top: 0.4rem;
+    list-style: none;
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .door-needs li {
+    font-size: var(--step--1);
+    color: var(--fg-2);
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .door-needs li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--seal-text);
+  }
+
+  .door-go {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-top: 1px solid var(--line);
+    padding-top: 0.8rem;
+  }
+
+  .door-effort {
+    color: var(--fg-3);
+  }
+
+  .door-arrow {
+    color: var(--seal-text);
+    font-size: var(--step-1);
+    transition: translate 220ms var(--ease-out-quart);
+  }
+
+  .door-link:hover .door-arrow {
+    translate: 4px 0;
+  }
+
+  .door-note {
+    margin-top: 1.75rem;
+    font-size: var(--step--1);
+    line-height: 1.65;
+    color: var(--fg-3);
+    max-width: 62ch;
+  }
+
+  .door-note a {
+    color: var(--seal-text);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in oklab, var(--seal) 40%, transparent);
+  }
+
+  /* ── The founder's chain choice and threshold field ───────────────────── */
+  .threshold-chains {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .threshold-chain {
+    padding: 0.4rem 0.8rem;
+    font-family: var(--font-ui);
+    font-size: var(--step--2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--fg-3);
+    background-color: transparent;
+    border: 1px solid var(--line);
+    cursor: pointer;
+    transition:
+      color 180ms var(--ease-out-quart),
+      border-color 180ms var(--ease-out-quart);
+  }
+
+  .threshold-chain[aria-pressed='true'] {
+    color: var(--fg-0);
+    border-color: var(--seal);
+    background-color: color-mix(in oklab, var(--seal) 8%, transparent);
+  }
+
+  .threshold-threshold {
+    margin-top: 1.1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    display: grid;
+    gap: 0.4rem;
+    max-width: 34rem;
+  }
+
+  .threshold-threshold input {
+    width: 12rem;
+    padding: 0.7rem 0.85rem;
+    font-family: var(--font-mono);
+    font-size: var(--step-0);
+    color: var(--fg-0);
+    background-color: var(--surface);
+    border: 1px solid var(--line-strong);
+  }
+
+  .threshold-threshold input:focus-visible {
+    outline: none;
+    border-color: var(--seal);
+    box-shadow: inset 0 0 0 1px var(--seal);
+  }
+
+  .threshold-threshold-note {
+    font-size: var(--step--1);
+    line-height: 1.6;
+    color: var(--fg-2);
+  }
+}
+
+@layer components {
+  /* The masthead is sticky, so a cue that jumps to a heading must not tuck it
+     underneath. */
+  .statement-headline[id],
+  .act [id] {
+    scroll-margin-top: 7rem;
+  }
+}
+
+@layer components {
+  /* ══════════════════════════════════════════════════════════════════════════
+     THE WALKTHROUGH
+     Readiness as a sequence rather than a report. On devnet especially, a
+     publisher is going to leave for a faucet and come back, so each requirement
+     is a numbered step that states where to go, and the whole list can be
+     re-checked without retyping an address.
+
+     A completed step drops its instruction and keeps only its figure — the
+     reward for finishing is less to read, not a badge.
+     ══════════════════════════════════════════════════════════════════════════ */
+  .threshold-walk {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    list-style: none;
+  }
+
+  .threshold-walk-step {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 1.1rem;
+    padding: 1.1rem 1.25rem 1.2rem;
+    border: 1px solid var(--line);
+    background-color: var(--surface);
+  }
+
+  .threshold-walk-step[data-state='met'] {
+    border-color: var(--seal-edge);
+    background-color: color-mix(in oklab, var(--seal) 6%, var(--surface));
+  }
+
+  /* Waiting on the network gets the hatch, the same treatment Arkiv has
+     everywhere else — it is not a step the reader can fail. */
+  .threshold-walk-step[data-state='unknown'] {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 9px,
+      color-mix(in oklab, var(--fg-5) 26%, transparent) 9px,
+      color-mix(in oklab, var(--fg-5) 26%, transparent) 10px
+    );
+  }
+
+  .threshold-walk-step .folio {
+    padding-top: 0.3rem;
+    color: var(--fg-4);
+  }
+
+  .threshold-walk-step[data-state='met'] .folio {
+    color: var(--seal-text);
+  }
+
+  .threshold-walk-body {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .threshold-walk-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.7rem;
+    font-family: var(--font-display);
+    font-size: var(--step-0);
+    color: var(--fg-0);
+  }
+
+  .threshold-walk-value {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    color: var(--fg-1);
+  }
+
+  .threshold-walk-todo {
+    font-size: var(--step--1);
+    line-height: 1.6;
+    color: var(--fg-1);
+    max-width: 68ch;
+    border-left: 2px solid var(--seal);
+    padding-left: 0.85rem;
+  }
+
+  .threshold-walk-action {
+    justify-self: start;
+    margin-top: 0.3rem;
+    font-family: var(--font-ui);
+    font-size: var(--step--2);
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--seal-text);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in oklab, var(--seal) 45%, transparent);
+    padding-bottom: 1px;
+  }
+
+  .threshold-walk-action:hover {
+    border-bottom-color: var(--seal);
+  }
+
+  /* A glanceable tally beside the re-check button. */
+  .threshold-progress {
+    display: inline-flex;
+    gap: 4px;
+  }
+
+  .threshold-progress-tick {
+    width: 1.6rem;
+    height: 3px;
+    background-color: var(--line-strong);
+  }
+
+  .threshold-progress-tick[data-state='met'] {
+    background-color: var(--seal);
+  }
+}
+
+@layer components {
+  /* A re-check dims the figures rather than removing them, so the reader keeps
+     their place in the sequence while it revalidates. */
+  .threshold-result[data-refreshing='true'] .threshold-walk {
+    opacity: 0.55;
+    transition: opacity 200ms var(--ease-out-quart);
+  }
+}
+
+@layer components {
+  /* Only relevant while devnet is selected, so it is absent rather than dimmed
+     the rest of the time. */
+  .threshold-mainnet-only {
+    display: none;
+  }
+
+  :global(html[data-network='devnet']) .threshold-mainnet-only {
+    display: flex;
+  }
+}
