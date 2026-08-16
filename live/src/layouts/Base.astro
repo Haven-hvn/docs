@@ -33,26 +33,26 @@ const isObservatory = world === 'observatory'
  * it, then display preferences.
  */
 const paletteEntries: PaletteEntry[] = [
-  { group: 'Surfaces', label: 'The Record', hint: 'The argument, in eight parts', href: '/', keywords: 'home landing index' },
-  { group: 'Surfaces', label: 'The Atlas', hint: 'Live observatory of communities and storage', href: '/atlas', keywords: 'map 3d visualisation observatory' },
-  { group: 'Surfaces', label: 'The Codex', hint: 'Protocol documentation', href: '/codex', keywords: 'docs documentation reference' },
-  { group: 'Surfaces', label: 'The Threshold', hint: 'Three ways in — read, publish, found', href: '/threshold', keywords: 'onboarding join enrol enroll start begin get started' },
-  { group: 'The Threshold', label: 'Read an archive', hint: 'Path A · the reader', href: '/threshold/read', keywords: 'lurker watch join community nft buy acquire opensea eligibility check address' },
-  { group: 'The Threshold', label: 'Publish an archive', hint: 'Path B · the publisher', href: '/threshold/publish', keywords: 'upload publish fil gas usdfc storage cli encrypt pin' },
-  { group: 'The Threshold', label: 'Start an archive', hint: 'Path C · the founder', href: '/threshold/found', keywords: 'found create own token nft gate deploy contract threshold community' },
+  { group: 'Surfaces', label: 'The Record', hint: 'The argument, in eight parts', href: '/docs/', keywords: 'home landing index' },
+  { group: 'Surfaces', label: 'The Atlas', hint: 'Live observatory of communities and storage', href: '/docs/atlas', keywords: 'map 3d visualisation observatory' },
+  { group: 'Surfaces', label: 'The Codex', hint: 'Protocol documentation', href: '/docs/codex', keywords: 'docs documentation reference' },
+  { group: 'Surfaces', label: 'The Threshold', hint: 'Three ways in — read, publish, found', href: '/docs/threshold', keywords: 'onboarding join enrol enroll start begin get started' },
+  { group: 'The Threshold', label: 'Read an archive', hint: 'Path A · the reader', href: '/docs/threshold/read', keywords: 'lurker watch join community nft buy acquire opensea eligibility check address' },
+  { group: 'The Threshold', label: 'Publish an archive', hint: 'Path B · the publisher', href: '/docs/threshold/publish', keywords: 'upload publish fil gas usdfc storage cli encrypt pin' },
+  { group: 'The Threshold', label: 'Start an archive', hint: 'Path C · the founder', href: '/docs/threshold/found', keywords: 'found create own token nft gate deploy contract threshold community' },
 
-  { group: 'The Codex', label: 'What Haven is', hint: 'Foundations · I.01', href: '/codex/what-haven-is' },
-  { group: 'The Codex', label: 'What Haven refuses to know', hint: 'Foundations · I.02', href: '/codex/threat-model', keywords: 'threat model privacy' },
-  { group: 'The Codex', label: 'Four networks, one rule set', hint: 'Foundations · I.03', href: '/codex/layers' },
-  { group: 'The Codex', label: 'The gate', hint: 'The Rule Set · II.01', href: '/codex/the-gate', keywords: 'balance authorisation holder' },
-  { group: 'The Codex', label: 'Key derivation and epochs', hint: 'The Rule Set · II.02', href: '/codex/key-derivation', keywords: 'vetkd epoch' },
-  { group: 'The Codex', label: 'The entity shape', hint: 'The Rule Set · II.03', href: '/codex/entity-shape', keywords: 'ident32 mime128 attributes' },
-  { group: 'The Codex', label: 'Attestation and holder identity', hint: 'The Rule Set · II.04', href: '/codex/attestation' },
-  { group: 'The Codex', label: 'arkiv-chain — the index', hint: 'Surfaces · III.01', href: '/codex/arkiv-chain' },
-  { group: 'The Codex', label: 'haven-aol — the gate', hint: 'Surfaces · III.02', href: '/codex/haven-aol' },
-  { group: 'The Codex', label: 'dapp, cli, mobile — the clients', hint: 'Surfaces · III.03', href: '/codex/clients' },
-  { group: 'The Codex', label: 'Candid and typed data', hint: 'Contracts · IV.01', href: '/codex/candid-and-typed-data' },
-  { group: 'The Codex', label: 'Verify it yourself', hint: 'Operations · V.01', href: '/codex/verify-it-yourself', keywords: 'curl rpc check' },
+  { group: 'The Codex', label: 'What Haven is', hint: 'Foundations · I.01', href: '/docs/codex/what-haven-is' },
+  { group: 'The Codex', label: 'What Haven refuses to know', hint: 'Foundations · I.02', href: '/docs/codex/threat-model', keywords: 'threat model privacy' },
+  { group: 'The Codex', label: 'Four networks, one rule set', hint: 'Foundations · I.03', href: '/docs/codex/layers' },
+  { group: 'The Codex', label: 'The gate', hint: 'The Rule Set · II.01', href: '/docs/codex/the-gate', keywords: 'balance authorisation holder' },
+  { group: 'The Codex', label: 'Key derivation and epochs', hint: 'The Rule Set · II.02', href: '/docs/codex/key-derivation', keywords: 'vetkd epoch' },
+  { group: 'The Codex', label: 'The entity shape', hint: 'The Rule Set · II.03', href: '/docs/codex/entity-shape', keywords: 'ident32 mime128 attributes' },
+  { group: 'The Codex', label: 'Attestation and holder identity', hint: 'The Rule Set · II.04', href: '/docs/codex/attestation' },
+  { group: 'The Codex', label: 'arkiv-chain — the index', hint: 'Surfaces · III.01', href: '/docs/codex/arkiv-chain' },
+  { group: 'The Codex', label: 'haven-aol — the gate', hint: 'Surfaces · III.02', href: '/docs/codex/haven-aol' },
+  { group: 'The Codex', label: 'dapp, cli, mobile — the clients', hint: 'Surfaces · III.03', href: '/docs/codex/clients' },
+  { group: 'The Codex', label: 'Candid and typed data', hint: 'Contracts · IV.01', href: '/docs/codex/candid-and-typed-data' },
+  { group: 'The Codex', label: 'Verify it yourself', hint: 'Operations · V.01', href: '/docs/codex/verify-it-yourself', keywords: 'curl rpc check' },
 
   { group: 'Verify', label: 'Gate canister', hint: ICP.canister, href: ICP.dashboard },
   { group: 'Verify', label: 'Pin service', hint: STORAGE.mainnet.warmStorage, href: CHAINS.filecoin.explorerAddress(STORAGE.mainnet.warmStorage) },
@@ -72,7 +72,7 @@ const paletteEntries: PaletteEntry[] = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <link rel="icon" href="/mark.svg" type="image/svg+xml" />
+    <link rel="icon" href="/docs/mark.svg" type="image/svg+xml" />
     <link rel="canonical" href={canonical.href} />
 
     <meta property="og:type" content="website" />

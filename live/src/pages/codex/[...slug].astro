@@ -50,7 +50,7 @@ const toc = headings.filter((heading) => heading.depth === 2 || heading.depth ==
         A reference work should always show you where you are in the whole. */}
     <aside class="codex-index" aria-label="Codex contents">
       <div class="codex-index-inner">
-        <a href="/codex" class="codex-index-home">
+        <a href="/docs/codex" class="codex-index-home">
           <span class="label label-seal">The Codex</span>
           <span class="codex-index-count label">{ordered.length} entries</span>
         </a>
@@ -88,7 +88,7 @@ const toc = headings.filter((heading) => heading.depth === 2 || heading.depth ==
     <article class="codex-entry-page">
       <header class="codex-entry-header">
         <p class="codex-breadcrumb">
-          <a href="/codex" class="link-rule">Codex</a>
+          <a href="/docs/codex" class="link-rule">Codex</a>
           <span class="codex-breadcrumb-sep" aria-hidden="true">/</span>
           <span>{entry.data.part}</span>
           <span class="codex-breadcrumb-sep" aria-hidden="true">/</span>
@@ -174,7 +174,7 @@ const toc = headings.filter((heading) => heading.depth === 2 || heading.depth ==
         <div class="marginalia codex-margin-note">
           <strong>Every claim here is checkable.</strong> The endpoints, selectors and preimages in this
           work are the same ones the interface reads at runtime. See
-          <a href="/codex/verify-it-yourself" class="link-rule">Verify it yourself</a>.
+          <a href="/docs/codex/verify-it-yourself" class="link-rule">Verify it yourself</a>.
         </div>
 
         <p class="label codex-margin-imprint">{HAVEN.name} {HAVEN.version}</p>

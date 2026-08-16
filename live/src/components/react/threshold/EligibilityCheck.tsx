@@ -336,7 +336,7 @@ export default function EligibilityCheck({ focus: override = null, identities = 
                         </p>
                       </li>
                     </ul>
-                    <a className="threshold-open-link" href="/codex/clients">
+                    <a className="threshold-open-link" href="/docs/codex/clients">
                       How the clients work
                       <span aria-hidden="true"> →</span>
                     </a>

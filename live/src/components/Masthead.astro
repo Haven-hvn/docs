@@ -12,10 +12,10 @@ interface Props {
 const { current = 'record', tone = 'auto' } = Astro.props
 
 const NAV = [
-  { folio: '01', label: 'The Record', href: '/', key: 'record' },
-  { folio: '02', label: 'The Atlas', href: '/atlas', key: 'atlas' },
-  { folio: '03', label: 'Codex', href: '/codex', key: 'codex' },
-  { folio: '04', label: 'The Threshold', href: '/threshold', key: 'threshold' },
+  { folio: '01', label: 'The Record', href: '/docs/', key: 'record' },
+  { folio: '02', label: 'The Atlas', href: '/docs/atlas', key: 'atlas' },
+  { folio: '03', label: 'Codex', href: '/docs/codex', key: 'codex' },
+  { folio: '04', label: 'The Threshold', href: '/docs/threshold', key: 'threshold' },
 ] as const
 ---
 
@@ -23,7 +23,7 @@ const NAV = [
   <div class="progress-rule" aria-hidden="true"></div>
 
   <div class="masthead-inner">
-    <a href="/" class="lockup vt-wordmark" aria-label={`${HAVEN.name} — ${HAVEN.descriptor}`}>
+    <a href="/docs/" class="lockup vt-wordmark" aria-label={`${HAVEN.name} — ${HAVEN.descriptor}`}>
       <Mark size={20} />
       <span class="wordmark">{HAVEN.name}</span>
       <span class="lockup-rule" aria-hidden="true"></span>
