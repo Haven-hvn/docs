@@ -67,7 +67,7 @@ const toc = headings.filter((heading) => heading.depth === 2 || heading.depth ==
                   {group.entries.map((item) => (
                     <li>
                       <a
-                        href={`/codex/${item.id}`}
+                        href={`/docs/codex/${item.id}`}
                         class="codex-nav-link"
                         aria-current={item.id === entry.id ? 'page' : undefined}
                       >
@@ -130,7 +130,7 @@ const toc = headings.filter((heading) => heading.depth === 2 || heading.depth ==
       <nav class="codex-pager" aria-label="Adjacent entries">
         {
           previous ? (
-            <a class="codex-pager-link" href={`/codex/${previous.id}`} rel="prev">
+            <a class="codex-pager-link" href={`/docs/codex/${previous.id}`} rel="prev">
               <span class="label">Previous</span>
               <span class="codex-pager-title">{previous.data.title}</span>
               <span class="folio">{previous.data.folio}</span>
@@ -141,7 +141,7 @@ const toc = headings.filter((heading) => heading.depth === 2 || heading.depth ==
         }
         {
           next && (
-            <a class="codex-pager-link codex-pager-next" href={`/codex/${next.id}`} rel="next">
+            <a class="codex-pager-link codex-pager-next" href={`/docs/codex/${next.id}`} rel="next">
               <span class="label">Next</span>
               <span class="codex-pager-title">{next.data.title}</span>
               <span class="folio">{next.data.folio}</span>
