@@ -63,7 +63,7 @@ All keys lowercase snake_case. `snake_case` everywhere — no camelCase duals.
 | `gate_chain` | `i32` | If gated | EIP chain id — replaces `EthMainnet`-style strings |
 | `gate_threshold` | `i32` | If gated | threshold filter (must fit i32) |
 | `gate_epoch` | `i32` | If v3 | epoch corpus grouping |
-| `sha256_ct` | `bytes32` | Yes | sha256 of **ciphertext bytes**; dedup (`find_existing_entity`) + restore locator. Renamed from `cid_hash` (it never hashed a CID). Attrs-side only, never mirrored |
+| `sha256_ct` | `bytes32` | Yes | sha256 hex digest of the record's root locator string — dedup (`find_existing_entity`) + restore key; the locator itself lives in payload `piece`/`fcid`. Renamed from `cid_hash` (which never hashed a CID). Attrs-side only, never mirrored |
 | `mime` | `i32` | Yes | MIME enum (shared table below); viewer dispatch without payload fetch |
 | `dur_s` | `i32` | Recommended | whole seconds (`0`/omit = unknown); display/sort without payload |
 
