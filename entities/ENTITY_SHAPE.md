@@ -42,5 +42,6 @@ SDK stores as `ArkivSdkAttribute { key:string; value:string|number }` (snake_cas
 * **haven-dapp** `src/types/arkiv.ts` `ArkivEntity` (`key`/`owner`/`attributes`/`payload` base64/`contentType`) → `Video` (`id: ArkivEntity.key`, `createdAtBlock` canonical for ordering, not `createdAt` string).
 * **haven-cli** `haven_cli/media` → same `Ident32` names on write.
 * Sync rule: any new `Ident32` key (e.g. for media) must be added here + `MEDIA_CONTENT_SPEC.md` first, then SDK/TS/Python/Rust consume — no per-repo ad-hoc keys.
+* Gate-type rule: the Arkiv attribute `gate_type` (`ATTR_UINT`, `1`=per-file, `3`=per-epoch, `4`=per-marketcap) mirrors the Haven-AOL gate JSON `version` numerically (`gate_type == gate.version`). Writers emit ONLY `gate_type`; readers read ONLY `gate_type` (no `gate_version` fallback). See `MEDIA_CONTENT_SPEC.md`.
 
 Linked in `docs/README.md` stack and `architecture/00-platform-overview.md` shared-contract note.

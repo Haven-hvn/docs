@@ -48,6 +48,20 @@ All keys are `Ident32` lowercase; enum values below are the only accepted spelli
 | `created_at` | `STRING` | System | `arkv-entitydb` | ISO-8601, also `payload.created_at_block` as block height |
 | `updated_at` | `STRING` | System | — | ISO-8601 if UPDATE |
 | `mint_id` | `STRING` | Optional | `haven-dapp:125` | if minted |
+| `gate_token` | `STRING` | If encrypted | `haven-dapp`, `haven-cli` | gate ERC-20 contract; read by `community-feed.ts` `discoverUserCommunities` (**read**) |
+| `gate_chain` | `STRING` | If encrypted | `haven-dapp`, `haven-cli` | Haven canonical chain name (`EthMainnet`, `BaseMainnet`, …) (**read**) |
+| `gate_threshold` | `UINT` | If encrypted | `haven-dapp`, `haven-cli` | token balance threshold (**read**) |
+| `gate_type` | `UINT` | If encrypted | `haven-dapp`, `haven-cli` | gate-type discriminator, `1`=per-file (v1), `3`=per-epoch (v3), `4`=per-marketcap (v4 drip). `gate_type == gate.version` numerically. Writers emit ONLY this key. (**read**) |
+| `gate_epoch` | `UINT` | If v3/v4 | `haven-cli`, `haven-dapp` (drip) | v3/v4 corpus epoch; top-level payload `epoch` mirrors it (**read elsewhere**) |
+| `market_cap_target_usd` | `UINT` | If v4 (`gate_type=4`) | `haven-dapp` drip publisher | whole-USD unlock target for this chunk (**read** via `parseDripInfo`) |
+| `drip_index` / `drip_total` / `drip_id` | `UINT`/`UINT`/`STRING` | If v4 | `haven-dapp` drip publisher | chunk position / chunk count / stable drip grouping id (**read** via `parseDripInfo`) |
+| `oracle_address` | `STRING` | If v4 | `haven-dapp` drip publisher | Chainlink AggregatorV3 proxy for the gate token's USD feed; stored for future on-chain enforcement (**read** via `parseDripInfo`) |
+
+> **Removed: `gate_version`.** Pre-migration entities used `gate_version` (`1`/`3` as UINT in
+> `haven-cli`, `"v4"` as STRING in `haven-dapp` drip). It is replaced by `gate_type` (numeric
+> `1|3|4`, `ATTR_UINT` — one word instead of a 128-byte string slot). Writers emit `gate_type`
+> only. Readers read `gate_type` only — no fallback. Arkiv queries must use `gate_type = 4`
+> (numeric, no quotes).
 
 **Constraints:** No secrets in attributes; `title` ≤128 bytes; `creator_handle` validated `Ident32` charset if used as Ident32 elsewhere; `phash` hex `string`.
 
@@ -94,7 +108,8 @@ See `haven-dapp/src/types/arkiv.ts:194–259`. MIME `contentType = application/j
 | `encrypted_cid` | `string` | If encrypted | duplicate of attr for convenience after decrypt |
 | `cid_hash` | `string` | Optional | dedup hash |
 | `cid_encryption_metadata` | `GateMetadataJson` | If CID encrypted | per-CID gate |
-| `encryption_metadata` | `string|object` | If encrypted | `GateMetadataJson` (v1) / `GateMetadataV3Json` (v3 `epoch`); `haven-aol` `accessol_v1/v3` |
+| `encryption_metadata` | `string|object` | If encrypted | `GateMetadataJson` (v1) / `GateMetadataV3Json` (v3 `epoch`) / `GateMetadataV4Json` (v4 `marketCapTarget`, `oracleAddress`); `haven-aol` `accessol_v1/v3/v4`. The record's `version` (1/3/4) equals the entity's `gate_type` attribute numerically. |
+| `gate_type` | `number` | If v3/v4 | Top-level payload mirror of the `gate_type` attribute (`3` for v3 + `epoch`; v4 native gate JSON already carries `version:4` so no extra top-level marker is needed). Replaces `gate_version` with no fallback. v1 omits (byte-identity). |
 | `is_encrypted: boolean` | `boolean` | **Yes** | must match `is_encrypted` attr |
 | `description` | `string` | Optional | longer than attr (no 128 limit) |
 | `thumbnail_cid` | `string` | Optional | **unread** — specified here, read by no surface, written by no pipeline. Treat as absent until a writer exists. |

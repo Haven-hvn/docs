@@ -23,9 +23,14 @@ service: (
 ```
 GateRequest(address evmAddress, bytes transportPublicKey, uint256 nonce)         // v1, CID in payload out-of-band
 GateRequestV3(address evmAddress, bytes transportPublicKey, uint256 epoch, uint256 nonce) // v3, epoch covered
+GateRequestV4(address evmAddress, bytes transportPublicKey, uint256 epoch, uint256 marketCapTarget, uint256 nonce) // v4, target covered
 ```
 
 Recovered via Motoko `secp256k1` ecrecover; nonce prevents replay.
+
+## Arkiv gate-type marker
+
+Arkiv entities carry `gate_type` (`ATTR_UINT`, `1`=per-file/v1, `3`=per-epoch/v3, `4`=per-marketcap/v4) — numerically equal to the Haven-AOL gate JSON `version`. `gate_version` is removed with no fallback. Query drips with `gate_type = 4`.
 
 ## VetKD
 
