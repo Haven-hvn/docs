@@ -76,10 +76,11 @@ All keys lowercase snake_case. `snake_case` everywhere — no camelCase duals.
 | `gate_type` | `i32` | always `4` |
 | `gate_token` | `addr` | drip token contract (lowercased) |
 | `gate_chain` | `i32` | EIP chain id |
+| `gate_threshold` | `i32` | threshold (full corpus triple lives on the series; parts carry none) |
 | `drip_id` | `str` | stable run id (uuid) — the thread key |
 | `drip_total` | `i32` | stage count |
 
-Series payload: `{ targets: <uint[] per-stage whole-USD targets>, creator?: <handle> }`.
+Series payload: `{ targets: <uint[] per-stage whole-USD targets>, creator?: <handle>, mime?: <enum int> }`.
 
 ### `haven.video.drip.part` (max 7 attrs — was 17)
 
