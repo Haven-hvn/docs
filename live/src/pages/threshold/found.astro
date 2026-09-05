@@ -105,8 +105,15 @@ import '../../styles/threshold.css'
               your archive, and a large holder can hand access around without you.
             </p>
             <p>
-              Gate on something your community actually holds and cares about. The asset becomes the
-              membership boundary, so it should be one the community recognises as its own.
+              The exception is a dead asset you buy into: a capped, fully-issued collection whose
+              supply you sweep becomes yours in the only sense the gate cares about — the holder set.
+              That trick only works where no more supply can appear, so not on anything still
+              mintable, and the old stragglers who still hold pieces will pass your gate too.
+            </p>
+            <p>
+              Otherwise, gate on something your community actually holds and cares about. The asset
+              becomes the membership boundary, so it should be one the community recognises as
+              its own.
             </p>
           </Explain>
         </div>
@@ -124,9 +131,10 @@ import '../../styles/threshold.css'
         </h2>
 
         <p class="lede" data-reveal style="--delay: 100ms">
-          Haven does not issue assets and has no opinion about how you make yours. These are the
-          standard routes, and none of them involve us — deploy with whatever you already trust, then
-          come back and test the address above.
+          If you need a token, the publish wizard mints one for you — name and symbol in, bonding-curve
+          token out, its address flowing straight into the gate. For anything else, the standard routes
+          below still apply: deploy with whatever you already trust, then come back and test the
+          address above.
         </p>
 
         <ol class="path-steps" data-reveal style="--delay: 160ms">
@@ -151,11 +159,14 @@ import '../../styles/threshold.css'
             <div>
               <h3 class="path-step-title">Generate and deploy it</h3>
               <p class="path-step-body">
-                Standard contracts are a solved problem: you do not need to write Solidity, and you
-                certainly should not write it for this. Generate an audited standard implementation,
-                or use a platform that deploys one for you.
+                If a token is what you need, you do not need to leave: the publish wizard's gate step
+                offers to mint a bonding-curve token for the archive — a standard linear curve on the
+                native reserve — and hands its address back to the gate above. For a collection, or a
+                token with custom tokenomics, use one of the standard routes instead: you do not need
+                to write Solidity, and you certainly should not write it for this.
               </p>
               <div class="path-links">
+                <a href="https://haven.pinme.dev/" target="_blank" rel="noreferrer noopener">Mint in the publish wizard<span aria-hidden="true"> ↗</span></a>
                 <a href="https://wizard.openzeppelin.com/" target="_blank" rel="noreferrer noopener">
                   OpenZeppelin Wizard<span aria-hidden="true"> ↗</span>
                 </a>
@@ -167,8 +178,9 @@ import '../../styles/threshold.css'
                 </a>
               </div>
               <p class="path-step-detail">
-                These are widely used third parties, not endorsements or integrations. Haven never
-                sees the deployment; it only ever reads the finished contract.
+                The external routes are widely used third parties, not endorsements or integrations.
+                For assets deployed outside the wizard, Haven never sees the deployment; it only ever
+                reads the finished contract.
               </p>
               <Explain term="What does deploying cost?">
                 <p>
@@ -209,13 +221,33 @@ import '../../styles/threshold.css'
         </h2>
 
         <p class="lede" data-reveal style="--delay: 100ms">
-          With a gate chosen and a threshold set, founding is finished — what remains is publishing,
-          which is the same work for you as for anyone else contributing to a community's archive.
+          With a gate chosen and a threshold set, founding is finished — what remains is publishing.
+          Either release it in stages, with each stage unlocking as your token climbs, or publish it
+          whole, which is the same work for you as for anyone else contributing to a community's
+          archive.
         </p>
 
         <ol class="path-steps" data-reveal style="--delay: 160ms">
           <li class="path-step">
             <span class="folio">01</span>
+            <div>
+              <h3 class="path-step-title">Or gate the drop itself</h3>
+              <p class="path-step-body">
+                If what you are founding is a single release rather than an ongoing archive, the gate
+                can be the release schedule: stages that unlock as your token's market cap crosses
+                rungs you set. The lock screen becomes the promotion — a public progress bar counting
+                down to the next unlock, visible to everyone, openable only by holders past each rung.
+              </p>
+              <div class="path-links">
+                <a href="https://haven.pinme.dev/" target="_blank" rel="noreferrer noopener">
+                  Publish a drip<span aria-hidden="true"> ↗</span>
+                </a>
+              </div>
+            </div>
+          </li>
+
+          <li class="path-step">
+            <span class="folio">02</span>
             <div>
               <h3 class="path-step-title">Follow the publisher's path</h3>
               <p class="path-step-body">
@@ -230,7 +262,7 @@ import '../../styles/threshold.css'
           </li>
 
           <li class="path-step path-step-blocked">
-            <span class="folio">02</span>
+            <span class="folio">03</span>
             <div>
               <h3 class="path-step-title">
                 Announce it
