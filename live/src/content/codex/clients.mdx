@@ -1,6 +1,6 @@
 ---
 title: dapp, cli, mobile — the clients
-summary: Three independent clients obey the same rule set in three languages. They share no library, no backend, and no database — only the contracts defined by the gate and the entity shape.
+summary: Three independent clients obey the same rule set in three languages. They share no library, no backend, and no database — only the contracts defined by the access rule and the entity shape.
 part: Surfaces
 folio: 'III.03'
 order: 3
@@ -24,9 +24,9 @@ Haven's client layer is deliberately polyglot. Each surface is written in a diff
 
 No surface depends on another. There is no shared backend between them, no shared queue, and no shared library — ADR-001 mandates this explicitly.
 
-## haven-dapp — the web reader
+## haven-dapp — the web client
 
-The dapp is a discovery and playback client. It connects a wallet, queries Arkiv for gated content, requests decryption keys from `haven-aol` via the TypeScript SDK, and decrypts ciphertext entirely in the browser. Playback uses a standard Media Source Extensions pipeline.
+The dapp is a discovery, playback, and publishing client. It connects a wallet, queries Arkiv for gated content, requests decryption keys from `haven-aol` via the TypeScript SDK, and decrypts ciphertext entirely in the browser. It also publishes: the drip wizard encrypts and pins releases, sets market-cap unlock stages, and mints bonding-curve tokens for archives that need one. Playback uses a standard Media Source Extensions pipeline.
 
 Key architectural properties:
 
@@ -44,7 +44,7 @@ Key architectural properties:
 - **Event-driven pipeline.** Media processing (transcoding, perceptual hashing, VLM analysis, thumbnail extraction) is a DAG of stages, not a monolith.
 - **Permissionless-local.** The CLI uses a local SQLite database. There is no shared Postgres, no hosted queue, and no remote state.
 - **Filecoin pin submission.** Ciphertext is pinned via the Onchain Cloud contracts on Filecoin FEVM. Payment is in USDFC.
-- **`haven-aol` Python SDK.** Used only for encryption (deriving the key to seal under). The CLI does not perform balance checks or gating logic.
+- **`haven-aol` Python SDK.** Used only for encryption (deriving the key to encrypt under). The CLI does not perform balance checks or gating logic.
 
 ## haven-mobile — the offline viewer
 

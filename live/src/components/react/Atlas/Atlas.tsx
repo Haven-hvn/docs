@@ -548,7 +548,7 @@ export default function Atlas({ deployments, collectionQuotes }: Props) {
       {!briefed && (
         <div className="atlas-brief-scrim" role="dialog" aria-modal="true" aria-labelledby="brief-title">
           <div className="atlas-brief">
-            <span className="label label-seal">Reading the Atlas</span>
+            <span className="label label-seal">Reading the index</span>
             <h2 className="atlas-brief-title" id="brief-title">
               Three things and you can read the whole map.
             </h2>
@@ -556,7 +556,7 @@ export default function Atlas({ deployments, collectionQuotes }: Props) {
               <li>
                 <span className="folio">01</span>
                 <p>
-                  <strong>Every body is a community.</strong> Sixteen candidate gates — real
+                  <strong>Every body is a community.</strong> Sixteen candidate keys — real
                   contracts whose holders could open an archive. The same sixteen appear on both
                   axes; the axis control re-measures them rather than replacing them, so a body keeps
                   its identity and only changes size.
@@ -584,7 +584,7 @@ export default function Atlas({ deployments, collectionQuotes }: Props) {
               </li>
             </ol>
             <button type="button" className="action action-sealed" onClick={dismissBrief}>
-              Enter the Atlas
+              Open the map
             </button>
           </div>
         </div>

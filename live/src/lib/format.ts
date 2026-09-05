@@ -57,7 +57,7 @@ export function bytesInline(n: number): string {
   return `${value} ${unit}`
 }
 
-/** Gigabytes, for the Atlas's own unit of account. */
+/** Gigabytes, for the index’s own unit of account. */
 export function gb(n: number): string {
   if (!Number.isFinite(n) || n <= 0) return '0 GB'
   if (n >= 1000) return `${(n / 1000).toFixed(n >= 10_000 ? 0 : 1)} TB`

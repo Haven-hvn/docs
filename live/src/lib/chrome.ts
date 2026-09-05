@@ -281,7 +281,7 @@ function installRules(): void {
  * Mirrors the edition toggle, with one important difference: this one changes
  * DATA rather than colour, so it broadcasts an event. The masthead is Astro
  * chrome and the readouts are React islands; a custom event on `document` is the
- * only channel the two share, and it is what lets the Atlas re-read its ledger
+ * only channel the two share, and it is what lets the index re-read its ledger
  * without a page load.
  */
 function installNetwork(): void {

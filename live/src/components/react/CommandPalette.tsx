@@ -13,7 +13,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
  */
 
 export interface PaletteEntry {
-  group: 'Surfaces' | 'The Threshold' | 'The Codex' | 'Verify' | 'Display'
+  group: 'Surfaces' | 'Start' | 'Docs' | 'Verify' | 'Display'
   label: string
   hint?: string
   href?: string
@@ -95,7 +95,7 @@ export default function CommandPalette({ entries }: Props) {
     // Preserve the authored grouping when nothing has been typed; rank purely by
     // match once the reader starts filtering.
     if (!query) {
-      const order: PaletteEntry['group'][] = ['Surfaces', 'The Threshold', 'The Codex', 'Verify', 'Display']
+      const order: PaletteEntry['group'][] = ['Surfaces', 'Start', 'Docs', 'Verify', 'Display']
       kept.sort((a, b) => order.indexOf(a.entry.group) - order.indexOf(b.entry.group))
     }
     return kept.map((row) => row.entry)

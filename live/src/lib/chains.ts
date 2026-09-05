@@ -235,9 +235,9 @@ export const STORAGE = {
    symbol() and totalSupply() from a public node before it was committed here.
 
    Read this as a roster of CANDIDATES, not of tenants. None of these communities
-   has been signed up, and the interface never implies otherwise — what the Atlas
-   shows is which real contracts already satisfy the gate criteria, and what an
-   archive gated by each would be worth to open.
+   has been signed up, and the interface never implies otherwise — what the index
+   shows is which real contracts already satisfy the holding criteria, and what an
+   archive locked by each would be worth to open.
 
    The selection is deliberately niche. Putting a household-name collection on
    this list would be the least credible thing the design could do: those projects
@@ -267,7 +267,7 @@ export interface GateSpec {
   threshold: number
   /** Editorial one-liner: what a community like this would keep in an archive. */
   premise: string
-  /** Constellation the community belongs to — used for Atlas grouping. */
+  /** Constellation the community belongs to — used for index grouping. */
   constellation: 'Lore' | 'Art' | 'Culture' | 'Governance'
 }
 
@@ -374,7 +374,7 @@ export const GATES: readonly GateSpec[] = [
     kind: 'token',
     threshold: 500,
     premise:
-      'A social token backed by a real collection. The vault has a story, and the story is worth more to members than to the public.',
+      'A social token backed by a real collection. The archive has a story, and the story is worth more to members than to the public.',
     constellation: 'Culture',
   },
   {

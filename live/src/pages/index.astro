@@ -41,7 +41,7 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
 
 <Base
   title={HAVEN.name}
-  description="Haven is a sovereign media protocol. Encrypted media on public infrastructure, with the key derived from what you hold — no accounts, no servers, no platform."
+  description="Haven is an archive network for communities. Encrypted media on public infrastructure, with the key derived from what you hold — no accounts, no servers, no platform."
 >
   <Masthead slot="masthead" current="record" />
   <Footer slot="footer" />
@@ -60,7 +60,7 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
       <p class="label hero-eyebrow" data-reveal>
         <span class="label-seal">Encrypted at the source</span>
         <span class="hero-eyebrow-rule" aria-hidden="true"></span>
-        <span>Gated by ownership</span>
+        <span>Unlocked by ownership</span>
         <span class="hero-eyebrow-rule" aria-hidden="true"></span>
         <span>Stored on public infrastructure</span>
       </p>
@@ -80,8 +80,8 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
         </p>
 
         <div class="hero-actions" data-reveal style="--delay: 400ms">
-          <Action href="/docs/atlas" variant="sealed" size="large">Enter the Atlas</Action>
-          <Action href="/docs/codex" variant="keyline" size="large" glyph="none">Read the Codex</Action>
+          <Action href="/docs/atlas" variant="sealed" size="large">Open the index</Action>
+          <Action href="/docs/codex" variant="keyline" size="large" glyph="none">Read the docs</Action>
         </div>
       </div>
     </div>
@@ -260,8 +260,8 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
   <div class="act-seam"></div>
 
   {/* ═══════════════════════════════════════════════════════════════════════
-      ACT 03 — THE MOVEMENTS
-      Void, pinned. Four beats, scrubbed by scroll: Seal, Register, Gate, Open.
+       ACT 03 — THE MOVEMENTS
+       Void, pinned. Four beats, scrubbed by scroll: Encrypt, Register, Unlock, Open.
       The stage stays put while the argument advances through it.
       ═══════════════════════════════════════════════════════════════════════ */}
   <section
@@ -273,7 +273,7 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
     <div class="sequence-stage movements-stage" data-stage>
       <div class="act-body frame movements-inner">
         <div class="movements-side">
-          <SectionHead folio="03" running="The movements" annotation="Seal · Register · Gate · Open" />
+          <SectionHead folio="03" running="The movements" annotation="Encrypt · Register · Unlock · Open" />
           <h2 class="statement-headline movements-title" id="movements-title">
             One piece of content, from the publisher's disk to the reader's screen.
           </h2>
@@ -415,12 +415,12 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
   <div class="act-seam"></div>
 
   {/* ═══════════════════════════════════════════════════════════════════════
-      ACT 06 — THE ATLAS
-      Void. The invitation. Two axes, stated honestly, then the door.
+       ACT 06 — THE INDEX
+       Void. The invitation. Two axes, stated honestly, then the door.
       ═══════════════════════════════════════════════════════════════════════ */}
   <section class="act act-pad-tall atlas-invite" data-tone="void" aria-labelledby="atlas-title">
     <div class="act-body frame">
-      <SectionHead folio="06" running="The Atlas" annotation="An observatory for the archive" />
+      <SectionHead folio="06" running="The index" annotation="An observatory for the archive" />
 
       <div class="atlas-invite-grid">
         <div class="atlas-invite-copy">
@@ -428,7 +428,7 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
             Every community is a <em>world</em>. Watch them from above.
           </h2>
           <p class="lede" data-reveal style="--delay: 140ms">
-            The Atlas draws the archive as a system of bodies in motion: real communities, real
+            The index draws the archive as a system of bodies in motion: real communities, real
             balances, real storage under proof. Two measures, kept deliberately apart — how much a
             world keeps, and what a world is worth.
           </p>
@@ -446,7 +446,7 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
             <div class="atlas-axis">
               <dt class="label label-seal">Axis II · Capitalisation</dt>
               <dd>
-                What the gating asset is worth. Supply comes from the contract; price comes from the
+                What the key asset is worth. Supply comes from the contract; price comes from the
                 market, because price is not an on-chain fact.
               </dd>
             </div>
@@ -462,7 +462,7 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
           </dl>
 
           <div class="atlas-invite-action" data-reveal style="--delay: 300ms">
-            <Action href="/docs/atlas" variant="sealed" size="large">Open the Atlas</Action>
+            <Action href="/docs/atlas" variant="sealed" size="large">Open the index</Action>
             <Action href="/docs/threshold" variant="keyline" glyph="none">Check an address</Action>
           </div>
         </div>
@@ -477,7 +477,7 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
           <figcaption class="plate-caption">
             <span class="plate-number">Plate 06</span>
             <span>
-              The observatory inverts the document: in the Atlas the network is the only light source.
+              The observatory inverts the document: in the index the network is the only light source.
             </span>
           </figcaption>
         </figure>
@@ -545,7 +545,7 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
       </h2>
       <div class="close-actions" data-reveal style="--delay: 220ms">
         <Action href="/docs/threshold" variant="sealed" size="large">Check if you already qualify</Action>
-        <Action href="/docs/atlas" variant="keyline" size="large" glyph="none">Enter the Atlas</Action>
+        <Action href="/docs/atlas" variant="keyline" size="large" glyph="none">Open the index</Action>
       </div>
     </div>
   </section>
@@ -1166,7 +1166,7 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
     padding-top: 0.5rem;
   }
 
-  /* A quiet orrery: three rings and a core. Enough to promise the Atlas without
+  /* A quiet orrery: three rings and a core. Enough to promise the index without
      shipping the renderer to the landing page. */
   .atlas-invite-plate {
     padding: clamp(1.25rem, 1rem + 1vw, 2rem);

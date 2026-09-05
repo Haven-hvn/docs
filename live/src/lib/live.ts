@@ -8,7 +8,7 @@
  * Arkiv is included deliberately. Its probe is expected to fail while no public
  * network exists — the entity
  * index is not operational — and the interface renders that failure as a state,
- * not as an error. It is the one body in the Atlas that is drawn unlit.
+ * not as an error. It is the one body in the index that is drawn unlit.
  */
 
 import { createPublicClient, http, type Address, type PublicClient } from 'viem'

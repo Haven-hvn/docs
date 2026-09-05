@@ -72,7 +72,7 @@ export function acquireLink(gate: GateSpec): { href: string; venue: string } {
  * Deep link into enrolment, focused on one community.
  *
  * Points at the reader's path rather than the chooser: someone who has just found
- * a community in the Atlas has already answered the question the chooser asks.
+ * a community in the index has already answered the question the chooser asks.
  */
 export function thresholdLink(gate: Pick<GateSpec, 'slug'>): string {
   return `/threshold/read?gate=${gate.slug}`

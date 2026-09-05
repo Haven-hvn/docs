@@ -10,7 +10,7 @@ import { useEffect, useRef } from 'react'
  * something machined rather than drawn. The void at the centre is the archive:
  * enclosed by the arrangement, owned by none of the parts.
  *
- * Deliberately 2D canvas rather than WebGL. The Atlas earns a full renderer; a
+ * Deliberately 2D canvas rather than WebGL. The index earns a full renderer; a
  * hero does not, and a page that ships a 3D engine to draw four arcs is a page
  * that has confused expense with quality. Everything here is composited on the
  * GPU anyway, and it starts in under a frame.

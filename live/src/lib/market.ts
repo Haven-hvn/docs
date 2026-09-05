@@ -1,7 +1,7 @@
 /**
  * HAVEN — MARKET
  *
- * The second axis of the Atlas. Storage answers "how much is kept here"; market
+ * The second axis of the index. Storage answers "how much is kept here"; market
  * capitalisation answers "how much is this community worth". They are deliberately
  * separate measures and the interface never blends them into a single score.
  *
@@ -58,7 +58,7 @@ const COINGECKO = 'https://api.coingecko.com/api/v3'
 
 /**
  * Live, batched quote for every fungible gate. One request, no key.
- * Returns an empty array rather than throwing — the Atlas must still draw.
+ * Returns an empty array rather than throwing — the index must still draw.
  */
 export async function fetchTokenQuotes(): Promise<MarketQuote[]> {
   const bySlug = Object.entries(TOKEN_MARKET_IDS)

@@ -4,10 +4,10 @@ import { inspectContract, isAddress, type GateCandidate } from '../../../lib/thr
 import { currentNetwork, onNetworkChange, type Network } from '../../../lib/network.ts'
 
 /**
- * PATH C — THE FOUNDER'S GATE
+ * PATH C — THE FOUNDER'S KEY
  *
  * A founder does not have to deploy anything. If a community already has an NFT
- * or a token, that asset is already a gate — Haven only ever asks it for a
+ * or a token, that asset is already a key — Haven only ever asks it for a
  * balance. This inspects any contract and says plainly whether it can serve.
  *
  * The findings are written for someone who has never deployed a contract. Every
@@ -18,7 +18,7 @@ import { currentNetwork, onNetworkChange, type Network } from '../../../lib/netw
  */
 
 /**
- * Chains a founder can test a gate on.
+ * Chains a founder can test a key on.
  *
  * Only the ones the project actually configures an RPC for are offered. There is
  * no testnet list here because `CHAINS` has no testnet EVM entries — inventing
@@ -75,7 +75,7 @@ export default function GateInspector() {
       >
         <div className="threshold-field">
           <label className="label" htmlFor="gate-address">
-            A contract address to test as a gate
+            A contract address to test as a key
           </label>
 
           <div className="threshold-chains" role="group" aria-label="Which chain">
@@ -125,8 +125,8 @@ export default function GateInspector() {
             {network === 'devnet' && (
               <>
                 {' '}
-                Devnet is selected, but a gate is read on whichever chain it lives on: these three are
-                the chains Haven is configured to read, so the picker does not change. A gate deployed
+                Devnet is selected, but balances are read on whichever chain the contract lives on: these three are
+                the chains Haven is configured to read, so the picker does not change. A contract deployed
                 on a test network is checked by the client that reads it, not here.
               </>
             )}
@@ -146,7 +146,7 @@ export default function GateInspector() {
             <div>
               <span className="label label-seal">Verdict</span>
               <p className="threshold-verdict-line">
-                {result.usable ? 'This can gate an archive' : 'This cannot gate an archive as it stands'}
+                {result.usable ? 'This works as an archive key' : 'This cannot work as an archive key as it stands'}
               </p>
               <p className="threshold-verdict-note">
                 {result.name ? (
@@ -158,7 +158,7 @@ export default function GateInspector() {
                   <>An unnamed contract on {spec.name}. </>
                 )}
                 {result.usable
-                  ? 'Haven asks a gate exactly one question, and this contract answers it.'
+                  ? 'Haven asks a key exactly one question, and this contract answers it.'
                   : 'Haven needs a contract that reports per-address balances. See below for what was found.'}
               </p>
             </div>

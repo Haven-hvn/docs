@@ -41,7 +41,7 @@ export const NETWORKS: readonly Network[] = [
   {
     id: 'arkiv',
     name: 'Arkiv OP L3',
-    role: 'The index',
+    role: 'Index',
     owns: 'Entity records, attributes, ordering',
     identifier: '0x4400000000000000000000000000000000000044',
     identifierLabel: 'Precompile',
@@ -53,7 +53,7 @@ export const NETWORKS: readonly Network[] = [
   {
     id: 'icp',
     name: 'DFINITY ICP',
-    role: 'The gate',
+    role: 'Access checks',
     owns: 'VetKD derivation, EIP-712 recovery, approvals',
     identifier: 'dciac-uaaaa-aaaad-qlzuq-cai',
     identifierLabel: 'Canister',
@@ -65,7 +65,7 @@ export const NETWORKS: readonly Network[] = [
   {
     id: 'evm',
     name: 'Any EVM',
-    role: 'The criterion',
+    role: 'Holdings',
     owns: 'Ownership truth — balances and holders',
     identifier: 'balanceOf · ownerOf',
     identifierLabel: 'eth_call',
@@ -77,7 +77,7 @@ export const NETWORKS: readonly Network[] = [
   {
     id: 'filecoin',
     name: 'Filecoin FEVM · IPFS',
-    role: 'The vault',
+    role: 'Archive',
     owns: 'Ciphertext bytes, pin proofs, payment',
     identifier: '0x09a0fDc2723fAd1A7b8e3e00eE5DF73841df55a0',
     identifierLabel: 'filecoin-pay',
@@ -157,7 +157,7 @@ export const SURFACES: readonly Surface[] = [
     name: 'haven-aol',
     language: 'Motoko',
     languageDetail: '+ TypeScript / Python SDKs',
-    role: 'Always-online gate',
+    role: 'Keys and access',
     owns: 'VetKD derivation, EIP-712 verification, balance checks, approval cache',
     doesNotOwn: 'UI, uploads, storage',
     talksTo: ['icp', 'evm'],
@@ -233,9 +233,9 @@ export const LAYERS: readonly ProtocolLayer[] = [
     tier: 'L7',
     title: 'Application — Haven',
     provider:
-      'Entity shape, gate rule, attestation over cidHash, holder identity',
+      'Entity shape, access rule, attestation over cidHash, holder identity',
     havenDefines:
-      'The protocol itself: content is a CID on Filecoin, gated by a public token, discovered through Arkiv, and identity is the collection’s own image.',
+      'The protocol itself: content is a CID on Filecoin, open only to holders of a public token, discovered through Arkiv, and identity is the collection’s own image.',
     networks: ['arkiv', 'icp', 'evm', 'filecoin'],
   },
 ] as const
@@ -259,7 +259,7 @@ export const MOVEMENTS: readonly Movement[] = [
   {
     index: 1,
     key: 'seal',
-    title: 'Seal',
+    title: 'Encrypt',
     actor: 'haven-cli',
     claim: 'The bytes are encrypted before they ever leave the machine.',
     detail:
@@ -301,7 +301,7 @@ export const MOVEMENTS: readonly Movement[] = [
   {
     index: 3,
     key: 'gate',
-    title: 'Gate',
+    title: 'Unlock',
     actor: 'haven-aol',
     claim: 'The key is derived from what you hold, and nothing else.',
     detail:
@@ -439,14 +439,14 @@ export const HORIZON: readonly Phase[] = [
     title: 'The record stands',
     state: 'live',
     body:
-      'The entity contract is live behind the precompile, the gate is live on a mainnet canister, and five independent clients read and write the same rule set with no shared backend between them.',
+      'The entity contract is live behind the precompile, access checks run on a mainnet canister, and five independent clients read and write the same rule set with no shared backend between them.',
   },
   {
     mark: 'II',
     title: 'The archive fills',
     state: 'active',
     body:
-      'Encrypted libraries accumulate against real gating tokens. Pin proofs and payment settle on Filecoin, and the Atlas begins to show storage that exists rather than storage that is promised.',
+      'Encrypted libraries accumulate against real holding requirements. Pin proofs and payment settle on Filecoin, and the index begins to show storage that exists rather than storage that is promised.',
   },
   {
     mark: 'III',
@@ -460,7 +460,7 @@ export const HORIZON: readonly Phase[] = [
     title: 'The commons hold',
     state: 'horizon',
     body:
-      'Communities operate their own archives at institutional scale: their own gate, their own storage economics, their own canon — and no operator, including us, able to take any of it away.',
+      'Communities operate their own archives at institutional scale: their own access rules, their own storage economics, their own canon — and no operator, including us, able to take any of it away.',
   },
 ] as const
 
@@ -477,7 +477,7 @@ export const CLAIMS = [
   {
     figure: '01',
     label: 'Encrypted at the source',
-    body: 'Media is sealed on the publisher’s machine. Ciphertext is the only thing any network ever sees.',
+    body: 'Media is encrypted on the publisher’s machine. Ciphertext is the only thing any network ever sees.',
   },
   {
     figure: '02',
@@ -492,13 +492,13 @@ export const CLAIMS = [
   {
     figure: '04',
     label: 'Nothing to shut down',
-    body: 'The index is a trie, the gate is a canister, the vault is Filecoin. There is no server to seize.',
+    body: 'The index is a trie, access checks run in a canister, the archive lives on Filecoin. There is no server to seize.',
   },
 ] as const
 
 export const HAVEN = {
   name: 'Haven',
-  descriptor: 'Sovereign Media Protocol',
+  descriptor: 'An archive network for communities',
   tier: 'Application layer · L7',
   thesis: 'Ownership is the only password.',
   established: '2026',

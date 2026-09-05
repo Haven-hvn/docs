@@ -47,7 +47,7 @@ const SLUGS = GATES.map((gate) => gate.slug)
 ---
 
 <Base
-  title="Read an archive — The Threshold"
+  title="Read an archive — Start"
   description="Join a community's archive: pick a community, acquire what it gates on, and check any address against all sixteen gates live on-chain."
 >
   <Masthead slot="masthead" current="threshold" />
@@ -117,7 +117,7 @@ const SLUGS = GATES.map((gate) => gate.slug)
         </h2>
 
         <p class="lede" data-reveal style="--delay: 100ms">
-          These are real contracts, verified on-chain and measured in the Atlas. Each gates on
+          These are real contracts, verified on-chain and measured in the index. Each gates on
           something you can acquire today. Haven is not a party to the purchase and takes nothing
           from it — you are buying from the open market, not from us.
         </p>
@@ -239,7 +239,7 @@ const SLUGS = GATES.map((gate) => gate.slug)
         </p>
 
         <p class="threshold-arrival" id="arrival" hidden>
-          <span class="label label-seal">Arrived from the Atlas</span>
+          <span class="label label-seal">Arrived from the index</span>
           <span>
             Checking against <strong data-arrival-name></strong>. Its gate and contract are in the
             roster above.
@@ -341,7 +341,7 @@ const SLUGS = GATES.map((gate) => gate.slug)
                   Arkiv is the layer that records the connection: this archive belongs to this
                   community, is gated by this contract, and consists of these pieces. It is metadata
                   only — it never holds media and never holds keys — but without it nothing can be
-                  browsed, and the Atlas cannot attribute a single byte to anyone.
+                  browsed, and the index cannot attribute a single byte to anyone.
                 </p>
               </Explain>
             </div>
@@ -384,7 +384,7 @@ const SLUGS = GATES.map((gate) => gate.slug)
         </ol>
 
         <div class="threshold-actions" data-reveal style="--delay: 240ms">
-          <Action href="/docs/atlas" variant="sealed" size="large">See the communities in the Atlas</Action>
+          <Action href="/docs/atlas" variant="sealed" size="large">See the communities in the index</Action>
           <Action href="/docs/threshold/found" variant="keyline" glyph="none">Start your own instead</Action>
         </div>
       </div>
@@ -396,7 +396,7 @@ const SLUGS = GATES.map((gate) => gate.slug)
 
 <script is:inline define:vars={{ SLUGS }}>
   /**
-   * Resolve a deep link from the Atlas.
+   * Resolve a deep link from the index.
    *
    * This has to run in the browser: the page is statically prerendered, so the
    * query string does not exist at build time and reading it server-side would

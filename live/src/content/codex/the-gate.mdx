@@ -1,20 +1,20 @@
 ---
-title: The gate
+title: The access rule
 summary: A canister on the Internet Computer derives a decryption key if and only if a public EVM balance meets a stated threshold. Nothing else participates.
 part: The Rule Set
 folio: 'II.01'
 order: 1
 status: settled
-epigraph: A gate that cannot be opened by its operator is a gate that cannot be closed by one either.
+epigraph: A lock its operator cannot open is a lock its operator cannot close either.
 sources:
   - docs/architecture/01-haven-aol.md
   - docs/api/contracts.md
   - docs/decisions/ADR-001-decoupled-boundaries.md
 ---
 
-## What the gate does
+## What the access check does
 
-The gate is canister `dciac-uaaaa-aaaad-qlzuq-cai`, deployed on the Internet Computer mainnet, written in Motoko. It accepts a signed request from a reader, verifies that the reader holds a sufficient balance on a public EVM chain, and — only then — derives a decryption key from the network's own threshold material via VetKD.
+Access checks run in canister `dciac-uaaaa-aaaad-qlzuq-cai`, deployed on the Internet Computer mainnet, written in Motoko. It accepts a signed request from a reader, verifies that the reader holds a sufficient balance on a public EVM chain, and — only then — derives a decryption key from the network's own threshold material via VetKD.
 
 There is no account, no password, and no session to steal. The entire authorisation model is a single `eth_call` to `balanceOf` (selector `0x70a08231`) or `ownerOf` on a public contract.
 
@@ -28,7 +28,7 @@ GateRequestV3(address evmAddress, bytes transportPublicKey, uint256 epoch, uint2
 
 2. The canister recovers the signer via `secp256k1` `ecrecover` (implemented in pure Motoko — no precompile available on ICP).
 
-3. The canister calls the target EVM chain through the `ic/evm_rpc` canister, checking that the recovered address satisfies the gate threshold.
+3. The canister calls the target EVM chain through the `ic/evm_rpc` canister, checking that the recovered address satisfies the threshold.
 
 4. If the balance is sufficient, VetKD derives key material under context `accessol_v3` with the preimage:
 
@@ -48,13 +48,13 @@ A zero threshold is a special case: it bypasses both the cache and the balance c
 
 ## Why ICP
 
-The gate needs three properties that conventional smart-contract platforms do not provide together:
+The access check needs three properties that conventional smart-contract platforms do not provide together:
 
 1. **Threshold key derivation** — VetKD is native to ICP's subnet architecture. No Ethereum precompile offers this today.
 2. **Outbound HTTPS calls** — the canister must call EVM RPCs to check balances. ICP canisters can make HTTP outcalls; Ethereum contracts cannot.
 3. **Sub-second query latency** — a reader should not wait for block confirmation to learn whether they hold. ICP query calls return in ~200ms.
 
-The tradeoff is a trust assumption on ICP subnet honesty. A supermajority of replicas colluding could reconstruct derived keys. The protocol accepts this because the economic cost of such collusion exceeds the value of any individual gated archive.
+The tradeoff is a trust assumption on ICP subnet honesty. A supermajority of replicas colluding could reconstruct derived keys. The protocol accepts this because the economic cost of such collusion exceeds the value of any individual locked archive.
 
 ## The contract surface
 
@@ -73,4 +73,4 @@ The canister exposes exactly ten Candid methods. No other IPC channel exists bet
 | `getCurrentEpoch` | query | `floor(unix / 2_592_000)` |
 | `evictExpiredApprovals` | update | Controller-only janitor |
 
-No frontend, no upload pipeline, no storage logic. The gate knows only how to derive — and only when the chain says it should.
+No frontend, no upload pipeline, no storage logic. The canister knows only how to derive — and only when the chain says it should.

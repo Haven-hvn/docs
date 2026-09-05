@@ -5,17 +5,17 @@ import { HAVEN } from '../lib/protocol.ts'
 interface Props {
   /** Which surface is current, for the nav state. */
   current?: 'record' | 'atlas' | 'codex' | 'threshold'
-  /** The Atlas draws its own dark chrome. */
+  /** The index draws its own dark chrome. */
   tone?: 'auto' | 'void'
 }
 
 const { current = 'record', tone = 'auto' } = Astro.props
 
 const NAV = [
-  { folio: '01', label: 'The Record', href: '/docs/', key: 'record' },
-  { folio: '02', label: 'The Atlas', href: '/docs/atlas', key: 'atlas' },
-  { folio: '03', label: 'Codex', href: '/docs/codex', key: 'codex' },
-  { folio: '04', label: 'The Threshold', href: '/docs/threshold', key: 'threshold' },
+  { folio: '01', label: 'Home', href: '/docs/', key: 'record' },
+  { folio: '02', label: 'Index', href: '/docs/atlas', key: 'atlas' },
+  { folio: '03', label: 'Docs', href: '/docs/codex', key: 'codex' },
+  { folio: '04', label: 'Start', href: '/docs/threshold', key: 'threshold' },
 ] as const
 ---
 

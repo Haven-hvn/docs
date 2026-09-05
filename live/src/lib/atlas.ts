@@ -272,7 +272,7 @@ export function buildDaoBodies({ facts, quotes, uploaders, axis }: DaoInput): Bo
         explorer: chain.explorerAddress(gate.address),
         constellation: gate.constellation,
         // The map should not be a dead end. A reader who has just found a
-        // community here needs the two things the Atlas cannot give them: where
+        // community here needs the two things the index cannot give them: where
         // to acquire the asset, and where to check whether they already qualify.
         acquire: acquireLink(gate),
         enrol: thresholdLink(gate),
@@ -318,7 +318,7 @@ export const STATIONS: readonly Station[] = [
   {
     id: 'arkiv',
     label: 'Arkiv OP L3',
-    role: 'The index',
+    role: 'Index',
     angle: Math.PI * 0.75,
     elevation: 2.4,
     hue: [0.36, 0.95, 0.55],
@@ -327,7 +327,7 @@ export const STATIONS: readonly Station[] = [
   {
     id: 'icp',
     label: 'DFINITY ICP',
-    role: 'The gate',
+    role: 'Access checks',
     angle: Math.PI * 0.25,
     elevation: 3.1,
     hue: [0.58, 0.6, 0.98],
@@ -336,7 +336,7 @@ export const STATIONS: readonly Station[] = [
   {
     id: 'ethereum',
     label: 'Any EVM',
-    role: 'The criterion',
+    role: 'Holdings',
     angle: Math.PI * 1.75,
     elevation: -2.6,
     hue: [0.99, 0.75, 0.3],
@@ -345,7 +345,7 @@ export const STATIONS: readonly Station[] = [
   {
     id: 'filecoin',
     label: 'Filecoin FEVM · IPFS',
-    role: 'The vault',
+    role: 'Archive',
     angle: Math.PI * 1.25,
     elevation: -3.2,
     hue: [0.44, 0.86, 0.98],

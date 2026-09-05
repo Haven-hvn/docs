@@ -20,7 +20,7 @@ import '../../styles/threshold.css'
 ---
 
 <Base
-  title="Start an archive — The Threshold"
+  title="Start an archive"
   description="Turn any NFT or token into the gate for your own archive — or create one. Test any contract live to see whether it can gate, then choose the only policy that matters: how much someone must hold."
 >
   <Masthead slot="masthead" current="threshold" />
@@ -40,9 +40,9 @@ import '../../styles/threshold.css'
         </h1>
 
         <p class="lede" data-reveal style="--delay: 160ms">
-          Founding a gated archive does not require inventing a currency. Haven asks a gate exactly
+          Founding a locked archive does not require inventing a currency. Haven asks a key exactly
           one question — does this address hold at least this much? — so anything that can answer it
-          can be a gate. If your community already has an NFT or a token, you are done choosing.
+          can be a key. If your community already has an NFT or a token, you are done choosing.
         </p>
 
         <a class="threshold-scroll" href="#gate-title" data-reveal style="--delay: 300ms">
@@ -271,7 +271,7 @@ import '../../styles/threshold.css'
               <p class="path-step-body">
                 Registering your archive as an entity in Arkiv — a transaction paid in{' '}
                 {ARKIV_GAS.symbol} — is what makes it findable — it binds the
-                archive to your gate, records its piece CIDs, and lets the Atlas attribute the bytes to
+                archive to your key, records its piece CIDs, and lets the index attribute the bytes to
                 your community. The protocol requires this layer; it is how any client knows your
                 archive exists.
               </p>

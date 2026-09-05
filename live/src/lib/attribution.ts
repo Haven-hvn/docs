@@ -20,7 +20,7 @@
  * In production this function disappears. The Arkiv entity for an uploader
  * carries the community it contributes to alongside the piece CIDs, and the
  * uploader's address is the join key — the same `0x…` appears in the Arkiv
- * entity, in the DataDAO's token or NFT contract on its own chain, and as the
+ * entity, in the community's token or NFT contract on its own chain, and as the
  * payer on the Filecoin data set. Three chains, one address, and the archive
  * resolves end to end. The shape of what this module returns is exactly what
  * that lookup will return, so only the body of `attributeUploaders` changes.

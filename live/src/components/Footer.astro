@@ -8,7 +8,7 @@ const YEAR = new Date().getFullYear()
 
 const COLUMNS = [
   {
-    heading: 'The Record',
+    heading: 'Home',
     links: [
       { label: 'The premise', href: '/docs/#premise-title' },
       { label: 'The mechanism', href: '/docs/#mechanism-title' },
@@ -18,18 +18,18 @@ const COLUMNS = [
     ],
   },
   {
-    heading: 'The Codex',
+    heading: 'Docs',
     links: [
       { label: 'What Haven is', href: '/docs/codex/what-haven-is' },
       { label: 'Four networks, one rule set', href: '/docs/codex/layers' },
-      { label: 'The gate', href: '/docs/codex/the-gate' },
+      { label: 'The access rule', href: '/docs/codex/the-gate' },
       { label: 'Key derivation and epochs', href: '/docs/codex/key-derivation' },
       { label: 'The entity shape', href: '/docs/codex/entity-shape' },
       { label: 'Verify it yourself', href: '/docs/codex/verify-it-yourself' },
     ],
   },
   {
-    heading: 'The Threshold',
+    heading: 'Start',
     links: [
       { label: 'Choose a path', href: '/docs/threshold' },
       { label: 'Read an archive', href: '/docs/threshold/read' },
@@ -49,7 +49,7 @@ const COLUMNS = [
     links: [
       { label: 'Ethereum', href: CHAINS.ethereum.explorer, external: true },
       { label: 'Filecoin', href: CHAINS.filecoin.explorer, external: true },
-      { label: 'Gate canister', href: ICP.dashboard, external: true },
+      { label: 'Access canister', href: ICP.dashboard, external: true },
       { label: 'Pin contract', href: CHAINS.filecoin.explorerAddress(STORAGE.mainnet.warmStorage), external: true },
       { label: 'Payment rails', href: CHAINS.filecoin.explorerAddress(STORAGE.mainnet.filecoinPay), external: true },
       { label: 'Arkiv node (503)', href: ARKIV.rpc, external: true },

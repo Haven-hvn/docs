@@ -14,7 +14,7 @@ sources:
 
 ## The contract surface
 
-Haven's inter-surface communication is bounded by two mechanisms: Candid (the Interface Description Language native to the Internet Computer) and EIP-712 typed data (the Ethereum signing standard). There is no REST API, no GraphQL endpoint, no message queue, and no shared library between surfaces. If a client needs something from the gate, it calls a Candid method. If the gate needs to verify a reader, it recovers an EIP-712 signature.
+Haven's inter-surface communication is bounded by two mechanisms: Candid (the Interface Description Language native to the Internet Computer) and EIP-712 typed data (the Ethereum signing standard). There is no REST API, no GraphQL endpoint, no message queue, and no shared library between surfaces. If a client needs something from the canister, it calls a Candid method. If the canister needs to verify a reader, it recovers an EIP-712 signature.
 
 ## Candid interface
 

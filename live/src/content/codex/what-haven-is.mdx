@@ -35,7 +35,7 @@ none of them is one Haven can withdraw.**
   in the path, Haven included, is in a position to read them.
 - Authorisation is a public balance. There is no account to suspend, no password
   to reset, no session token to exfiltrate.
-- The index is a state trie, the gate is a canister, the vault is Filecoin. There
+- The index is a state trie, access checks run in a canister, the archive lives on Filecoin. There
   is no origin server to seize and no DNS record whose removal ends the archive.
 
 ## The topology, stated plainly
@@ -82,7 +82,7 @@ narrow and specific: records cannot presently be resolved from a gate to the
 content published against it. Storage, proofs, payment and gating are unaffected,
 and all four are live and readable right now.
 
-The Atlas draws this honestly. Storage and market figures are read live from
+The index draws this honestly. Storage and market figures are read live from
 Filecoin and the EVM chains; the metadata edges that would bind a data set to a
 community are drawn unlit, because they are pending an index rather than merely
 absent.

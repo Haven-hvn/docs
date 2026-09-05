@@ -42,15 +42,15 @@ const PATHS = [
     href: '/docs/threshold/found',
     name: 'I want to start one',
     who: 'The founder',
-    body: 'You want your own gated archive. You do not have to invent a token to do it: any NFT or token your community already holds can be the gate. If there is none yet, you can make one.',
+    body: 'You want your own locked archive. You do not have to invent a token to do it: any NFT or token your community already holds can be the key. If there is none yet, you can make one.',
     effort: 'A day, once',
-    needs: ['An asset to gate on', 'A number: how much to require', 'The publisher\u2019s three balances'],
+    needs: ['An asset to require', 'A number: how much to require', 'The publisher\u2019s three balances'],
   },
 ] as const
 ---
 
 <Base
-  title="The Threshold"
+  title="Start"
   description="Three ways into Haven: read a community's archive, publish to one, or start your own. No accounts — authorisation is a balance you already hold."
 >
   <Masthead slot="masthead" current="threshold" />
@@ -59,7 +59,7 @@ const PATHS = [
     {/* ── The premise ─────────────────────────────────────────────────────── */}
     <section class="act act-opening" data-tone="void" aria-labelledby="threshold-title">
       <div class="act-body frame">
-        <SectionHead folio="04" running="The Threshold" annotation="Enrolment" />
+        <SectionHead folio="04" running="Start" annotation="Enrolment" />
 
         <h1 class="statement-colossus optical-hang" id="threshold-title">
           <span class="mask-line" data-reveal><span>There is nothing</span></span>
@@ -163,7 +163,7 @@ const PATHS = [
           None of these exist because none of them have anywhere to live. There is no Haven server
           holding your account, because there is no Haven account and no Haven server — the shared
           state is public blockchains, and nothing else. {GATES.length} communities are already
-          measurable on that basis in <a href="/docs/atlas">the Atlas</a>.
+          measurable on that basis in <a href="/docs/atlas">the index</a>.
         </p>
       </div>
     </section>

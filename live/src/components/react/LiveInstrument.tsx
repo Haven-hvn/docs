@@ -271,7 +271,7 @@ export default function LiveInstrument({ storage }: Props) {
 
         /* The state column carries a full sentence per row. Below ~1300px there
            is not enough measure for five columns, so it is dropped rather than
-           squeezed — the same information is in the Codex. */
+           squeezed — the same information is in the docs. */
         @media (max-width: 1300px) {
           .note-col, .note-cell { display: none; }
         }
