@@ -29,7 +29,7 @@ The lower layers have no idea Haven exists. They see standard EVM transactions, 
 
 **Arkiv OP L3** holds the metadata index. Entity records — keys, attributes, content types, payloads — live in a state trie behind a precompile at `0x4400000000000000000000000000000000000044`. Reads use the `arkiv_query` JSON-RPC method; writes use `execute(Operation[])` via standard EVM transactions. Arkiv has no public network at present: the {ARKIV.codename} testnet was retired on {ARKIV.retiredOn}, taking its faucet, block explorer and RPC with it, and its former node at `{ARKIV.rpc}` now answers 503. A limited devnet runs by request, and the next public testnet is expected {ARKIV.nextPublicTestnet}. Every previous devnet has served RPC, faucet and explorer from one host on the same path convention, so the next one is expected to as well.
 
-**DFINITY ICP** runs the access checks. Canister `dciac-uaaaa-aaaad-qlzuq-cai` performs VetKD key derivation, EIP-712 signature recovery, and EVM balance checks. It is the only component that touches threshold cryptographic material, and it does so without assembling a full key.
+**DFINITY ICP** runs the access checks. Canister `gny6k-fqaaa-aaaab-ag3ra-cai` performs VetKD key derivation, EIP-712 signature recovery, and EVM balance checks. It is the only component that touches threshold cryptographic material, and it does so without assembling a full key.
 
 **Any EVM chain** holds the balances. A balance — `balanceOf` or `ownerOf` — on Ethereum, Base, Optimism, or Arbitrum One is the whole authorisation model. The protocol does not privilege one chain over another; `haven-aol` accepts any chain in its `validChains` set: `EthMainnet`, `EthSepolia`, `BaseMainnet`, `ArbitrumOne`, `OptimismMainnet`.
 

@@ -23,7 +23,7 @@ Five services, zero private datastores. That topology — verified by graph buil
 | Information | Why Haven never sees it |
 | --- | --- |
 | Plaintext media | Encrypted on the publisher's machine by `haven-cli` before any network is contacted. Only ciphertext reaches Filecoin. |
-| Decryption keys at rest | VetKD derives material per-request inside canister `dciac-uaaaa-aaaad-qlzuq-cai`. The canister holds threshold shares, never assembled keys. |
+| Decryption keys at rest | VetKD derives material per-request inside canister `gny6k-fqaaa-aaaab-ag3ra-cai`. The canister holds threshold shares, never assembled keys. |
 | Reader identity beyond address | The gate recovers a bare `secp256k1` address via `ecrecover`. There is no profile, no email, no session cookie. |
 | Viewing history | Decryption occurs in the reader's client. No surface reports back what was opened or when. |
 | Credential material | There is no password to reset because there is no password. The credential is a public balance, readable by anyone with an RPC endpoint. |

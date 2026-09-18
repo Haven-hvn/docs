@@ -55,10 +55,10 @@ export const NETWORKS: readonly Network[] = [
     name: 'DFINITY ICP',
     role: 'Access checks',
     owns: 'VetKD derivation, EIP-712 recovery, approvals',
-    identifier: 'dciac-uaaaa-aaaad-qlzuq-cai',
+    identifier: 'gny6k-fqaaa-aaaab-ag3ra-cai',
     identifierLabel: 'Canister',
     endpoint: 'https://icp0.io',
-    explorer: 'https://dashboard.internetcomputer.org/canister/dciac-uaaaa-aaaad-qlzuq-cai',
+    explorer: 'https://dashboard.internetcomputer.org/canister/gny6k-fqaaa-aaaab-ag3ra-cai',
     layer: 'L5–L6 · Session',
     hue: 'var(--color-icp)',
   },
@@ -109,7 +109,7 @@ export const ARKIV = {
 } as const
 
 export const AOL = {
-  canister: 'dciac-uaaaa-aaaad-qlzuq-cai',
+  canister: 'gny6k-fqaaa-aaaab-ag3ra-cai',
   language: 'Motoko',
   epochSeconds: 2_592_000,
   approvalTtlDays: 30,

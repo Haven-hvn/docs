@@ -117,8 +117,8 @@ export const CHAINS: Record<ChainKey, ChainSpec> = {
 export const ICP = {
   gateway: 'https://icp0.io',
   status: 'https://icp0.io/api/v2/status',
-  canister: 'dciac-uaaaa-aaaad-qlzuq-cai',
-  dashboard: 'https://dashboard.internetcomputer.org/canister/dciac-uaaaa-aaaad-qlzuq-cai',
+  canister: 'gny6k-fqaaa-aaaab-ag3ra-cai',
+  dashboard: 'https://dashboard.internetcomputer.org/canister/gny6k-fqaaa-aaaab-ag3ra-cai',
 } as const
 
 /** Arkiv. Present in the design, not currently answering. */

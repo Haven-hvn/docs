@@ -8,7 +8,7 @@ Haven **rides exclusively on public networks and infrastructure** — there is *
 
 | Old (Web2) assumption | Haven (Web3) reality |
 |---|---|
-| App ↔ `postgres`/`redis` private DB | `haven-aol` **IC stable memory** (canister `dciac-uaaaa-aaaad-qlzuq-cai`) + **Arkiv OP L3** state trie (`0x44…0044` precompile, accounts + roaring64/ART) + **Filecoin FEVM/IPFS** (`filecoin-pin`/`pay`) |
+| App ↔ `postgres`/`redis` private DB | `haven-aol` **IC stable memory** (canister `gny6k-fqaaa-aaaab-ag3ra-cai`) + **Arkiv OP L3** state trie (`0x44…0044` precompile, accounts + roaring64/ART) + **Filecoin FEVM/IPFS** (`filecoin-pin`/`pay`) |
 | Chain as optional ledger | Chain **is** the datastore — `entityKey` + `Attribute[]` + `payload` (base64) live in trie, queried via `arkiv_query`/`getEntityCount` (`@arkiv-network/sdk 0.7.0`, `braga.hoodi.arkiv.network/rpc`) |
 | Gate via private auth service | Gate via **public** chains — `haven-aol` `requestDecryptionKeyV3` checks `evm_rpc` `eth_call` on **any EVM** (Ethereum, Base…) + `secp256k1` `ecrecover`, VetKD `accessol_v3` epoch `2592000` |
 | Shared backend per team | `haven-cli` is **permissionless-local** — each actor runs `haven_cli/database/connection.py` `sqlite:///haven.db` / `:memory:` on their own machine (`builder.py:66` `create_engine→postgres` was false, now `Datastores:0`) |

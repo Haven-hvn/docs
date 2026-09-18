@@ -14,7 +14,7 @@ sources:
 
 ## What the access check does
 
-Access checks run in canister `dciac-uaaaa-aaaad-qlzuq-cai`, deployed on the Internet Computer mainnet, written in Motoko. It accepts a signed request from a reader, verifies that the reader holds a sufficient balance on a public EVM chain, and — only then — derives a decryption key from the network's own threshold material via VetKD.
+Access checks run in canister `gny6k-fqaaa-aaaab-ag3ra-cai`, deployed on the Internet Computer mainnet, written in Motoko. It accepts a signed request from a reader, verifies that the reader holds a sufficient balance on a public EVM chain, and — only then — derives a decryption key from the network's own threshold material via VetKD.
 
 There is no account, no password, and no session to steal. The entire authorisation model is a single `eth_call` to `balanceOf` (selector `0x70a08231`) or `ownerOf` on a public contract.
 
