@@ -3,7 +3,6 @@ import { getCollection } from 'astro:content'
 import Base from '../../layouts/Base.astro'
 import Masthead from '../../components/Masthead.astro'
 import Footer from '../../components/Footer.astro'
-import SectionHead from '../../components/SectionHead.astro'
 import { HAVEN } from '../../lib/protocol.ts'
 import '../../styles/codex.css'
 
@@ -13,7 +12,6 @@ const PART_ORDER = ['Foundations', 'The Rule Set', 'Surfaces', 'Contracts', 'Ope
 
 const parts = PART_ORDER.map((part) => ({
   part,
-  numeral: ['I', 'II', 'III', 'IV', 'V'][PART_ORDER.indexOf(part)] ?? '',
   entries: entries
     .filter((entry) => entry.data.part === part)
     .sort((a, b) => a.data.order - b.data.order),
@@ -29,8 +27,6 @@ const parts = PART_ORDER.map((part) => ({
 
   <article class="codex-front">
     <div class="frame">
-      <SectionHead folio="03" running="Docs" annotation={`${entries.length} entries · ${parts.length} parts`} />
-
       <header class="codex-front-head">
         <h1 class="editorial-colossus" data-reveal>Docs</h1>
         <p class="lede" data-reveal style="--delay: 120ms">
@@ -39,7 +35,7 @@ const parts = PART_ORDER.map((part) => ({
           checked against the thing it documents.
         </p>
         <p class="codex-front-note" data-reveal style="--delay: 200ms">
-          {HAVEN.name} {HAVEN.version} · {HAVEN.tier}
+          {HAVEN.name} {HAVEN.version} · {HAVEN.tier} · {entries.length} entries in {parts.length} parts
         </p>
       </header>
 
@@ -48,16 +44,14 @@ const parts = PART_ORDER.map((part) => ({
           parts.map((group) => (
             <section class="codex-part" data-reveal>
               <header class="codex-part-head">
-                <span class="folio codex-part-numeral">Part {group.numeral}</span>
                 <h2 class="statement-title codex-part-title">{group.part}</h2>
-                <span class="label codex-part-count">{group.entries.length}</span>
+                <span class="label codex-part-count">{group.entries.length} entries</span>
               </header>
 
               <ol class="codex-part-list">
                 {group.entries.map((entry) => (
                   <li>
                     <a class="codex-entry" href={`/docs/codex/${entry.id}`}>
-                      <span class="folio codex-entry-folio">{entry.data.folio}</span>
                       <span class="codex-entry-body">
                         <span class="codex-entry-title">{entry.data.title}</span>
                         <span class="codex-entry-summary">{entry.data.summary}</span>
@@ -93,16 +87,17 @@ const parts = PART_ORDER.map((part) => ({
   }
 
   .codex-front-note {
-    font-family: var(--font-ledger);
     font-size: var(--text-fine);
-    letter-spacing: 0.08em;
     color: var(--fg-4);
-    text-transform: uppercase;
   }
 
+  /* The register sits on a sunk field: the contents are the record's body, and
+     the field carries the screens the entries alone would leave open. */
   .codex-contents {
     display: grid;
     gap: clamp(2.5rem, 2rem + 2vw, 4rem);
+    background-color: color-mix(in oklab, var(--surface-sunk) 60%, transparent);
+    padding: clamp(1.5rem, 1rem + 2vw, 3rem) clamp(1.25rem, 1rem + 2vw, 2.5rem);
   }
 
   .codex-part-head {
@@ -110,11 +105,6 @@ const parts = PART_ORDER.map((part) => ({
     align-items: baseline;
     gap: 1.25rem;
     padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--line-strong);
-  }
-
-  .codex-part-numeral {
-    flex-shrink: 0;
   }
 
   .codex-part-title {
@@ -132,11 +122,10 @@ const parts = PART_ORDER.map((part) => ({
 
   .codex-entry {
     display: grid;
-    grid-template-columns: 4.5rem minmax(0, 1fr) auto auto;
+    grid-template-columns: minmax(0, 1fr) auto auto;
     align-items: baseline;
     gap: 1.25rem;
     padding-block: 1.1rem;
-    border-bottom: 1px solid var(--line);
     transition:
       background-color 320ms var(--ease-out-expo),
       padding-left 420ms var(--ease-out-expo);
@@ -145,14 +134,6 @@ const parts = PART_ORDER.map((part) => ({
   .codex-entry:hover {
     background-color: color-mix(in oklab, var(--seal) 3.5%, transparent);
     padding-left: 0.75rem;
-  }
-
-  .codex-entry-folio {
-    color: var(--fg-4);
-  }
-
-  .codex-entry:hover .codex-entry-folio {
-    color: var(--seal-text);
   }
 
   .codex-entry-body {
@@ -169,7 +150,7 @@ const parts = PART_ORDER.map((part) => ({
   }
 
   .codex-entry-summary {
-    font-size: var(--text-fine);
+    font-size: var(--text-small);
     line-height: 1.5;
     color: var(--fg-3);
     max-width: 72ch;
@@ -194,7 +175,7 @@ const parts = PART_ORDER.map((part) => ({
 
   @media (max-width: 760px) {
     .codex-entry {
-      grid-template-columns: 3.5rem minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1fr);
     }
     .codex-entry-arrow {
       display: none;

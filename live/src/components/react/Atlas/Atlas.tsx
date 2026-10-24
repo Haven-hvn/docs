@@ -402,7 +402,7 @@ export default function Atlas({ deployments, collectionQuotes }: Props) {
                 }
                 onPointerLeave={() => setHover(null)}
               >
-                <span className="atlas-list-rank">{String(index + 1).padStart(2, '0')}</span>
+                <span className="atlas-list-rank">{index + 1}</span>
                 <span className="atlas-list-name">{body.label}</span>
                 <span className="atlas-list-measure">{body.sublabel}</span>
               </button>
@@ -430,7 +430,9 @@ export default function Atlas({ deployments, collectionQuotes }: Props) {
               onClick={() => setSelectedId(null)}
               aria-label="Close"
             >
-              ✕
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
+                <path d="M1.5 1.5L9.5 9.5M9.5 1.5L1.5 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
             </button>
           </header>
 
@@ -554,7 +556,7 @@ export default function Atlas({ deployments, collectionQuotes }: Props) {
             </h2>
             <ol className="atlas-brief-list">
               <li>
-                <span className="folio">01</span>
+                <span className="folio">1</span>
                 <p>
                   <strong>Every body is a community.</strong> Sixteen candidate keys — real
                   contracts whose holders could open an archive. The same sixteen appear on both
@@ -563,7 +565,7 @@ export default function Atlas({ deployments, collectionQuotes }: Props) {
                 </p>
               </li>
               <li>
-                <span className="folio">02</span>
+                <span className="folio">2</span>
                 <p>
                   <strong>Size is the measure, and only the measure.</strong> Volume tracks the value —
                   market capitalisation on one axis, bytes pinned under proof on the other. The four
@@ -573,7 +575,7 @@ export default function Atlas({ deployments, collectionQuotes }: Props) {
                 </p>
               </li>
               <li>
-                <span className="folio">03</span>
+                <span className="folio">3</span>
                 <p>
                   <strong>One number here is not a measurement.</strong> The bytes are real, summed
                   from live pin-contract reads. But nothing on Filecoin records which community an

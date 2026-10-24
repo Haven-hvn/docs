@@ -128,7 +128,9 @@ const { term, open = false, class: className = '' } = Astro.props
 
   .explain-body :global(a) {
     color: var(--seal-text);
-    text-decoration: none;
-    border-bottom: 1px solid color-mix(in oklab, var(--seal) 40%, transparent);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklab, var(--seal) 40%, transparent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
   }
 </style>

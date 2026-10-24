@@ -1,6 +1,6 @@
 ---
 interface Props {
-  /** Folio number, e.g. '03'. */
+  /** Folio number, e.g. '3'. */
   folio: string
   /** Running head — the section's name in the register. */
   running: string
@@ -15,7 +15,6 @@ const { folio, running, annotation, class: className = '' } = Astro.props
 <div class:list={['head', className]} data-reveal>
   <div class="head-meta">
     <span class="folio">{folio}</span>
-    <span class="head-rule" aria-hidden="true"></span>
     <span class="label label-ink">{running}</span>
   </div>
   {annotation && <span class="label head-annotation">{annotation}</span>}
@@ -28,7 +27,6 @@ const { folio, running, annotation, class: className = '' } = Astro.props
     justify-content: space-between;
     gap: 2rem;
     padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--line-strong);
   }
 
   /* Hidden only when scripting can reveal it again. */
@@ -53,18 +51,9 @@ const { folio, running, annotation, class: className = '' } = Astro.props
 
   .head-meta {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: 1rem;
     min-width: 0;
-  }
-
-  /* A short rule between the number and the name. Print does this; screens
-     almost never do, which is exactly why it reads as a document. */
-  .head-rule {
-    width: 2.5rem;
-    height: 1px;
-    background-color: var(--seal);
-    flex-shrink: 0;
   }
 
   .head-annotation {

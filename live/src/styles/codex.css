@@ -24,7 +24,6 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
-  border-right: 1px solid var(--line);
   padding-right: clamp(0.75rem, 1.4vw, 1.5rem);
 }
 
@@ -39,7 +38,6 @@
   justify-content: space-between;
   gap: 1rem;
   padding-bottom: 0.7rem;
-  border-bottom: 1px solid var(--line-strong);
 }
 
 .codex-index-count {
@@ -71,8 +69,7 @@
 
 .codex-nav-link {
   display: grid;
-  grid-template-columns: 2.6rem minmax(0, 1fr);
-  gap: 0.5rem;
+  grid-template-columns: minmax(0, 1fr);
   align-items: baseline;
   padding: 0.42rem 0.5rem 0.42rem 0;
   font-size: var(--text-fine);
@@ -86,12 +83,6 @@
     background-color 260ms var(--ease-out-expo);
 }
 
-.codex-nav-folio {
-  font-family: var(--font-ledger);
-  font-size: var(--text-nano);
-  color: var(--fg-4);
-}
-
 .codex-nav-link:hover {
   color: var(--fg);
   background-color: color-mix(in oklab, var(--seal) 4%, transparent);
@@ -101,10 +92,6 @@
   color: var(--fg);
   border-left-color: var(--seal);
   background-color: color-mix(in oklab, var(--seal) 6%, transparent);
-}
-
-.codex-nav-link[aria-current='page'] .codex-nav-folio {
-  color: var(--seal-text);
 }
 
 /* ── Entry header ─────────────────────────────────────────────────────────── */
@@ -117,24 +104,7 @@
   display: grid;
   gap: 1.25rem;
   padding-bottom: clamp(1.75rem, 1.5rem + 1vw, 2.75rem);
-  border-bottom: 1px solid var(--line-strong);
   margin-bottom: clamp(1.75rem, 1.5rem + 1vw, 2.75rem);
-}
-
-.codex-breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-family: var(--font-ledger);
-  font-size: var(--text-micro);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--fg-3);
-  flex-wrap: wrap;
-}
-
-.codex-breadcrumb-sep {
-  color: var(--fg-4);
 }
 
 .codex-title {
@@ -145,9 +115,8 @@
   max-width: 60ch;
 }
 
-/* An epigraph: indented, italic, in the editorial face, with a hanging rule. */
+/* An epigraph: indented, italic, in the editorial face. */
 .codex-epigraph {
-  border-left: 1px solid var(--seal);
   padding: 0.2rem 0 0.2rem 1.25rem;
   max-width: 52ch;
 }
@@ -169,6 +138,7 @@
 .codex-sources {
   display: grid;
   gap: 0.4rem;
+  margin-top: 2.5rem;
 }
 
 .codex-sources ul {
@@ -179,8 +149,8 @@
 }
 
 .codex-sources code {
-  font-size: 0.6875rem;
-  color: var(--fg-4);
+  font-size: var(--text-fine);
+  color: var(--fg-3);
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
@@ -225,17 +195,11 @@
   line-height: 1.16;
   color: var(--fg);
   margin-top: 2.6em;
-  padding-top: 0.9rem;
-  border-top: 1px solid var(--line);
   scroll-margin-top: calc(var(--chrome-h) + 2rem);
 }
 
-/* The entry header already closes with a rule. A second one directly beneath it
-   reads as a mistake and opens a dead band above the first section. */
 .prose > h2:first-child {
   margin-top: 0;
-  padding-top: 0;
-  border-top: none;
 }
 
 .prose h3 {
@@ -261,19 +225,18 @@
 
 .prose a {
   color: var(--fg);
-  background-image: linear-gradient(var(--seal), var(--seal));
-  background-repeat: no-repeat;
-  background-position: 0 100%;
-  background-size: 100% 1px;
-  padding-bottom: 1px;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--seal) 55%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
   transition:
     color 260ms ease,
-    background-size 320ms var(--ease-out-expo);
+    text-decoration-color 320ms var(--ease-out-expo);
 }
 
 .prose a:hover {
   color: var(--seal);
-  background-size: 100% 2px;
+  text-decoration-color: var(--seal);
 }
 
 .prose ul,
@@ -294,9 +257,10 @@
   content: '';
   position: absolute;
   left: 0;
-  top: 0.82em;
-  width: 8px;
-  height: 1px;
+  top: 0.62em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
   background-color: var(--seal);
 }
 
@@ -310,13 +274,13 @@
 }
 
 .prose ol > li::before {
-  content: counter(prose-item, decimal-leading-zero);
+  content: counter(prose-item, decimal) '.';
   position: absolute;
   left: 0;
   top: 0.08em;
-  font-family: var(--font-ledger);
+  font-family: var(--font-institution);
   font-size: var(--text-micro);
-  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
   color: var(--seal-text);
 }
 
@@ -347,13 +311,19 @@
   overflow-x: auto;
   tab-size: 2;
   margin-top: 1.6em;
-  box-shadow: var(--lift-1);
+  box-shadow: var(--lift-1); /* taste-skill-ignore: code plates are interface fragments (data-ui), which keep their own shadows */
 }
 
 /* Comments in the shell examples are the only coloured token; everything else
    stays monochrome so the plate reads as evidence, not as a syntax demo. */
 .prose pre code {
   color: inherit;
+}
+
+/* Comments in the shell examples are the only coloured token, and they must
+   still clear 4.5:1 — Shiki's github-dark default leaves them at 3:1. */
+.prose pre span[style='color:#6A737D'] {
+  color: #9aa4ae !important;
 }
 
 .prose pre code {
@@ -373,11 +343,9 @@
 }
 
 .prose thead th {
-  font-family: var(--font-ledger);
-  font-size: var(--text-nano);
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-family: var(--font-institution);
+  font-size: var(--text-fine);
+  font-weight: 600;
   color: var(--fg-3);
   text-align: left;
   padding: 0 0.9rem 0.55rem 0;
@@ -386,12 +354,7 @@
 
 .prose tbody td {
   padding: 0.65rem 0.9rem 0.65rem 0;
-  border-bottom: 1px solid var(--line-soft);
   vertical-align: baseline;
-}
-
-.prose tbody tr:last-child td {
-  border-bottom: 1px solid var(--line);
 }
 
 .prose td:first-child,
@@ -400,7 +363,6 @@
 }
 
 .prose blockquote {
-  border-left: 1px solid var(--seal);
   padding-left: 1.25rem;
   color: var(--fg-2);
   font-family: var(--font-editorial);
@@ -409,17 +371,16 @@
 }
 
 .prose hr {
-  margin-block: 2.5em;
-  border-top: 1px solid var(--line);
+  border: none;
+  height: 0;
+  margin-block: 3em;
 }
 
 /* ── Pager ────────────────────────────────────────────────────────────────── */
 .codex-pager {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1px;
-  background-color: var(--line);
-  border: 1px solid var(--line);
+  gap: 1rem;
   margin-top: clamp(3rem, 2rem + 3vw, 5rem);
 }
 
@@ -427,7 +388,7 @@
   display: grid;
   gap: 0.4rem;
   padding: 1.1rem 1.25rem;
-  background-color: var(--surface);
+  background-color: color-mix(in oklab, var(--surface-sunk) 40%, transparent);
   transition: background-color 320ms var(--ease-out-expo);
 }
 
@@ -464,7 +425,6 @@
 
 .codex-toc-heading {
   padding-bottom: 0.6rem;
-  border-bottom: 1px solid var(--line);
   display: block;
 }
 
@@ -522,13 +482,11 @@
   .codex {
     grid-template-columns: minmax(0, 1fr);
   }
+  /* The standing index is a desk reference. On a phone the masthead's Docs
+     link and the adjacent-entry pager cover navigation without burying the
+     entry under a full table of contents. */
   .codex-index {
-    position: static;
-    max-height: none;
-    border-right: none;
-    border-bottom: 1px solid var(--line);
-    padding-right: 0;
-    padding-bottom: 1.5rem;
+    display: none;
   }
   .codex-nav {
     grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));

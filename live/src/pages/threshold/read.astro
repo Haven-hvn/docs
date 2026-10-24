@@ -56,7 +56,7 @@ const SLUGS = GATES.map((gate) => gate.slug)
     {/* ── Orientation ─────────────────────────────────────────────────────── */}
     <section class="act act-opening" data-tone="void" aria-labelledby="read-title">
       <div class="act-body frame">
-        <SectionHead folio="04 · A" running="Read an archive" annotation="The reader" />
+        <SectionHead folio="4 · A" running="Read an archive" annotation="The reader" />
 
         <p class="path-back" data-reveal>
           <a href="/docs/threshold">← All three paths</a>
@@ -109,7 +109,7 @@ const SLUGS = GATES.map((gate) => gate.slug)
     {/* ── Step 1 · pick a community ───────────────────────────────────────── */}
     <section class="act act-pad-tall" data-tone="stock" aria-labelledby="pick-title">
       <div class="act-body frame">
-        <SectionHead folio="01" running="Pick a community" annotation={`${GATES.length} candidates`} />
+        <SectionHead folio="1" running="Pick a community" annotation={`${GATES.length} candidates`} />
 
         <h2 class="statement-headline optical-hang" id="pick-title">
           <span class="mask-line" data-reveal><span>Start with work you</span></span>
@@ -142,7 +142,6 @@ const SLUGS = GATES.map((gate) => gate.slug)
             <div class="gate-group" data-reveal style={`--delay: ${140 + groupIndex * 50}ms`}>
               <h3 class="gate-group-head">
                 <span class="label label-seal">{group.constellation}</span>
-                <span class="rule" aria-hidden="true"></span>
                 <span class="label">{group.gates.length}</span>
               </h3>
 
@@ -226,7 +225,7 @@ const SLUGS = GATES.map((gate) => gate.slug)
     {/* ── Step 2 · check ──────────────────────────────────────────────────── */}
     <section class="act act-pad-tall" data-tone="void" aria-labelledby="check-title">
       <div class="act-body frame">
-        <SectionHead folio="02" running="Check the gate" annotation="Live on-chain" />
+        <SectionHead folio="2" running="Check the gate" annotation="Live on-chain" />
 
         <h2 class="statement-headline optical-hang" id="check-title">
           <span class="mask-line" data-reveal><span>Ask the gates directly.</span></span>
@@ -271,7 +270,7 @@ const SLUGS = GATES.map((gate) => gate.slug)
     {/* ── Step 3 · open ───────────────────────────────────────────────────── */}
     <section class="act act-pad-tall" data-tone="stock" aria-labelledby="open-title">
       <div class="act-body frame">
-        <SectionHead folio="03" running="Open it" annotation="Four steps, one waiting on us" />
+        <SectionHead folio="3" running="Open it" annotation="Four steps, one waiting on us" />
 
         <h2 class="statement-headline optical-hang" id="open-title">
           <span class="mask-line" data-reveal><span>One signature.</span></span>
@@ -287,7 +286,7 @@ const SLUGS = GATES.map((gate) => gate.slug)
 
         <ol class="path-steps" data-reveal style="--delay: 160ms">
           <li class="path-step">
-            <span class="folio">01</span>
+            <span class="folio">1</span>
             <div>
               <h3 class="path-step-title">
                 Install a reader
@@ -310,7 +309,7 @@ const SLUGS = GATES.map((gate) => gate.slug)
           </li>
 
           <li class="path-step">
-            <span class="folio">02</span>
+            <span class="folio">2</span>
             <div>
               <h3 class="path-step-title">
                 Find the archive
@@ -348,7 +347,7 @@ const SLUGS = GATES.map((gate) => gate.slug)
           </li>
 
           <li class="path-step">
-            <span class="folio">03</span>
+            <span class="folio">3</span>
             <div>
               <h3 class="path-step-title">Sign once to prove the address is yours</h3>
               <p class="path-step-body">
@@ -370,7 +369,7 @@ const SLUGS = GATES.map((gate) => gate.slug)
           </li>
 
           <li class="path-step">
-            <span class="folio">04</span>
+            <span class="folio">4</span>
             <div>
               <h3 class="path-step-title">Watch it</h3>
               <p class="path-step-body">

@@ -261,7 +261,7 @@ export const MOVEMENTS: readonly Movement[] = [
     key: 'seal',
     title: 'Encrypt',
     actor: 'haven-cli',
-    claim: 'The bytes are encrypted before they ever leave the machine.',
+    claim: 'Encrypted before they leave the machine.',
     detail:
       'Media is encrypted locally under a symmetric key. Only ciphertext is ever handed to a network, so no operator anywhere in the path — including Haven — is in a position to read it.',
     primitive: 'AES · local keying',
@@ -279,7 +279,7 @@ export const MOVEMENTS: readonly Movement[] = [
     key: 'register',
     title: 'Register',
     actor: 'arkiv-chain',
-    claim: 'The record is written to a public trie, not a private table.',
+    claim: 'A public trie, not a private table.',
     detail:
       'One atomic batch of operations writes the entity: its key, its attributes, its content type and its time-to-live. The state trie is the index — there is no separate database to fall out of sync with it.',
     primitive: 'execute(Operation[]) · 0x44…0044',
@@ -303,7 +303,7 @@ export const MOVEMENTS: readonly Movement[] = [
     key: 'gate',
     title: 'Unlock',
     actor: 'haven-aol',
-    claim: 'The key is derived from what you hold, and nothing else.',
+    claim: 'Derived from what you hold, and nothing else.',
     detail:
       'A reader signs a typed request. The canister recovers the address, asks a public chain whether that address meets the threshold, and only then derives a key from the network’s own threshold material. There is no account, no password and no session to steal.',
     primitive: 'GateRequestV3 · VetKD accessol_v3',
@@ -470,27 +470,27 @@ export const HORIZON: readonly Phase[] = [
  */
 export const CLAIMS = [
   {
-    figure: '00',
+    figure: '0',
     label: 'No private backend',
     body: 'Five services, zero private datastores. Every byte of shared state is on a public network.',
   },
   {
-    figure: '01',
+    figure: '1',
     label: 'Encrypted at the source',
     body: 'Media is encrypted on the publisher’s machine. Ciphertext is the only thing any network ever sees.',
   },
   {
-    figure: '02',
+    figure: '2',
     label: 'Ownership is the credential',
     body: 'A public balance is the whole authorisation model. No accounts, no passwords, no sessions.',
   },
   {
-    figure: '03',
+    figure: '3',
     label: 'Identity is inherited',
     body: 'A community’s image is read from its own contract — so identity needs no directory to administer it.',
   },
   {
-    figure: '04',
+    figure: '4',
     label: 'Nothing to shut down',
     body: 'The index is a trie, access checks run in a canister, the archive lives on Filecoin. There is no server to seize.',
   },

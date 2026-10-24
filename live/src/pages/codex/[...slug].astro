@@ -71,7 +71,6 @@ const toc = headings.filter((heading) => heading.depth === 2 || heading.depth ==
                         class="codex-nav-link"
                         aria-current={item.id === entry.id ? 'page' : undefined}
                       >
-                        <span class="codex-nav-folio">{item.data.folio}</span>
                         <span>{item.data.title}</span>
                       </a>
                     </li>
@@ -87,16 +86,8 @@ const toc = headings.filter((heading) => heading.depth === 2 || heading.depth ==
     {/* ── The entry ───────────────────────────────────────────────────────── */}
     <article class="codex-entry-page">
       <header class="codex-entry-header">
-        <p class="codex-breadcrumb">
-          <a href="/docs/codex" class="link-rule">Codex</a>
-          <span class="codex-breadcrumb-sep" aria-hidden="true">/</span>
-          <span>{entry.data.part}</span>
-          <span class="codex-breadcrumb-sep" aria-hidden="true">/</span>
-          <span class="folio">{entry.data.folio}</span>
-        </p>
-
-        <h1 class="editorial-display codex-title">{entry.data.title}</h1>
-        <p class="lede codex-summary">{entry.data.summary}</p>
+        <h1 class="editorial-display codex-title" data-reveal>{entry.data.title}</h1>
+        <p class="lede codex-summary" data-reveal style="--delay: 120ms">{entry.data.summary}</p>
 
         {
           entry.data.epigraph && (
@@ -108,24 +99,25 @@ const toc = headings.filter((heading) => heading.depth === 2 || heading.depth ==
 
         <div class="codex-entry-meta">
           {entry.data.status !== 'settled' && <span class="seal-mark">{entry.data.status}</span>}
-          {
-            entry.data.sources.length > 0 && (
-              <div class="codex-sources">
-                <span class="label">Transcribed from</span>
-                <ul>
-                  {entry.data.sources.map((source) => (
-                    <li><code class="addr">{source}</code></li>
-                  ))}
-                </ul>
-              </div>
-            )
-          }
         </div>
       </header>
 
-      <div class="prose">
+      <div class="prose" data-reveal style="--delay: 200ms">
         <Content />
       </div>
+
+      {
+        entry.data.sources.length > 0 && (
+          <aside class="codex-sources" aria-label="Sources">
+            <span class="label">Transcribed from</span>
+            <ul>
+              {entry.data.sources.map((source) => (
+                <li><code class="addr">{source}</code></li>
+              ))}
+            </ul>
+          </aside>
+        )
+      }
 
       <nav class="codex-pager" aria-label="Adjacent entries">
         {
@@ -133,7 +125,6 @@ const toc = headings.filter((heading) => heading.depth === 2 || heading.depth ==
             <a class="codex-pager-link" href={`/docs/codex/${previous.id}`} rel="prev">
               <span class="label">Previous</span>
               <span class="codex-pager-title">{previous.data.title}</span>
-              <span class="folio">{previous.data.folio}</span>
             </a>
           ) : (
             <span />
@@ -144,7 +135,6 @@ const toc = headings.filter((heading) => heading.depth === 2 || heading.depth ==
             <a class="codex-pager-link codex-pager-next" href={`/docs/codex/${next.id}`} rel="next">
               <span class="label">Next</span>
               <span class="codex-pager-title">{next.data.title}</span>
-              <span class="folio">{next.data.folio}</span>
             </a>
           )
         }
@@ -183,6 +173,20 @@ const toc = headings.filter((heading) => heading.depth === 2 || heading.depth ==
   </div>
 
   <script>
+    // Code plates are interface fragments of the protocol — the same commands and
+    // payloads the live surfaces execute — so they carry the data-ui mark.
+    for (const plate of document.querySelectorAll<HTMLPreElement>('.prose pre')) {
+      plate.setAttribute('data-ui', 'true')
+    }
+
+    // Each section of the reference enters on its own, so the long column doesn't
+    // arrive as one block. Headings, tables and lists carry the marks.
+    for (const el of document.querySelectorAll<HTMLElement>(
+      '.prose > h2, .prose > h3, .prose > table, .prose > ul, .prose > blockquote',
+    )) {
+      el.setAttribute('data-reveal', '')
+    }
+
     // Scroll-spy for the section index. One observer, no scroll handler.
     const links = document.querySelectorAll<HTMLElement>('[data-toc-link]')
     if (links.length > 0) {

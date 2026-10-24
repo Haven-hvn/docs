@@ -2,7 +2,6 @@
 import Base from '../layouts/Base.astro'
 import Masthead from '../components/Masthead.astro'
 import Footer from '../components/Footer.astro'
-import SectionHead from '../components/SectionHead.astro'
 import Action from '../components/Action.astro'
 import HeroAperture from '../components/react/HeroAperture.tsx'
 import LiveInstrument from '../components/react/LiveInstrument.tsx'
@@ -17,7 +16,7 @@ import {
   SURFACES,
   TOPOLOGY,
 } from '../lib/protocol.ts'
-import { bytesInline, folio, integer } from '../lib/format.ts'
+import { bytesInline, integer } from '../lib/format.ts'
 
 const mainnet = ledger.mainnet
 const calibration = ledger.calibration
@@ -57,18 +56,10 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
     </div>
 
     <div class="act-body frame hero-body">
-      <p class="label hero-eyebrow" data-reveal>
-        <span class="label-seal">Encrypted at the source</span>
-        <span class="hero-eyebrow-rule" aria-hidden="true"></span>
-        <span>Unlocked by ownership</span>
-        <span class="hero-eyebrow-rule" aria-hidden="true"></span>
-        <span>Stored on public infrastructure</span>
-      </p>
-
       <h1 class="statement-colossus hero-statement optical-hang" id="hero-statement">
         <span class="mask-line" data-reveal style="--delay: 60ms"><span>Ownership is the</span></span>
         <span class="mask-line" data-reveal style="--delay: 160ms"
-          ><span>only <span class="voice-editorial">password</span>.</span></span
+          ><span>only password.</span></span
         >
       </h1>
 
@@ -106,26 +97,26 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
       </dl>
       <p class="label hero-scroll">
         <span>Scroll</span>
-        <span class="hero-scroll-rule" aria-hidden="true"></span>
+        <svg class="hero-scroll-rule" aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M1.5 4.25L6 8.75L10.5 4.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </p>
     </div>
   </section>
 
-  <div class="act-seam"></div>
+  {/* Sections change field colour outright: nothing fades into anything. */}
 
   {/* ═══════════════════════════════════════════════════════════════════════
       ACT 01 — THE PREMISE
       Stock. The argument, then five claims the rest of the document has to earn.
       ═══════════════════════════════════════════════════════════════════════ */}
-  <section class="act act-pad-tall columns-visible" data-tone="stock" aria-labelledby="premise-title">
+  <section class="act act-pad-tall" data-tone="stock" aria-labelledby="premise-title">
     <div class="act-body frame">
-      <SectionHead folio="01" running="The premise" annotation="Why a protocol and not a product" />
-
       <div class="premise">
-        <h2 class="editorial-display premise-title" id="premise-title">
+        <h2 class="editorial-headline premise-title" id="premise-title">
           <span class="mask-line" data-reveal><span>Every platform you have</span></span>
           <span class="mask-line" data-reveal style="--delay: 90ms"
-            ><span>ever loved was a <em>landlord</em>.</span></span
+            ><span>ever loved was a landlord.</span></span
           >
         </h2>
 
@@ -153,7 +144,6 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
         {
           CLAIMS.map((claim, index) => (
             <li class="claim" data-reveal style={`--delay: ${index * 70}ms`}>
-              <span class="folio claim-figure">{claim.figure}</span>
               <h3 class="statement-title claim-label">{claim.label}</h3>
               <p class="claim-body">{claim.body}</p>
             </li>
@@ -170,16 +160,8 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
       ═══════════════════════════════════════════════════════════════════════ */}
   <section class="act act-pad" data-tone="stock" aria-labelledby="mechanism-title">
     <div class="act-body frame">
-      <SectionHead
-        folio="02"
-        running="The mechanism"
-        annotation={`${TOPOLOGY.publicNetworks} public networks · 1 rule set`}
-      />
-
       <div class="mechanism-intro">
-        <h2 class="statement-display" id="mechanism-title" data-reveal>
-          Haven is not a chain. It is the layer above four of them.
-        </h2>
+        <h2 class="statement-display" id="mechanism-title" data-reveal>The layer above four chains.</h2>
         <p class="prose-body" data-reveal style="--delay: 120ms">
           Consensus, storage, settlement and threshold cryptography already exist, operated by networks
           that predate Haven and will outlast it. Haven specifies only how those four capabilities
@@ -194,7 +176,6 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
           LAYERS.map((layer) => (
             <article class="layer">
               <header class="layer-head">
-                <span class="folio">{layer.tier}</span>
                 <h3 class="statement-title layer-title">{layer.title}</h3>
                 <ul class="layer-nets" aria-label="Networks at this layer">
                   {layer.networks.map((id) => (
@@ -218,8 +199,8 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
       </div>
 
       <table class="specimen networks-table" data-reveal>
-        <caption class="label networks-caption">
-          Table 02.1 — The four networks, their responsibilities, and where to verify them
+        <caption class="networks-caption">
+          The four networks, their responsibilities, and where to verify them
         </caption>
         <thead>
           <tr>
@@ -257,32 +238,23 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
     </div>
   </section>
 
-  <div class="act-seam"></div>
+  {/* Sections change field colour outright: nothing fades into anything. */}
 
   {/* ═══════════════════════════════════════════════════════════════════════
        ACT 03 — THE MOVEMENTS
        Void, pinned. Four beats, scrubbed by scroll: Encrypt, Register, Unlock, Open.
       The stage stays put while the argument advances through it.
       ═══════════════════════════════════════════════════════════════════════ */}
-  <section
-    class="act sequence movements"
-    data-tone="void"
-    data-sequence
-    aria-labelledby="movements-title"
-  >
-    <div class="sequence-stage movements-stage" data-stage>
+  <section class="act movements" data-tone="void" aria-labelledby="movements-title">
+    <div class="movements-stage">
       <div class="act-body frame movements-inner">
         <div class="movements-side">
-          <SectionHead folio="03" running="The movements" annotation="Encrypt · Register · Unlock · Open" />
-          <h2 class="statement-headline movements-title" id="movements-title">
-            One piece of content, from the publisher's disk to the reader's screen.
-          </h2>
+          <h2 class="statement-headline movements-title" id="movements-title">From disk to screen.</h2>
 
           <ol class="movements-index" aria-label="The four movements">
             {
               MOVEMENTS.map((movement) => (
                 <li class="movements-index-item" data-index={movement.index - 1}>
-                  <span class="folio">{folio(movement.index)}</span>
                   <span class="movements-index-title">{movement.title}</span>
                   <span class="label movements-index-actor">{movement.actor}</span>
                 </li>
@@ -294,22 +266,16 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
         <div class="movements-beats">
           {
             MOVEMENTS.map((movement) => (
-              <article class="beat movement" data-beat data-active={movement.index === 1 ? 'true' : 'false'}>
-                <header class="movement-head">
-                  <span class:list={['net-dot', `net-${movement.network}`]} aria-hidden="true" />
-                  <span class="label movement-primitive">{movement.primitive}</span>
-                </header>
-
+              <article class="movement">
                 <h3 class="editorial-headline movement-claim">{movement.claim}</h3>
                 <p class="movement-detail">{movement.detail}</p>
 
-                <figure class="movement-evidence">
+                <figure class="movement-evidence" data-ui>
                   <pre class="code-plate"><code>{movement.code}</code></pre>
                   <figcaption class="plate-caption">
-                    <span class="plate-number">Fig. 03.{movement.index}</span>
                     <span>
-                      Executed by <code>{movement.actor}</code>. Nothing in this step requires a service
-                      Haven operates.
+                      Executed by {movement.actor} — {movement.primitive}. Nothing in this step requires a
+                      service Haven operates.
                     </span>
                   </figcaption>
                 </figure>
@@ -328,27 +294,24 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
       ═══════════════════════════════════════════════════════════════════════ */}
   <section class="act act-pad evidence-act" data-tone="void" aria-labelledby="evidence-title">
     <div class="act-body frame">
-      <SectionHead folio="04" running="The evidence" annotation="Measured, not asserted" />
-
       <div class="evidence-head">
-        <h2 class="statement-display" id="evidence-title" data-reveal>
-          Read from the networks themselves, in your browser, right now.
-        </h2>
+        <h2 class="statement-display" id="evidence-title" data-reveal>Read the networks, live.</h2>
         <p class="prose-body" data-reveal style="--delay: 120ms">
           A page that animates invented activity is easy to build and worth nothing. Every figure below
-          is a real round-trip to a public endpoint with no key and no proxy — including the one that
-          fails. Storage is aggregated from the Filecoin pin contracts on FEVM; across both deployments
-          that is <strong>{totalPinned}</strong> under proof in {integer(totalSets)} live data sets.
+          is a real round-trip from your browser to a public endpoint, with no key and no proxy —
+          including the one that fails. Storage is aggregated from the Filecoin pin contracts on FEVM;
+          across both deployments that is <strong>{totalPinned}</strong> under proof in{' '}
+          {integer(totalSets)} live data sets.
         </p>
       </div>
 
-      <div class="evidence-panel panel-sunk" data-reveal style="--delay: 200ms">
+      <div class="evidence-panel panel-sunk" data-ui data-reveal style="--delay: 200ms">
         <LiveInstrument client:visible storage={storage} />
       </div>
     </div>
   </section>
 
-  <div class="act-seam"></div>
+  {/* Sections change field colour outright: nothing fades into anything. */}
 
   {/* ═══════════════════════════════════════════════════════════════════════
       ACT 05 — THE SURFACES
@@ -356,12 +319,6 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
       ═══════════════════════════════════════════════════════════════════════ */}
   <section class="act act-pad" data-tone="stock" aria-labelledby="surfaces-title">
     <div class="act-body frame">
-      <SectionHead
-        folio="05"
-        running="The surfaces"
-        annotation={`${TOPOLOGY.services} clients · ${TOPOLOGY.languages.length} languages · ${TOPOLOGY.sharedTypes} shared libraries`}
-      />
-
       <div class="surfaces-head">
         <h2 class="statement-display" id="surfaces-title" data-reveal>
           Five clients that have never met.
@@ -376,35 +333,36 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
 
       <div class="surfaces" data-reveal>
         {
-          SURFACES.map((surface, index) => (
-            <article class="surface specular">
+          SURFACES.map((surface) => (
+            <article class="surface">
               <header class="surface-head">
-                <span class="folio">{folio(index + 1)}</span>
                 <h3 class="surface-name">{surface.name}</h3>
                 <span class="label surface-language">{surface.language}</span>
               </header>
 
-              <p class="surface-role">{surface.role}</p>
+              <div class="surface-body">
+                <p class="surface-role">{surface.role}</p>
 
-              <dl class="surface-facts">
-                <div>
-                  <dt class="label">Owns</dt>
-                  <dd>{surface.owns}</dd>
-                </div>
-                <div>
-                  <dt class="label">Does not own</dt>
-                  <dd class="surface-not">{surface.doesNotOwn}</dd>
-                </div>
-              </dl>
+                <dl class="surface-facts">
+                  <div>
+                    <dt class="label">Owns</dt>
+                    <dd>{surface.owns}</dd>
+                  </div>
+                  <div>
+                    <dt class="label">Does not own</dt>
+                    <dd class="surface-not">{surface.doesNotOwn}</dd>
+                  </div>
+                </dl>
 
-              <footer class="surface-foot">
-                <code class="addr">{surface.artifact}</code>
-                <ul class="surface-nets" aria-label="Networks this surface talks to">
-                  {surface.talksTo.map((id) => (
-                    <li class:list={['net-dot', `net-${id}`]} title={id} />
-                  ))}
-                </ul>
-              </footer>
+                <footer class="surface-foot">
+                  <code class="addr">{surface.artifact}</code>
+                  <ul class="surface-nets" aria-label="Networks this surface talks to">
+                    {surface.talksTo.map((id) => (
+                      <li class:list={['net-dot', `net-${id}`]} title={id} />
+                    ))}
+                  </ul>
+                </footer>
+              </div>
             </article>
           ))
         }
@@ -412,7 +370,7 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
     </div>
   </section>
 
-  <div class="act-seam"></div>
+  {/* Sections change field colour outright: nothing fades into anything. */}
 
   {/* ═══════════════════════════════════════════════════════════════════════
        ACT 06 — THE INDEX
@@ -420,13 +378,9 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
       ═══════════════════════════════════════════════════════════════════════ */}
   <section class="act act-pad-tall atlas-invite" data-tone="void" aria-labelledby="atlas-title">
     <div class="act-body frame">
-      <SectionHead folio="06" running="The index" annotation="An observatory for the archive" />
-
       <div class="atlas-invite-grid">
         <div class="atlas-invite-copy">
-          <h2 class="editorial-colossus" id="atlas-title" data-reveal>
-            Every community is a <em>world</em>. Watch them from above.
-          </h2>
+          <h2 class="editorial-display" id="atlas-title" data-reveal>Every community is a world.</h2>
           <p class="lede" data-reveal style="--delay: 140ms">
             The index draws the archive as a system of bodies in motion: real communities, real
             balances, real storage under proof. Two measures, kept deliberately apart — how much a
@@ -435,7 +389,7 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
 
           <dl class="atlas-axes" data-reveal style="--delay: 220ms">
             <div class="atlas-axis">
-              <dt class="label label-seal">Axis I · Storage</dt>
+              <dt class="label">Storage</dt>
               <dd>
                 What a community has pinned under proof, summed over the addresses that paid for it —
                 leaf counts, live data sets, and the {storage.usdfcSymbol} escrowed to keep them, read
@@ -444,14 +398,14 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
               </dd>
             </div>
             <div class="atlas-axis">
-              <dt class="label label-seal">Axis II · Capitalisation</dt>
+              <dt class="label">Capitalisation</dt>
               <dd>
                 What the key asset is worth. Supply comes from the contract; price comes from the
                 market, because price is not an on-chain fact.
               </dd>
             </div>
             <div class="atlas-axis atlas-axis-pending">
-              <dt class="label">Pending · Attribution</dt>
+              <dt class="label">Attribution, pending</dt>
               <dd>
                 Every byte above is a real on-chain sum. Which community each uploading address
                 publishes for is not on Filecoin at all — it is metadata, and metadata is Arkiv's job.
@@ -467,7 +421,7 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
           </div>
         </div>
 
-        <figure class="atlas-invite-plate plate crop-marks" data-reveal style="--delay: 200ms">
+        <figure class="atlas-invite-plate" data-reveal style="--delay: 200ms">
           <div class="atlas-invite-visual" aria-hidden="true">
             <div class="orbit orbit-1"></div>
             <div class="orbit orbit-2"></div>
@@ -475,7 +429,6 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
             <div class="orbit-core"></div>
           </div>
           <figcaption class="plate-caption">
-            <span class="plate-number">Plate 06</span>
             <span>
               The observatory inverts the document: in the index the network is the only light source.
             </span>
@@ -485,7 +438,7 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
     </div>
   </section>
 
-  <div class="act-seam"></div>
+  {/* Sections change field colour outright: nothing fades into anything. */}
 
   {/* ═══════════════════════════════════════════════════════════════════════
       ACT 07 — THE HORIZON
@@ -493,12 +446,10 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
       ═══════════════════════════════════════════════════════════════════════ */}
   <section class="act act-pad-tall" data-tone="stock" aria-labelledby="horizon-title">
     <div class="act-body frame">
-      <SectionHead folio="07" running="The horizon" annotation="Phases, not dates" />
-
       <blockquote class="manifesto" data-reveal>
-        <p class="editorial-headline manifesto-text" id="horizon-title">
-          The question is not whether a community can publish. It is whether, in thirty years, anyone
-          still <em>can</em> — and whether the answer depends on a company being in a good mood.
+        <p class="manifesto-text" id="horizon-title">
+          The question is not whether a community can publish — it is whether, in thirty years, anyone
+          still can.
         </p>
       </blockquote>
 
@@ -506,10 +457,6 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
         {
           HORIZON.map((phase, index) => (
             <li class="phase" data-state={phase.state} data-reveal style={`--delay: ${index * 80}ms`}>
-              <div class="phase-mark">
-                <span class="folio phase-numeral">{phase.mark}</span>
-                <span class="phase-line" aria-hidden="true"></span>
-              </div>
               <div class="phase-body">
                 <header class="phase-head">
                   <h3 class="statement-title phase-title">{phase.title}</h3>
@@ -538,13 +485,12 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
       ═══════════════════════════════════════════════════════════════════════ */}
   <section class="act close" data-tone="void" aria-labelledby="close-title">
     <div class="act-body frame close-body">
-      <p class="label close-eyebrow" data-reveal>{HAVEN.descriptor} · {HAVEN.version}</p>
       <h2 class="statement-monument close-title optical-hang" id="close-title">
         <span class="mask-line" data-reveal><span>Nothing to</span></span>
         <span class="mask-line" data-reveal style="--delay: 90ms"><span>shut down.</span></span>
       </h2>
       <div class="close-actions" data-reveal style="--delay: 220ms">
-        <Action href="/docs/threshold" variant="sealed" size="large">Check if you already qualify</Action>
+        <Action href="/docs/threshold" variant="sealed" size="large">Check if you qualify</Action>
         <Action href="/docs/atlas" variant="keyline" size="large" glyph="none">Open the index</Action>
       </div>
     </div>
@@ -582,19 +528,6 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
     max-width: min(100%, 92rem);
   }
 
-  .hero-eyebrow {
-    display: flex;
-    align-items: center;
-    gap: 0.875rem;
-    color: var(--fg-3);
-  }
-
-  .hero-eyebrow-rule {
-    width: 3.5rem;
-    height: 1px;
-    background-color: var(--line-strong);
-  }
-
   /* `ch` here is relative to the colossus size, which is the intent: about
      fourteen characters per line at any viewport. */
   .hero-statement {
@@ -626,13 +559,12 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
     align-items: end;
     gap: 2rem;
     padding-block: clamp(1.5rem, 1rem + 1.5vw, 2.5rem);
-    border-top: 1px solid var(--line);
   }
 
   .hero-networks {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0;
+    gap: 1.5rem;
     margin: 0;
   }
 
@@ -640,12 +572,10 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
     display: grid;
     gap: 0.35rem;
     padding-inline: clamp(0.75rem, 1.4vw, 1.75rem);
-    border-left: 1px solid var(--line);
   }
 
   .hero-network:first-child {
     padding-left: 0;
-    border-left: none;
   }
 
   .hero-network-head {
@@ -673,7 +603,7 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
   }
 
   .hero-network-id {
-    font-size: 0.6875rem;
+    font-size: 0.8125rem;
     color: var(--fg-4);
     overflow-wrap: anywhere;
   }
@@ -695,21 +625,18 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
   }
 
   .hero-scroll-rule {
-    width: 3rem;
-    height: 1px;
-    background-color: var(--line-strong);
-    transform-origin: left center;
+    color: var(--fg-2);
     animation: scroll-hint 2.8s var(--ease-in-out-quint) infinite;
   }
 
   @keyframes scroll-hint {
     0%,
     100% {
-      scale: 0.3 1;
+      transform: translateY(-2px);
       opacity: 0.4;
     }
     50% {
-      scale: 1 1;
+      transform: translateY(2px);
       opacity: 1;
     }
   }
@@ -725,7 +652,7 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
   }
 
   .premise-title {
-    max-width: 20ch;
+    max-width: 26ch;
   }
 
   .premise-argument {
@@ -738,23 +665,15 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
   .claims {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-    gap: 0;
+    gap: clamp(1.5rem, 1rem + 1vw, 2.5rem);
     list-style: none;
-    border-top: 1px solid var(--line-strong);
   }
 
   .claim {
     display: grid;
     gap: 0.65rem;
     align-content: start;
-    padding: 1.75rem clamp(1rem, 1.4vw, 1.75rem) 0;
-    border-left: 1px solid var(--line);
     min-height: 12rem;
-  }
-
-  .claim:first-child {
-    padding-left: 0;
-    border-left: none;
   }
 
   .claim-figure {
@@ -762,7 +681,7 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
   }
 
   .claim-label {
-    max-width: 16ch;
+    max-width: 22ch;
   }
 
   .claim-body {
@@ -784,13 +703,12 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
   }
 
   .mechanism-intro h2 {
-    max-width: 24ch;
+    max-width: 28ch;
   }
 
   .layers {
     display: grid;
     gap: 0;
-    border-top: 1px solid var(--line-strong);
     margin-bottom: clamp(3rem, 2rem + 3vw, 5rem);
   }
 
@@ -799,12 +717,16 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
     grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
     gap: clamp(1.5rem, 1rem + 2vw, 4rem);
     padding-block: clamp(1.5rem, 1rem + 1.4vw, 2.5rem);
-    border-bottom: 1px solid var(--line);
     transition: background-color 400ms var(--ease-out-expo);
   }
 
   .layer:hover {
     background-color: color-mix(in oklab, var(--seal) 2.5%, transparent);
+  }
+
+  .layer-tier {
+    font-size: var(--text-small);
+    color: var(--seal-text);
   }
 
   .layer-head {
@@ -850,6 +772,8 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
     text-align: left;
     color: var(--fg-4);
     padding-bottom: 0.875rem;
+    font-size: var(--text-fine);
+    line-height: 1.4;
   }
 
   .networks-name {
@@ -882,15 +806,14 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
   }
 
   /* ══════════════════════════════════════════════════════════════════════════
-     ACT 03 — MOVEMENTS (pinned)
-     The section is four viewports tall; the stage inside is one. That ratio is
-     what gives each beat a full screen of scroll to hold the reader.
+     ACT 03 — MOVEMENTS (flowing)
+     The four beats run in sequence down the page. Nothing pins, nothing hides:
+     every beat stays readable from the moment it enters the viewport.
      ══════════════════════════════════════════════════════════════════════════ */
-  .movements {
-    height: 420vh;
-  }
-
   .movements-stage {
+    position: static;
+    height: auto;
+    padding-block: 4rem;
     align-items: center;
   }
 
@@ -909,27 +832,28 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
   }
 
   .movements-title {
-    max-width: 22ch;
+    max-width: 26ch;
   }
 
   .movements-index {
     display: grid;
     gap: 0;
     list-style: none;
-    border-top: 1px solid var(--line);
   }
 
   .movements-index-item {
     display: grid;
-    grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: baseline;
     gap: 1rem;
     padding-block: 0.85rem;
-    border-bottom: 1px solid var(--line-soft);
-    opacity: 0.4;
     transition:
       opacity 500ms var(--ease-out-expo),
       padding-left 500ms var(--ease-out-expo);
+  }
+
+  .movements-index-item:hover {
+    padding-left: 0.5rem;
   }
 
   .movements-index-title {
@@ -942,37 +866,18 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
     color: var(--fg-4);
   }
 
-  /* The index tracks the active beat. Using :has on the parent means no JS is
-     needed to keep the two in sync beyond the beat index attribute. */
-  .movements[data-beat-index='0'] .movements-index-item[data-index='0'],
-  .movements[data-beat-index='1'] .movements-index-item[data-index='1'],
-  .movements[data-beat-index='2'] .movements-index-item[data-index='2'],
-  .movements[data-beat-index='3'] .movements-index-item[data-index='3'] {
-    opacity: 1;
-    padding-left: 0.5rem;
-  }
-
   .movements-beats {
-    position: relative;
-    min-height: 30rem;
     display: grid;
+    gap: clamp(3rem, 2rem + 3vw, 5rem);
+    min-width: 0;
   }
 
   .movement {
-    grid-area: 1 / 1;
+    grid-area: auto;
     display: grid;
     gap: 1.25rem;
-    align-content: center;
-  }
-
-  .movement-head {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-  }
-
-  .movement-primitive {
-    color: var(--seal-text);
+    align-content: start;
+    min-width: 0;
   }
 
   .movement-claim {
@@ -989,6 +894,7 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
 
   .movement-evidence {
     margin-top: 0.5rem;
+    min-width: 0;
   }
 
   /* ══════════════════════════════════════════════════════════════════════════
@@ -1003,7 +909,7 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
   }
 
   .evidence-head h2 {
-    max-width: 22ch;
+    max-width: 26ch;
   }
 
   .evidence-head strong {
@@ -1030,38 +936,32 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
     max-width: 16ch;
   }
 
+  /* A reading list, not a card grid: each client is one row, name on the left,
+     what it owns on the right. */
   .surfaces {
     margin-bottom: calc(clamp(2.5rem, 2rem + 3vw, 4.5rem) * -0.35);
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-    gap: 1px;
-    background-color: var(--line);
-    border: 1px solid var(--line);
+    gap: clamp(2rem, 1.5rem + 2vw, 3.5rem);
   }
 
   .surface {
     display: grid;
-    gap: 1rem;
-    align-content: start;
-    padding: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
-    background-color: var(--surface);
-    transition: background-color 400ms var(--ease-out-expo);
-  }
-
-  .surface:hover {
-    background-color: var(--surface-raised);
+    grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+    gap: clamp(1.5rem, 1rem + 2vw, 4rem);
+    align-items: start;
   }
 
   .surface-head {
     display: grid;
     gap: 0.45rem;
+    align-content: start;
   }
 
   .surface-name {
-    font-family: var(--font-ledger);
-    font-size: var(--text-subtitle);
+    font-family: var(--font-institution);
+    font-size: var(--text-title);
     font-weight: 500;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.021em;
     color: var(--fg);
   }
 
@@ -1069,8 +969,14 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
     color: var(--seal-text);
   }
 
+  .surface-body {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+  }
+
   .surface-role {
-    font-size: var(--text-small);
+    font-size: var(--text-body);
     font-weight: 500;
     color: var(--fg);
     letter-spacing: -0.014em;
@@ -1078,16 +984,15 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
 
   .surface-facts {
     display: grid;
-    gap: 0.875rem;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1rem;
     margin: 0;
-    padding-top: 0.875rem;
-    border-top: 1px solid var(--line);
   }
 
   .surface-facts dd {
     margin: 0;
-    font-size: var(--text-fine);
-    line-height: 1.5;
+    font-size: var(--text-small);
+    line-height: 1.55;
     color: var(--fg-2);
     padding-top: 0.25rem;
     text-wrap: pretty;
@@ -1098,14 +1003,14 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
   }
 
   .surface-foot {
-    display: grid;
-    gap: 0.7rem;
-    padding-top: 0.875rem;
-    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
   }
 
   .surface-foot .addr {
-    font-size: 0.6875rem;
+    font-size: 0.8125rem;
     color: var(--fg-4);
   }
 
@@ -1132,21 +1037,19 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
   }
 
   .atlas-invite-copy h2 {
-    max-width: 18ch;
+    max-width: 24ch;
   }
 
   .atlas-axes {
     display: grid;
     gap: 0;
     margin: 0;
-    border-top: 1px solid var(--line);
   }
 
   .atlas-axis {
     display: grid;
     gap: 0.4rem;
-    padding-block: 1rem;
-    border-bottom: 1px solid var(--line-soft);
+    padding-block: 1.25rem;
   }
 
   .atlas-axis dd {
@@ -1167,7 +1070,8 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
   }
 
   /* A quiet orrery: three rings and a core. Enough to promise the index without
-     shipping the renderer to the landing page. */
+     shipping the renderer to the landing page. Flat marks, no glow: the rings
+     are drawn, not lit. */
   .atlas-invite-plate {
     padding: clamp(1.25rem, 1rem + 1vw, 2rem);
     background-color: color-mix(in oklab, var(--surface-sunk) 60%, transparent);
@@ -1182,7 +1086,7 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
 
   .orbit {
     position: absolute;
-    border: 1px solid var(--line-strong);
+    border: 2px solid var(--line-strong);
     border-radius: 50%;
     animation: orbit-spin linear infinite;
   }
@@ -1190,10 +1094,10 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
   .orbit::after {
     content: '';
     position: absolute;
-    width: 7px;
-    height: 7px;
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
-    top: -4px;
+    top: -5px;
     left: 50%;
   }
 
@@ -1204,7 +1108,6 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
   }
   .orbit-1::after {
     background-color: var(--color-icp);
-    box-shadow: 0 0 16px 2px var(--color-icp);
   }
 
   .orbit-2 {
@@ -1215,7 +1118,6 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
   }
   .orbit-2::after {
     background-color: var(--color-evm);
-    box-shadow: 0 0 16px 2px var(--color-evm);
   }
 
   .orbit-3 {
@@ -1225,7 +1127,6 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
   }
   .orbit-3::after {
     background-color: var(--color-filecoin);
-    box-shadow: 0 0 16px 2px var(--color-filecoin);
   }
 
   .orbit-core {
@@ -1233,9 +1134,6 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
     aspect-ratio: 1;
     border-radius: 50%;
     background-color: var(--seal);
-    box-shadow:
-      0 0 24px 4px color-mix(in oklab, var(--seal) 60%, transparent),
-      0 0 80px 12px color-mix(in oklab, var(--seal) 30%, transparent);
   }
 
   @keyframes orbit-spin {
@@ -1251,11 +1149,16 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
     padding-block: clamp(3rem, 2rem + 4vw, 7rem);
   }
 
-  /* The measure belongs on the element that carries the large type: `ch` is
-     relative to the element's own font size, so putting it on the blockquote
-     resolves against inherited body size and collapses the quote into a column. */
+  /* A statement, not a headline: set at statement size, three lines, in the
+     editorial face. */
   .manifesto-text {
-    max-width: 26ch;
+    font-family: var(--font-editorial);
+    font-size: clamp(1.375rem, 1.1rem + 1.1vw, 2rem);
+    font-weight: 400;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    color: var(--fg);
+    max-width: 32ch;
     text-wrap: balance;
   }
 
@@ -1263,31 +1166,10 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
     display: grid;
     gap: 0;
     list-style: none;
-    border-top: 1px solid var(--line-strong);
   }
 
   .phase {
-    display: grid;
-    grid-template-columns: 6rem minmax(0, 1fr);
-    gap: clamp(1.5rem, 1rem + 2vw, 3rem);
-    padding-block: clamp(1.5rem, 1rem + 1.4vw, 2.25rem);
-    border-bottom: 1px solid var(--line);
-  }
-
-  .phase-mark {
-    display: grid;
-    gap: 0.75rem;
-    align-content: start;
-  }
-
-  .phase-numeral {
-    font-size: var(--text-subtitle);
-    letter-spacing: 0.1em;
-  }
-
-  .phase-line {
-    height: 1px;
-    background-color: var(--line-strong);
+    padding-block: clamp(1.75rem, 1.25rem + 1.6vw, 2.75rem);
   }
 
   .phase-body {
@@ -1314,16 +1196,6 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
   .phase[data-state='live'] .phase-state,
   .phase[data-state='active'] .phase-state {
     color: var(--seal-text);
-  }
-
-  .phase[data-state='live'] .phase-numeral,
-  .phase[data-state='active'] .phase-numeral {
-    color: var(--seal-text);
-  }
-
-  .phase[data-state='horizon'] .phase-numeral,
-  .phase[data-state='next'] .phase-numeral {
-    color: var(--fg-4);
   }
 
   .phase-text {
@@ -1372,7 +1244,7 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
      font and `white-space: pre` to the whole act. */
   .code-plate {
     font-family: var(--font-ledger);
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     line-height: 1.7;
     color: #eae6dd;
     background-color: #22242c;
@@ -1380,6 +1252,7 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
     border-left: 2px solid var(--seal);
     padding: 1.15rem 1.35rem;
     overflow-x: auto;
+    max-width: 100%;
     tab-size: 2;
     white-space: pre;
   }
@@ -1417,11 +1290,13 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
     }
     .hero-networks {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1.25rem 0;
+      gap: 1.25rem;
     }
     .hero-network:nth-child(3) {
       padding-left: 0;
-      border-left: none;
+    }
+    .hero-scroll {
+      display: none;
     }
     .movements {
       height: auto;
@@ -1433,6 +1308,8 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
     }
     .movements-inner {
       grid-template-columns: minmax(0, 1fr);
+      /* Stacked: the index must not read as a kicker sitting on the first beat. */
+      gap: 4rem;
     }
     .movements-beats {
       display: grid;
@@ -1448,8 +1325,6 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
     }
     .claim {
       padding-left: 0;
-      border-left: none;
-      border-bottom: 1px solid var(--line);
       padding-bottom: 1.5rem;
       min-height: 0;
     }
@@ -1460,14 +1335,54 @@ const totalSets = (mainnet?.liveDataSets ?? 0) + (calibration?.liveDataSets ?? 0
       grid-template-columns: minmax(0, 1fr);
     }
     .hero-network {
-      padding-left: 0;
-      border-left: none;
+      padding-inline: 0;
     }
     .hero-foot {
       grid-template-columns: minmax(0, 1fr);
     }
-    .phase {
-      grid-template-columns: 3rem minmax(0, 1fr);
+    .surface {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* The specimen table becomes a list: each network a titled entry. The
+       column headers were the only thing requiring a wide grid. */
+    .networks-table {
+      display: block;
+    }
+    .networks-table caption {
+      text-align: left;
+      padding-bottom: 1.25rem;
+    }
+    .networks-table thead {
+      display: none;
+    }
+    .networks-table tbody {
+      display: grid;
+      gap: 1.5rem;
+    }
+    .networks-table tr {
+      display: grid;
+      gap: 0.4rem;
+      padding-bottom: 1.5rem;
+    }
+    .networks-table th,
+    .networks-table td {
+      display: block;
+      padding: 0;
+      border-bottom: none;
+    }
+    .networks-name {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: var(--text-body);
+    }
+    .networks-owns {
+      color: var(--fg-3);
+    }
+    .networks-link {
+      display: inline-block;
+      padding-top: 0.25rem;
     }
   }
 </style>
