@@ -216,12 +216,13 @@ export default function LiveInstrument({ storage }: Props) {
         .num { text-align: right; font-variant-numeric: tabular-nums; }
 
         .figure-cell {
-          font-family: var(--font-ledger); font-size: var(--text-small);
+          font-size: var(--text-small);
+          font-variant-numeric: tabular-nums;
           color: var(--fg); white-space: nowrap;
         }
 
         .latency-cell {
-          font-family: var(--font-ledger); font-size: var(--text-fine);
+          font-size: var(--text-fine);
           color: var(--fg-3); white-space: nowrap;
         }
 
@@ -229,8 +230,8 @@ export default function LiveInstrument({ storage }: Props) {
         .note-cell { display: grid; gap: 0.2rem; }
 
         .state-mark {
-          font-family: var(--font-ledger); font-size: var(--text-nano);
-          letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-3);
+          font-size: var(--text-fine);
+          color: var(--fg-3);
         }
         .state-mark[data-health='live'] { color: var(--color-arkiv); }
         .state-mark[data-health='slow'] { color: var(--color-evm); }
@@ -244,7 +245,7 @@ export default function LiveInstrument({ storage }: Props) {
         tr[data-health='pending'] { opacity: 0.55; }
 
         /* ── Ledger ───────────────────────────────────────────────────────── */
-        .ledger { border-top: 1px solid var(--line-strong); padding-top: 1.25rem; }
+        .ledger { padding-top: 1.25rem; }
         .ledger-head {
           display: flex; align-items: baseline; justify-content: space-between;
           gap: 1rem; flex-wrap: wrap; margin-bottom: 1.25rem;
@@ -253,13 +254,11 @@ export default function LiveInstrument({ storage }: Props) {
 
         .ledger-grid {
           display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-          gap: 0; margin: 0;
+          gap: 1.5rem; margin: 0;
         }
         .ledger-cell {
-          display: grid; gap: 0.4rem; padding: 0 1.25rem;
-          border-left: 1px solid var(--line);
+          display: grid; gap: 0.4rem; padding: 0;
         }
-        .ledger-cell:first-child { padding-left: 0; border-left: none; }
 
         .ledger-figure {
           margin: 0; font-family: var(--font-institution);

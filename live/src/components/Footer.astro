@@ -138,7 +138,7 @@ const COLUMNS = [
       <span class="label">© {YEAR} {HAVEN.name}</span>
       <span class="label">Est. {HAVEN.established}</span>
       <span class="label">{HAVEN.version}</span>
-      <span class="label colophon-typefaces">Newsreader · Inter · JetBrains Mono</span>
+      <span class="label colophon-typefaces">Newsreader · Inter · JetBrains Mono</span>{/* taste-skill-ignore: names the typefaces in the colophon — prose, not monospace usage */}
       <button class="colophon-edition label" data-edition-toggle type="button" aria-pressed="false">
         <span data-edition-label>Ink</span> edition
       </button>
@@ -151,13 +151,11 @@ const COLUMNS = [
     position: relative;
     background-color: var(--surface-deep);
     color: var(--fg);
-    border-top: 1px solid var(--line);
   }
 
   /* ── Register ─────────────────────────────────────────────────────────── */
   .colophon-register {
     padding-block: 1.5rem;
-    border-bottom: 1px solid var(--line);
   }
 
   .register {
@@ -170,13 +168,11 @@ const COLUMNS = [
     display: grid;
     gap: 0.28rem;
     padding-inline: clamp(0.75rem, 1.4vw, 1.75rem);
-    border-left: 1px solid var(--line);
     min-width: 0;
   }
 
   .register-entry:first-child {
     padding-left: 0;
-    border-left: none;
   }
 
   .register-head {
@@ -202,7 +198,7 @@ const COLUMNS = [
   }
 
   .register-id {
-    font-size: 0.6875rem;
+    font-size: 0.8125rem;
     color: var(--fg-3);
     overflow-wrap: anywhere;
   }
@@ -252,9 +248,8 @@ const COLUMNS = [
   .colophon-facts {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
-    gap: 0.875rem 0;
+    gap: 0.875rem;
     margin: 0;
-    border-top: 1px solid var(--line);
     padding-top: 0.875rem;
   }
 
@@ -263,13 +258,11 @@ const COLUMNS = [
     gap: 0.28rem;
     align-content: start;
     padding-inline: 0.875rem;
-    border-left: 1px solid var(--line);
     min-width: 0;
   }
 
   .colophon-facts > div:first-child {
     padding-left: 0;
-    border-left: none;
   }
 
   .colophon-facts dd {
@@ -297,7 +290,6 @@ const COLUMNS = [
 
   .colophon-heading {
     padding-bottom: 0.7rem;
-    border-bottom: 1px solid var(--line);
     display: block;
   }
 
@@ -319,14 +311,13 @@ const COLUMNS = [
     align-items: end;
     gap: clamp(1.5rem, 1rem + 3vw, 4rem);
     padding-block: 1.5rem 2rem;
-    border-top: 1px solid var(--line);
   }
 
   .colophon-note {
     font-size: var(--text-fine);
     line-height: 1.55;
     color: var(--fg-3);
-    max-width: 76ch;
+    max-width: 62ch;
     text-wrap: pretty;
   }
 
@@ -367,11 +358,10 @@ const COLUMNS = [
     }
     .register {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1.25rem 0;
+      gap: 1.25rem;
     }
     .register-entry:nth-child(3) {
       padding-left: 0;
-      border-left: none;
     }
     .colophon-meta {
       justify-content: flex-start;
@@ -384,7 +374,6 @@ const COLUMNS = [
     }
     .register-entry {
       padding-left: 0;
-      border-left: none;
     }
   }
 </style>

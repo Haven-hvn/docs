@@ -37,7 +37,7 @@
   border: 1px solid var(--line-strong);
   outline: 1px solid var(--line-soft);
   outline-offset: 4px;
-  box-shadow: var(--lift-3);
+  box-shadow: var(--lift-3); /* taste-skill-ignore: the palette is a real overlay */
   animation: palette-in 380ms var(--ease-out-expo) both;
 }
 
@@ -60,7 +60,6 @@
   align-items: center;
   gap: 0.875rem;
   padding: 0.9rem 1.125rem;
-  border-bottom: 1px solid var(--line-strong);
 }
 
 .palette-field input {
@@ -168,7 +167,6 @@
   display: flex;
   gap: 1.25rem;
   padding: 0.7rem 1.125rem;
-  border-top: 1px solid var(--line);
 }
 
 .palette-foot .label {

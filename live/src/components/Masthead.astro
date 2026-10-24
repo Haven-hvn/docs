@@ -12,10 +12,10 @@ interface Props {
 const { current = 'record', tone = 'auto' } = Astro.props
 
 const NAV = [
-  { folio: '01', label: 'Home', href: '/docs/', key: 'record' },
-  { folio: '02', label: 'Index', href: '/docs/atlas', key: 'atlas' },
-  { folio: '03', label: 'Docs', href: '/docs/codex', key: 'codex' },
-  { folio: '04', label: 'Start', href: '/docs/threshold', key: 'threshold' },
+  { label: 'Home', href: '/docs/', key: 'record' },
+  { label: 'Index', href: '/docs/atlas', key: 'atlas' },
+  { label: 'Docs', href: '/docs/codex', key: 'codex' },
+  { label: 'Start', href: '/docs/threshold', key: 'threshold' },
 ] as const
 ---
 
@@ -26,7 +26,6 @@ const NAV = [
     <a href="/docs/" class="lockup vt-wordmark" aria-label={`${HAVEN.name} — ${HAVEN.descriptor}`}>
       <Mark size={20} />
       <span class="wordmark">{HAVEN.name}</span>
-      <span class="lockup-rule" aria-hidden="true"></span>
       <span class="lockup-descriptor">
         <span class="label">{HAVEN.descriptor}</span>
         <span class="label lockup-tier">{HAVEN.tier}</span>
@@ -42,7 +41,6 @@ const NAV = [
             aria-current={current === item.key ? 'page' : undefined}
             data-magnetic="3"
           >
-            <span class="nav-folio">{item.folio}</span>
             <span class="nav-label">{item.label}</span>
           </a>
         ))
@@ -90,14 +88,14 @@ const NAV = [
     height: 6px;
     border-radius: 50%;
     background-color: var(--color-arkiv, oklch(0.83 0.2 152));
-    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-arkiv, green) 18%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-arkiv, green) 18%, transparent); /* taste-skill-ignore: status halo on the health dot — a state signal, not rest decoration */
     flex: none;
   }
 
   /* Devnet is deliberately the ember state — it is the one that needs noticing. */
   :global(html[data-network='devnet']) .net-pip {
     background-color: var(--seal);
-    box-shadow: 0 0 0 3px var(--seal-wash);
+    box-shadow: 0 0 0 3px var(--seal-wash); /* taste-skill-ignore: devnet ember halo — the one state that must be noticed */
   }
 
   :global(html[data-network='devnet']) .chip-network {
@@ -108,10 +106,9 @@ const NAV = [
     position: sticky;
     top: 0;
     z-index: 900;
-    background-color: color-mix(in oklab, var(--surface) 78%, transparent);
-    backdrop-filter: blur(24px) saturate(1.6);
-    -webkit-backdrop-filter: blur(24px) saturate(1.6);
-    border-bottom: 1px solid var(--line);
+    /* Opaque, not glass: a translucent blur bar put the scrolling page's
+       headlines under a veil. A plain bar on the page's own ground. */
+    background-color: var(--surface);
   }
 
   .progress-rule {
@@ -137,9 +134,7 @@ const NAV = [
   }
 
   /* ── Lockup ─────────────────────────────────────────────────────────────
-     Mark, wordmark, hairline, then two stacked micro labels. The vertical rule
-     between name and descriptor is what makes it read as an institution rather
-     than an app logo. */
+     Mark, wordmark, then two stacked small descriptors. */
   .lockup {
     display: flex;
     align-items: center;
@@ -157,10 +152,7 @@ const NAV = [
   }
 
   .lockup-rule {
-    width: 1px;
-    height: 1.75rem;
-    background-color: var(--line);
-    margin-inline: 0.25rem;
+    display: none;
   }
 
   .lockup-descriptor {
@@ -173,10 +165,7 @@ const NAV = [
     font-size: var(--text-nano);
   }
 
-  /* ── Nav ────────────────────────────────────────────────────────────────
-     Each surface is numbered. The folio sits above the label in mono, which is
-     the same apparatus the page bodies use — the chrome and the document speak
-     the same language. */
+  /* ── Nav ──────────────────────────────────────────────────────────────── */
   .nav {
     display: flex;
     justify-content: center;
@@ -190,15 +179,6 @@ const NAV = [
     gap: 0.28rem;
     padding: 0.5rem 1.1rem;
     color: var(--fg-2);
-    transition: color 300ms var(--ease-out-expo);
-  }
-
-  .nav-folio {
-    font-family: var(--font-ledger);
-    font-size: var(--text-nano);
-    letter-spacing: 0.18em;
-    color: var(--fg-4);
-    line-height: 1;
     transition: color 300ms var(--ease-out-expo);
   }
 
@@ -226,20 +206,12 @@ const NAV = [
     color: var(--fg);
   }
 
-  .nav-item:hover .nav-folio {
-    color: var(--seal-text);
-  }
-
   .nav-item:hover::after {
     scale: 1 1;
   }
 
   .nav-item[aria-current='page'] {
     color: var(--fg);
-  }
-
-  .nav-item[aria-current='page'] .nav-folio {
-    color: var(--seal-text);
   }
 
   .nav-item[aria-current='page']::after {
@@ -302,6 +274,34 @@ const NAV = [
     }
     .nav {
       justify-content: flex-end;
+    }
+  }
+
+  /* Phone: the chrome keeps the wordmark, all four surfaces, and the network
+     state. Everything decorative — the palette chip, the kbd hint, the wide
+     nav padding — gives way to keep every link inside the viewport. */
+  @media (max-width: 720px) {
+    .masthead-inner {
+      gap: 0.6rem;
+    }
+    .nav {
+      gap: 0;
+    }
+    .nav-item {
+      padding: 0.5rem 0.4rem;
+    }
+    .nav-label {
+      font-size: var(--text-fine);
+    }
+    .chip[data-palette-open] {
+      display: none;
+    }
+    /* The network state keeps its pip; the word gives way to the nav. */
+    .chip-network .label {
+      display: none;
+    }
+    .chip {
+      padding: 0.5rem 0.55rem;
     }
   }
 </style>

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Haven \u2014 the sovereign media protocol. Marketing surface, protocol documentation, and the Atlas observatory.",
+  "description": "Haven — the sovereign media protocol. Marketing surface, protocol documentation, and the Atlas observatory.",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -18,29 +18,29 @@
     "audit:contrast": "node scripts/audit-contrast.mjs"
   },
   "dependencies": {
-    "@astrojs/mdx": "7.0.5",
-    "@astrojs/react": "6.0.2",
-    "@react-three/fiber": "9.7.0",
-    "@react-three/postprocessing": "3.0.5",
+    "@astrojs/mdx": "^8.1.1",
+    "@astrojs/react": "^7.1.1",
+    "@react-three/fiber": "^9.8.2",
+    "@react-three/postprocessing": "^3.2.2",
     "@tailwindcss/vite": "4.3.3",
-    "astro": "7.2.2",
+    "astro": "^7.4.2",
     "d3-force": "3.0.0",
-    "motion": "13.1.0",
-    "postprocessing": "6.39.4",
-    "react": "19.2.8",
-    "react-dom": "19.2.8",
+    "motion": "^14.6.0",
+    "postprocessing": "^6.39.5",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "tailwindcss": "4.3.3",
-    "three": "0.185.1",
-    "viem": "^2.55.15"
+    "three": "^0.186.1",
+    "viem": "^2.57.11"
   },
   "devDependencies": {
-    "@astrojs/check": "0.9.10",
+    "@astrojs/check": "^0.9.12",
     "@types/d3-force": "3.0.10",
-    "@types/react": "19.2.18",
-    "@types/react-dom": "19.2.4",
-    "@types/three": "0.185.4",
-    "playwright": "^1.58.2",
-    "typescript": "5.9.3"
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.186.0",
+    "playwright": "^1.64.1",
+    "typescript": "^6.0.3"
   },
   "engines": {
     "node": ">=22.12.0"
