@@ -1,6 +1,6 @@
 # Candid & EIP-712 Contracts
 
-Source: `haven-aol/src/backend/backend.did`, `haven-aol/README.md` (mainnet `gny6k-fqaaa-aaaab-ag3ra-cai`).
+Source: `haven-aol/src/backend/backend.did`, `haven-aol/README.md` (mainnet `3gzy3-kaaaa-aaaan-q6y6q-cai`).
 
 ## Candid interface
 

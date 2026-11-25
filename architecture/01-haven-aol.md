@@ -1,6 +1,6 @@
 # haven-aol — Always Online (ICP Canister + SDKs)
 
-> Repo: `haven-aol/` (Motoko `src/backend/main.mo` 88k, `backend.did`, `mops.toml`). SDKs: `packages/typescript` (npm `haven-aol`), `packages/python` (PyPI `haven-aol`), `packages/secp256k1` (pure Motoko ecrecover). Mainnet: `gny6k-fqaaa-aaaab-ag3ra-cai`.
+> Repo: `haven-aol/` (Motoko `src/backend/main.mo` 88k, `backend.did`, `mops.toml`). SDKs: `packages/typescript` (npm `haven-aol`), `packages/python` (PyPI `haven-aol`), `packages/secp256k1` (pure Motoko ecrecover). Mainnet: `3gzy3-kaaaa-aaaan-q6y6q-cai`.
 
 ## Service boundary (decoupled)
 

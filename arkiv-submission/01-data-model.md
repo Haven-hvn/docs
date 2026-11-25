@@ -225,7 +225,7 @@ archive (slug: forgotten_runes)
 
 ```
 kind         eq   "archive"
-attestor     eq   "gny6k-fqaaa-aaaab-ag3ra-cai"
+attestor     eq   "3gzy3-kaaaa-aaaan-q6y6q-cai"
 piece_count  gt   0
 ```
 
