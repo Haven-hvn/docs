@@ -18,29 +18,29 @@
     "audit:contrast": "node scripts/audit-contrast.mjs"
   },
   "dependencies": {
-    "@astrojs/mdx": "^8.1.1",
-    "@astrojs/react": "^7.1.1",
-    "@react-three/fiber": "^9.8.2",
-    "@react-three/postprocessing": "^3.2.2",
-    "@tailwindcss/vite": "4.3.3",
-    "astro": "^7.4.2",
-    "d3-force": "3.0.0",
-    "motion": "^14.6.0",
-    "postprocessing": "^6.39.5",
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1",
-    "tailwindcss": "4.3.3",
-    "three": "^0.186.1",
-    "viem": "^2.57.11"
+    "@astrojs/mdx": "8.1.6",
+    "@astrojs/react": "7.1.9",
+    "@react-three/fiber": "9.8.2",
+    "@react-three/postprocessing": "3.2.2",
+    "@tailwindcss/vite": "4.3.5",
+    "astro": "7.4.13",
+    "d3-force": "3.0.1",
+    "motion": "14.14.0",
+    "postprocessing": "6.39.6",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "tailwindcss": "4.3.5",
+    "three": "0.187.0",
+    "viem": "2.58.6"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.12",
+    "@astrojs/check": "0.9.12",
     "@types/d3-force": "3.0.10",
-    "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0",
-    "@types/three": "^0.186.0",
-    "playwright": "^1.64.1",
-    "typescript": "^6.0.3"
+    "@types/react": "19.3.3",
+    "@types/react-dom": "19.3.0",
+    "@types/three": "0.187.0",
+    "playwright": "1.65.1",
+    "typescript": "7.0.2"
   },
   "engines": {
     "node": ">=22.12.0"
